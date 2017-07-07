@@ -1,0 +1,85 @@
+﻿<view:BaseView x:Class="TripLine.DesktopApp.View.AlbumView"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+      xmlns:cvt="clr-namespace:TripLine.DesktopApp.Converters"
+      xmlns:view="clr-namespace:TripLine.DesktopApp.View"
+      xmlns:vmodel="clr-namespace:TripLine.DesktopApp.ViewModels"
+      mc:Ignorable="d" 
+      d:DesignHeight="300" d:DesignWidth="400"   >
+
+    <Grid Margin="7,0,7,0"  Background="{StaticResource TLineViewBackgroundPanel}" >
+        <Grid.Resources>
+            <cvt:VisibilityConverter x:Key="VisibilityConverter"/>
+            <cvt:InvisibilityConverter x:Key="InvisibilityConverter"/>
+            <cvt:PathToImageSourceConverter x:Key="ImageConverter"/>
+
+            <DataTemplate  x:Key="albumItemTemplate" DataType="{x:Type vmodel:AlbumItemViewModel}" > <StackPanel
+                Height="160">
+                    <Button Height="130"  Width="100" Background="{StaticResource TLineViewBackground}">
+                        <Image Source="{Binding Path=Thumbnail, Converter={StaticResource ImageConverter}}" 
+                               Stretch="UniformToFill" >
+                        </Image>
+                    </Button>
+                    <TextBlock  Text="{Binding Path=DisplayName}" Style="{StaticResource WizardTextLine}"                                   />
+             </StackPanel> </DataTemplate>
+        </Grid.Resources>
+
+       
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="auto"  />
+            <RowDefinition Height="auto"  />
+            <RowDefinition Height="400"   />          
+            <RowDefinition Height="auto"   />
+            <RowDefinition Height="auto"  />
+
+            <!--<RowDefinition Height="10"  />-->
+        </Grid.RowDefinitions>
+
+        <StackPanel Grid.Row="0"  Grid.ColumnSpan="2" Orientation="Vertical"  Background="{StaticResource TLineViewBackgroundPanel}"  Margin="0,7,0,7" >
+            <TextBlock Text="{Binding Path=DisplayName }"  Style="{StaticResource WizardHeaderTextLg}"  Margin="0,0,0,0" />
+        </StackPanel>
+
+        <StackPanel Grid.Row="1"  Grid.ColumnSpan="2" Orientation="Vertical"  Background="{StaticResource TLineViewBackgroundPanel}"  Margin="0,7,0,7" >
+            <TextBlock Text="{Binding Path=SelectedSection.DisplayName}"  Style="{StaticResource WizardTextLine}"  Margin="0,0,0,0" />
+        </StackPanel>
+
+        <DockPanel  Name="SelectedPhoto" Grid.Row="2" Grid.ColumnSpan="2"  Background="{StaticResource TLineViewBackground}">
+            <TextBlock  Text="{Binding Path=SelectedItem.DisplayName}" Style="{StaticResource WizardTextLine}" DockPanel.Dock="Bottom" />
+            <Image  Source="{Binding Path=SelectedItem.PhotoUrl, Converter={StaticResource ImageConverter}}" Stretch="Uniform" />
+        </DockPanel>
+
+        <DockPanel Name="PhotoStrip"  Grid.Row="3" Grid.ColumnSpan="2"  Background="{StaticResource TLineViewBackground}">
+            <ListBox  ItemsSource="{Binding Path=SelectedSection.Items}" SelectionMode="Extended"  
+                                      Background="{StaticResource TLineViewBackgroundPanel}" 
+                                      ItemTemplate="{StaticResource albumItemTemplate}"
+                                      SelectedValue="{Binding NoSelection}"  IsSynchronizedWithCurrentItem="True" 
+                                      VirtualizingStackPanel.IsVirtualizing="False"  
+                                      ScrollViewer.HorizontalScrollBarVisibility="Visible"
+                                      >
+                <ListBox.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <StackPanel Orientation="Horizontal" Background="{StaticResource TLineViewBackground}"   />
+                    </ItemsPanelTemplate>
+                </ListBox.ItemsPanel>
+            </ListBox>
+        </DockPanel>
+
+
+        <StackPanel Name="Detail" Grid.Row="4" Grid.ColumnSpan="2"  Background="{StaticResource TLineViewBackground}"  MinHeight="180">
+            <TextBlock Text="    Longitude                100"  Style="{StaticResource WizardTextLine}"  Margin="0,0,0,0" />
+            <TextBlock Text="    Latitude                 100"  Style="{StaticResource WizardTextLine}"  Margin="0,0,0,0" />
+        </StackPanel>
+
+
+    </Grid>
+</view:BaseView>
+       
+
+
+

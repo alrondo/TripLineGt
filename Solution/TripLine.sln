@@ -1,0 +1,78 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.26403.7
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TripLine.Dtos", "..\Source\TripLine.Dtos\TripLine.Dtos.csproj", "{A3417FB7-8FFA-4D5F-B1A3-311FA9EB49DD}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TripLine.Service", "..\Source\TripLine.Service\TripLine.Service.csproj", "{6EDD1232-DAE6-4DF9-B803-4DAEAF5EEDA9}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{7C195CDB-78D5-4452-AC3E-9DE580592207}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TripLine.DesktopApp", "..\Source\TripLine.DesktopApp\TripLine.DesktopApp.csproj", "{01B3A38C-9480-4396-BFB0-7E32A68A1284}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tripline.WebConsumer", "..\Source\Tripline.WebConsumer\Tripline.WebConsumer.csproj", "{DB72F30E-DAEF-47C0-869A-3B30DE0A8729}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TripLine.ServiceTests", "..\Source\TripLine.ServiceTests\TripLine.ServiceTests.csproj", "{38BF86AE-BDCC-47A8-92BE-E7B5F3389B4A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TripLine.DesktopAppTests", "..\Source\TripLine.DesktopAppTests\TripLine.DesktopAppTests.csproj", "{9BC06F00-FB13-4A4C-9251-C57943212047}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TLine.Style", "..\Source\TLine.Style\TLine.Style.csproj", "{49FA83E1-0651-4652-BE36-AC7812668FE4}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TLine.Toolbox", "..\Source\TLine.Toolbox\TLine.Toolbox.csproj", "{A9F03CF8-7F2E-4FED-9E39-B197FE764192}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TLine.Toolbox.UI", "..\Source\TLine.Toolbox.UI\TLine.Toolbox.UI.csproj", "{67853204-16B9-4502-A40E-B6384839619E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TLine.WPF.MVVM", "..\Source\TLine.WPF.MVVM\TLine.WPF.MVVM.csproj", "{F4827CDC-880A-4819-BADF-745B0CF8B9DB}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{A3417FB7-8FFA-4D5F-B1A3-311FA9EB49DD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A3417FB7-8FFA-4D5F-B1A3-311FA9EB49DD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A3417FB7-8FFA-4D5F-B1A3-311FA9EB49DD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A3417FB7-8FFA-4D5F-B1A3-311FA9EB49DD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6EDD1232-DAE6-4DF9-B803-4DAEAF5EEDA9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6EDD1232-DAE6-4DF9-B803-4DAEAF5EEDA9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6EDD1232-DAE6-4DF9-B803-4DAEAF5EEDA9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6EDD1232-DAE6-4DF9-B803-4DAEAF5EEDA9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{01B3A38C-9480-4396-BFB0-7E32A68A1284}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{01B3A38C-9480-4396-BFB0-7E32A68A1284}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{01B3A38C-9480-4396-BFB0-7E32A68A1284}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{01B3A38C-9480-4396-BFB0-7E32A68A1284}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DB72F30E-DAEF-47C0-869A-3B30DE0A8729}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DB72F30E-DAEF-47C0-869A-3B30DE0A8729}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DB72F30E-DAEF-47C0-869A-3B30DE0A8729}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DB72F30E-DAEF-47C0-869A-3B30DE0A8729}.Release|Any CPU.Build.0 = Release|Any CPU
+		{38BF86AE-BDCC-47A8-92BE-E7B5F3389B4A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{38BF86AE-BDCC-47A8-92BE-E7B5F3389B4A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{38BF86AE-BDCC-47A8-92BE-E7B5F3389B4A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{38BF86AE-BDCC-47A8-92BE-E7B5F3389B4A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9BC06F00-FB13-4A4C-9251-C57943212047}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9BC06F00-FB13-4A4C-9251-C57943212047}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9BC06F00-FB13-4A4C-9251-C57943212047}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9BC06F00-FB13-4A4C-9251-C57943212047}.Release|Any CPU.Build.0 = Release|Any CPU
+		{49FA83E1-0651-4652-BE36-AC7812668FE4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{49FA83E1-0651-4652-BE36-AC7812668FE4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{49FA83E1-0651-4652-BE36-AC7812668FE4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{49FA83E1-0651-4652-BE36-AC7812668FE4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A9F03CF8-7F2E-4FED-9E39-B197FE764192}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A9F03CF8-7F2E-4FED-9E39-B197FE764192}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A9F03CF8-7F2E-4FED-9E39-B197FE764192}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A9F03CF8-7F2E-4FED-9E39-B197FE764192}.Release|Any CPU.Build.0 = Release|Any CPU
+		{67853204-16B9-4502-A40E-B6384839619E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{67853204-16B9-4502-A40E-B6384839619E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{67853204-16B9-4502-A40E-B6384839619E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{67853204-16B9-4502-A40E-B6384839619E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F4827CDC-880A-4819-BADF-745B0CF8B9DB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F4827CDC-880A-4819-BADF-745B0CF8B9DB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F4827CDC-880A-4819-BADF-745B0CF8B9DB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F4827CDC-880A-4819-BADF-745B0CF8B9DB}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

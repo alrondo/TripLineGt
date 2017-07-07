@@ -1,0 +1,12 @@
+C:\devalr\TripLine18\Source\TLine.Style\bin\Release\TLine.Style.dll.config
+C:\devalr\TripLine18\Source\TLine.Style\bin\Release\TLine.Style.dll
+C:\devalr\TripLine18\Source\TLine.Style\bin\Release\TLine.Style.pdb
+C:\devalr\TripLine18\Source\TLine.Style\bin\Release\MahApps.Metro.dll
+C:\devalr\TripLine18\Source\TLine.Style\bin\Release\System.Windows.Interactivity.dll
+C:\devalr\TripLine18\Source\TLine.Style\bin\Release\MahApps.Metro.pdb
+C:\devalr\TripLine18\Source\TLine.Style\bin\Release\MahApps.Metro.xml
+C:\devalr\TripLine18\Source\TLine.Style\obj\Release\BladeStyle.baml
+C:\devalr\TripLine18\Source\TLine.Style\obj\Release\TLine.Style_MarkupCompile.cache
+C:\devalr\TripLine18\Source\TLine.Style\obj\Release\TLine.Style.g.resources
+C:\devalr\TripLine18\Source\TLine.Style\obj\Release\TLine.Style.dll
+C:\devalr\TripLine18\Source\TLine.Style\obj\Release\TLine.Style.pdb

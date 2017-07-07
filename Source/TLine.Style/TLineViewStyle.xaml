@@ -1,0 +1,255 @@
+﻿<ResourceDictionary xmlns:markup="http://schemas.microsoft.com/winfx/2006/xaml"
+                      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+
+    <Style x:Key="WizardText" TargetType="{x:Type TextBlock}">
+        <Setter Property="Foreground" Value="White"/>
+        <Setter Property="FontSize" Value="12"/>
+        <Setter Property="VerticalAlignment" Value="Top"></Setter>
+        <Setter Property="TextWrapping" Value="Wrap"></Setter>
+    </Style>
+
+    <Style x:Key="WizardTextLg" TargetType="{x:Type TextBlock}">
+        <Setter Property="Foreground" Value="White"/>
+        <Setter Property="FontSize" Value="14"/>
+        <Setter Property="VerticalAlignment" Value="Top"></Setter>
+        <Setter Property="TextWrapping" Value="Wrap"></Setter>
+    </Style>
+
+    
+    
+    <Style x:Key="WizardTextLine" TargetType="{x:Type TextBlock}">
+        <Setter Property="Foreground" Value="White"/>
+        <Setter Property="FontSize" Value="12"/>
+        <Setter Property="VerticalAlignment" Value="Top"></Setter>
+    </Style>
+
+    <Style x:Key="WizardTextLineLg" TargetType="{x:Type TextBlock}">
+        <Setter Property="Foreground" Value="White"/>
+        <Setter Property="FontSize" Value="14"/>
+        <Setter Property="VerticalAlignment" Value="Top"></Setter>
+    </Style>
+
+
+    <Style x:Key="WizardHeaderTextXSm" TargetType="{x:Type TextBlock}">
+        <Setter Property="Foreground" Value="White"/>
+        <Setter Property="FontSize" Value="14"/>
+        <Setter Property="FontWeight" Value="Bold" />
+        <Setter Property="VerticalAlignment" Value="Top"></Setter>
+    </Style>
+
+
+    <Style x:Key="WizardHeaderTextSm" TargetType="{x:Type TextBlock}">
+        <Setter Property="Foreground" Value="White"/>
+        <Setter Property="FontSize" Value="16"/>
+        <Setter Property="FontWeight" Value="Bold" />
+        <Setter Property="VerticalAlignment" Value="Top"></Setter>
+    </Style>
+
+
+    <Style x:Key="WizardHeaderText" TargetType="{x:Type TextBlock}">
+        <Setter Property="Foreground" Value="White"/>
+        <Setter Property="FontSize" Value="18"/>
+        <Setter Property="FontWeight" Value="Bold" />
+        <Setter Property="VerticalAlignment" Value="Top"></Setter>
+    </Style>
+
+    <Style x:Key="WizardHeaderTextLg" TargetType="{x:Type TextBlock}">
+        <Setter Property="Foreground" Value="White"/>
+        <Setter Property="FontSize" Value="20"/>
+        <Setter Property="FontWeight" Value="Bold" />
+        <Setter Property="VerticalAlignment" Value="Top"></Setter>
+    </Style>
+
+   
+    
+
+
+
+
+    <Style x:Key="WizardBannerText" TargetType="{x:Type TextBlock}">
+        <Setter Property="Foreground" Value="White"/>
+        <Setter Property="FontSize" Value="26"/>
+        <Setter Property="FontWeight" Value="ExtraBold" />
+        <Setter Property="VerticalAlignment" Value="Top"></Setter>
+    </Style>
+
+
+    <!-- TextBlock -->
+    <Style x:Key="
+           " TargetType="{x:Type TextBlock}">
+        <Setter Property="Foreground" Value="{DynamicResource TLineViewTitleBrush}"/>
+        <Setter Property="FontSize" Value="25"/>
+        <Setter Property="FontWeight" Value="DemiBold"/>
+        <Setter Property="Margin" Value="5,0"/>
+    </Style>
+    
+    <Style x:Key="TLineViewDescription" TargetType="{x:Type TextBlock}">
+        <Setter Property="Foreground" Value="{DynamicResource TLineViewDescriptionBrush}"/>
+        <Setter Property="FontSize" Value="12"/>
+        <Setter Property="VerticalAlignment" Value="Top"></Setter>
+        <Setter Property="Margin" Value="5,0"/>
+    </Style>
+
+    <Style x:Key="TLineViewTextBox" TargetType="{x:Type TextBox}">
+        <Setter Property="VerticalContentAlignment" Value="Center"/>
+        <Setter Property="HorizontalContentAlignment" Value="Left"/>
+        <Setter Property="Padding" Value="3"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate   TargetType="{x:Type TextBox}">
+                    <Border Name="border"  
+                            Padding="2"
+                            BorderBrush="{DynamicResource TLineViewControlBorderBrush}" 
+                            BorderThickness="1"
+                            Background="Transparent"                                        
+                            >
+                            <ScrollViewer Margin="0" x:Name="PART_ContentHost"/>
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter TargetName="border" Property="Background" Value="{DynamicResource TLineViewControlDisabledBackgroundBrush}" />
+                        </Trigger>
+                        <Trigger Property="IsEnabled" Value="False">
+                            <Setter TargetName="border" Property="Opacity" Value="0.6" />
+                            <Setter TargetName="border" Property="Background" Value="{DynamicResource TLineViewControlDisabledBackgroundBrush}" />
+                            <Setter TargetName="border" Property="BorderBrush" Value="{DynamicResource TLineViewControlDisabledBorderBrush}" />
+                        </Trigger>
+                        <MultiTrigger>
+                            <MultiTrigger.Conditions>
+                                <Condition Property="IsKeyboardFocused" Value="True" />
+                                <Condition Property="IsMouseOver" Value="True" />
+                            </MultiTrigger.Conditions>
+                            <MultiTrigger.Setters>
+                                <Setter TargetName="border" Property="BorderBrush" Value="White" />
+                            </MultiTrigger.Setters>
+                        </MultiTrigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style x:Key="TLineViewCheckBox" TargetType="{x:Type CheckBox}">
+        <Setter Property="HorizontalAlignment" Value="Left"/>
+        <Setter Property="Width" Value="20"/>
+        <Setter Property="Height" Value="20"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate   TargetType="{x:Type CheckBox}">
+                    <Border BorderBrush="LightGray" BorderThickness="{TemplateBinding BorderThickness}" >
+                        <Grid >
+                            <!-- ContentPresenter displays content of CheckBox -->
+                            <ContentPresenter Name="contentPresenter" Content="{TemplateBinding Content}" ContentTemplate="{TemplateBinding ContentTemplate}" Margin="{TemplateBinding Padding}" 
+                                                        HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" 
+                                                        VerticalAlignment="{TemplateBinding VerticalContentAlignment}" />
+                            <Border Name="border" BorderBrush="{DynamicResource TLineViewControlBorderBrush}" >
+                                <Border.Background>
+                                    <VisualBrush>
+                                        <VisualBrush.Visual>
+                                            <Canvas Name="canvas" VerticalAlignment="Center" Opacity="1" >
+                                                <Path Name="checkPath" Data="M 0 5 L 3 10 10 0" Stroke="White" StrokeThickness="2" StrokeStartLineCap="Round" StrokeEndLineCap="Round" StrokeLineJoin="Round" Visibility="Hidden" />
+                                                <Line Name="horizline" X1="2" Y1="5" X2="8" Y2="5" Stroke="White" Stretch="None" Visibility="Hidden" />
+                                            </Canvas>
+                                        </VisualBrush.Visual>
+                                    </VisualBrush>
+                                </Border.Background>
+                            </Border>
+                        </Grid>
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsEnabled" Value="False">
+                            <Setter TargetName="canvas" Property="Opacity" Value="0.3" />
+                            <Setter TargetName="border" Property="Opacity" Value="1"/>
+                            <Setter TargetName="contentPresenter" Property="Opacity" Value="0.5"/>
+                        </Trigger>
+                        <Trigger Property="IsChecked" Value="True">
+                            <Setter TargetName="checkPath" Property="Visibility" Value="Visible" />
+                            <Setter TargetName="horizline" Property="Visibility" Value="Hidden" />
+                        </Trigger>
+                        <Trigger Property="IsChecked" Value="{x:Null}">
+                            <Setter TargetName="checkPath" Property="Visibility" Value="Hidden" />
+                            <Setter TargetName="horizline" Property="Visibility" Value="Visible" />
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <!-- TLineView Header Button -->
+    <Style x:Key="TLineViewHeaderButton" TargetType="{x:Type Button}">
+        <Setter Property="Foreground" Value="{DynamicResource TLineViewDescriptionBrush}"/>
+        <Setter Property="Background" Value="Transparent"/>
+        <Setter Property="Height" Value="70" />
+        <Setter Property="MinWidth" Value="90" />
+        <Setter Property="FontSize" Value="20"/>
+        <Setter Property="VerticalAlignment" Value="Bottom"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type Button}">
+                    <Grid Name="mainGrid">
+                        <Border Name="borderBottom" SnapsToDevicePixels="True" BorderBrush="{DynamicResource TLineViewButtonBorderBrush}" Background="Transparent" BorderThickness="0,0,0,1" />
+                        <Border Name="border" SnapsToDevicePixels="True" BorderBrush="{DynamicResource TLineViewButtonBorderBrush}" Background="Transparent" BorderThickness="1,1,1,0" >
+                            <ContentPresenter Name="contentPresenter"  HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                    </Grid>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsEnabled" Value="False">
+                            <Setter Property="Opacity" TargetName="border" Value="1"/>
+                            <Setter Property="Opacity" TargetName="contentPresenter" Value="0.5"/>
+                        </Trigger>
+                        <Trigger Property="IsPressed" Value="True">
+                            <Setter Property="RenderTransform" TargetName="mainGrid">
+                                <Setter.Value>
+                                    <TransformGroup>
+                                        <ScaleTransform ScaleX="0.9" ScaleY="0.9"/>
+                                        <SkewTransform AngleX="0" AngleY="0"/>
+                                        <RotateTransform Angle="0"/>
+                                        <TranslateTransform X="3.5" Y="3.5"/>
+                                    </TransformGroup>
+                                </Setter.Value>
+                            </Setter>
+                        </Trigger>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter Property="BorderBrush" TargetName="borderBottom" Value="LawnGreen"/>
+                            <Setter Property="BorderThickness" TargetName="borderBottom" Value="0,0,0,2"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <!-- TLineView Content Buttons  -->
+    <Style x:Key="TLineViewButton" TargetType="{x:Type Button}">
+        <Setter Property="Foreground" Value="White"/>
+        <Setter Property="Background" Value="Transparent"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type Button}">
+                    <Grid Name="mainGrid">
+                        <Border Name="border" SnapsToDevicePixels="True" BorderBrush="{DynamicResource TLineViewControlBorderBrush}" Background="Transparent" BorderThickness="1" CornerRadius="4" >
+                            <ContentPresenter Name="contentPresenter"  HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                    </Grid>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter TargetName="border" Property="Background" Value="{DynamicResource TLineViewControlDisabledBackgroundBrush}" />
+                        </Trigger>
+                        <Trigger Property="IsEnabled" Value="False">
+                            <Setter TargetName="border" Property="Opacity" Value="0.6" />
+                            <Setter TargetName="border" Property="Background" Value="{DynamicResource TLineViewControlDisabledBackgroundBrush}" />
+                        </Trigger>
+                        <Trigger Property="IsPressed" Value="True">
+                            <Setter TargetName="border" Property="BorderThickness" Value="2" />
+                            <Setter TargetName="border" Property="Background" Value="{DynamicResource TLineViewButtonPressedBackgroudBrush}" />
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+</ResourceDictionary>

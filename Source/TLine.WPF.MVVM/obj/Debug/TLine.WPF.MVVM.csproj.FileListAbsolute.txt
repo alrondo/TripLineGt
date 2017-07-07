@@ -1,0 +1,11 @@
+C:\CodeAlrn\TripLineRoot\TripLineJn\Source\TLine.WPF.MVVM\bin\Debug\TLine.WPF.MVVM.dll
+C:\CodeAlrn\TripLineRoot\TripLineJn\Source\TLine.WPF.MVVM\bin\Debug\TLine.WPF.MVVM.pdb
+C:\CodeAlrn\TripLineRoot\TripLineJn\Source\TLine.WPF.MVVM\bin\Debug\log4net.dll
+C:\CodeAlrn\TripLineRoot\TripLineJn\Source\TLine.WPF.MVVM\bin\Debug\MahApps.Metro.dll
+C:\CodeAlrn\TripLineRoot\TripLineJn\Source\TLine.WPF.MVVM\bin\Debug\System.Windows.Interactivity.dll
+C:\CodeAlrn\TripLineRoot\TripLineJn\Source\TLine.WPF.MVVM\bin\Debug\log4net.xml
+C:\CodeAlrn\TripLineRoot\TripLineJn\Source\TLine.WPF.MVVM\bin\Debug\MahApps.Metro.pdb
+C:\CodeAlrn\TripLineRoot\TripLineJn\Source\TLine.WPF.MVVM\bin\Debug\MahApps.Metro.xml
+C:\CodeAlrn\TripLineRoot\TripLineJn\Source\TLine.WPF.MVVM\obj\Debug\TLine.WPF.MVVM.csprojResolveAssemblyReference.cache
+C:\CodeAlrn\TripLineRoot\TripLineJn\Source\TLine.WPF.MVVM\obj\Debug\TLine.WPF.MVVM.dll
+C:\CodeAlrn\TripLineRoot\TripLineJn\Source\TLine.WPF.MVVM\obj\Debug\TLine.WPF.MVVM.pdb

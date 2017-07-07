@@ -1,0 +1,120 @@
+﻿<view:BaseView x:Class="TripLine.DesktopApp.View.TripWizardView"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+      xmlns:cvt="clr-namespace:TripLine.DesktopApp.Converters"
+      xmlns:view="clr-namespace:TripLine.DesktopApp.View"
+     
+      mc:Ignorable="d" >
+
+    <Grid Margin="0,0,0,0"  Background="{StaticResource TLineViewBackgroundPanel}"  Name="TripWizGrid" >
+        <Grid.Resources>
+            <cvt:VisibilityConverter x:Key="VisibilityConverter"/>
+            <cvt:InvisibilityConverter x:Key="InvisibilityConverter"/>
+        </Grid.Resources>
+
+        <Grid.RowDefinitions>
+            <RowDefinition Height="12"  />
+            <RowDefinition Height="auto"  />
+            <RowDefinition Height="auto"  />
+            <RowDefinition Height="auto"  />
+            <RowDefinition Height="auto"  />
+            <RowDefinition Height="*"  />
+            <RowDefinition Height="auto"  />
+            <RowDefinition Height="12"  />
+        </Grid.RowDefinitions>
+
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="12"   />
+            <ColumnDefinition Width="*"   />
+            <ColumnDefinition Width="*"   />
+            <ColumnDefinition Width="14*"   />
+            <ColumnDefinition Width="*"   />
+            <ColumnDefinition Width="12"  />
+        </Grid.ColumnDefinitions>
+
+        <Border Grid.Row="0"   Grid.Column="0" Grid.RowSpan="8"   />
+        <Border Grid.Row="0"  Grid.Column="5" Grid.RowSpan="8"   />
+
+        <TextBlock Text=""  Style="{StaticResource WizardText}" />
+
+        <StackPanel Grid.Row="1"  Grid.Column="2" Grid.ColumnSpan="2" Orientation="Vertical">
+            <TextBlock Text ="Dear master, i really want to help you populate your TripLine library."  
+                       Style="{StaticResource WizardText}"  />
+            <TextBlock Text =""  Style="{StaticResource WizardText}"  />
+        </StackPanel>
+
+        <StackPanel Grid.Row="2"  Grid.Column="2" Grid.ColumnSpan="2" Orientation="Vertical">
+
+            <TextBlock  Text ="{Binding Status, Mode=TwoWay, StringFormat=Please wait while i \{0\} }"  
+                        Style="{StaticResource WizardText}" 
+                        Visibility="{Binding InitialDetection, Mode=TwoWay, Converter={StaticResource VisibilityConverter}}"     />
+
+            <TextBlock Text="{Binding Path=NewPhotoCount, Mode=TwoWay, StringFormat= I have found pictures \{0\} in your directory }"
+                       Style="{StaticResource WizardText}"   
+                       Visibility="{Binding DetectingNewTripComponents, Mode=TwoWay, Converter={StaticResource VisibilityConverter}}"       />
+
+            <TextBlock Text=" " />
+
+            <TextBlock Text="Wait some more, as i some of my magical powers. I can see  :" 
+                       Style="{StaticResource WizardText}"
+                       Visibility="{Binding DetectingNewTripComponents, Mode=TwoWay, Converter={StaticResource VisibilityConverter}}"     
+                       />
+
+            <TextBlock Text="Tadam! Hope my magical skill did the job.  This is what i found:" 
+                       Style="{StaticResource WizardText}"
+                       Visibility="{Binding DetectionCompleted, Mode=TwoWay, Converter={StaticResource VisibilityConverter}}"     
+                       />
+            <TextBlock Text=" "   Visibility="{Binding InitialDetection, Mode=TwoWay, Converter={StaticResource InvisibilityConverter}}"      />
+
+
+            <!--Visibility="{Binding , Mode=TwoWay, Converter={StaticResource VisibilityConverter}} "-->
+        </StackPanel>
+
+        <StackPanel Grid.Row="3"  Grid.Column="2" Orientation="Vertical"  Grid.ColumnSpan="2"
+                    Visibility="{Binding NewTravelPhotosFound, Mode=TwoWay,
+                    Converter={StaticResource VisibilityConverter}}">
+                        
+            <TextBlock Margin="15,0,0,0" Style="{StaticResource WizardText}"
+                Text="{Binding Path=NewTravelPhotosCount, Mode=TwoWay,
+                StringFormat={}{0} have probably comes from travelling }"  />
+            <TextBlock Margin="15,0,0,0" Style="{StaticResource WizardText}"
+                Text="{Binding Path=NewPhotoSessionCount, Mode=TwoWay,
+                StringFormat=\{0\} different locations  }"/> 
+            <TextBlock Text=" "/>
+
+
+            <TextBlock Margin="15,5,0,0" Style="{StaticResource WizardText}"
+                Text="{Binding Path=NewTripCandidateCount, Mode=TwoWay,
+                StringFormat={}{0} New trips  }" />
+            <TextBlock Margin="15,0,0,0" Style="{StaticResource WizardText}"
+                Text="{Binding Path=NewDestinationCandidateCount, Mode=TwoWay,
+                StringFormat={}{0} New destinations  }"  />
+
+            <TextBlock Margin="15,0,0,0" Style="{StaticResource WizardText}"
+                Text="{Binding Path=NewDestinationCandidateCount, Mode=TwoWay,
+                StringFormat={}{0} Visited attraction  }"/>
+
+        </StackPanel>
+
+
+        <StackPanel Grid.Row="4"  Grid.Column="2" Grid.ColumnSpan="4" Orientation="Vertical" Margin="0,14,0,38"
+                    Visibility="{Binding DetectionCompleted, Mode=TwoWay,
+                    Converter={StaticResource VisibilityConverter}}"  >
+            <TextBlock Text="Youhou, do you want me to add these to your library?"   Style="{StaticResource WizardText}" />
+        </StackPanel>
+
+
+        <StackPanel Grid.Row="5"  Grid.Column="1" Orientation="Horizontal"   Height="40" Grid.ColumnSpan="3"
+                    Visibility="{Binding NewTravelPhotoFound,
+                    Converter={StaticResource VisibilityConverter}}" Margin="32.6,4.4,0,3.6" Grid.RowSpan="2">
+
+            <Button Width="70" Margin="150,0,0,0" Command="{Binding OkCommand}">OK</Button>
+            <Button Width="70" Margin="10,0,0,0" Command="{Binding CancelCommand}" >Cancel</Button>
+            <!--<Button Width="70" Margin="10,0,0,0" Command="{Binding CancelCommand}"    Visibility="{Binding CancelCommand}"  >Cancel</Button>-->
+        </StackPanel>
+        
+    </Grid>
+
+</view:BaseView>

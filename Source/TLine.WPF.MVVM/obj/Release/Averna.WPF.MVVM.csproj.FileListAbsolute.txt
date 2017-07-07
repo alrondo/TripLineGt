@@ -1,0 +1,13 @@
+C:\devalr\TripLine18\Source\TLine.WPF.MVVM\bin\Release\TLine.WPF.MVVM.dll
+C:\devalr\TripLine18\Source\TLine.WPF.MVVM\bin\Release\TLine.WPF.MVVM.pdb
+C:\devalr\TripLine18\Source\TLine.WPF.MVVM\bin\Release\TLine.Style.dll
+C:\devalr\TripLine18\Source\TLine.WPF.MVVM\bin\Release\log4net.dll
+C:\devalr\TripLine18\Source\TLine.WPF.MVVM\bin\Release\MahApps.Metro.dll
+C:\devalr\TripLine18\Source\TLine.WPF.MVVM\bin\Release\System.Windows.Interactivity.dll
+C:\devalr\TripLine18\Source\TLine.WPF.MVVM\bin\Release\TLine.Style.pdb
+C:\devalr\TripLine18\Source\TLine.WPF.MVVM\bin\Release\log4net.xml
+C:\devalr\TripLine18\Source\TLine.WPF.MVVM\bin\Release\MahApps.Metro.pdb
+C:\devalr\TripLine18\Source\TLine.WPF.MVVM\bin\Release\MahApps.Metro.xml
+C:\devalr\TripLine18\Source\TLine.WPF.MVVM\obj\Release\TLine.WPF.MVVM.csprojResolveAssemblyReference.cache
+C:\devalr\TripLine18\Source\TLine.WPF.MVVM\obj\Release\TLine.WPF.MVVM.dll
+C:\devalr\TripLine18\Source\TLine.WPF.MVVM\obj\Release\TLine.WPF.MVVM.pdb

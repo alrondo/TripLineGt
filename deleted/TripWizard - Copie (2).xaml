@@ -1,0 +1,73 @@
+﻿<view:BaseView x:Class="TripLine.DesktopApp.View.TripWizardView"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+      xmlns:view="clr-namespace:TripLine.DesktopApp.View"
+      mc:Ignorable="d" 
+      d:DesignHeight="300" d:DesignWidth="700">
+
+    <Grid Margin="0,-12,0,12"  Background="BurlyWood">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="auto"  />
+            <RowDefinition Height="3*"   />
+            <RowDefinition Height="*"  />
+        </Grid.RowDefinitions>
+        
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="2*"   />
+            <ColumnDefinition Width="50"   />
+            
+            <ColumnDefinition Width="30"   />
+            <ColumnDefinition Width="7*"   />
+            
+            <ColumnDefinition Width="30"  />
+            <ColumnDefinition Width="2*"  />
+        </Grid.ColumnDefinitions>
+  
+
+        <StackPanel Grid.Row="0"  Grid.RowSpan="3" Grid.Column="0" Background="LightCoral" />
+        <StackPanel Grid.Row="0"  Grid.RowSpan="3" Grid.Column="5" Background="LightCoral" />
+
+        <StackPanel Grid.Row="0"  Grid.Column="2" Grid.ColumnSpan="3" Orientation="Vertical">
+            <TextBlock FontWeight="Heavy">After analyzing your picture library have identify : </TextBlock>
+        </StackPanel>
+
+        <!-- Column 2 - Count of elements -->
+        
+        <StackPanel Grid.Row="1"  Grid.Column="2" Orientation="Vertical" >
+            <TextBlock Text="{Binding Path=NewPhotoCount}" ></TextBlock>
+            <TextBlock Text="{Binding Path=NewPhotoSessionCount}"></TextBlock>
+            <TextBlock Text="{Binding Path=NewTripCandidateCount}"></TextBlock>
+        </StackPanel>
+        <StackPanel Grid.Row="2"  Grid.Column="3" Orientation="Vertical" ></StackPanel>
+
+        <!-- Column 3 - Elements names -->
+        <StackPanel Grid.Row="0"  Grid.Column="3" Orientation="Vertical" ></StackPanel>
+        <StackPanel Grid.Row="1"  Grid.Column="3" Orientation="Vertical" >
+            <TextBlock>Photos taken while travelling</TextBlock>
+            <TextBlock>Travel destination</TextBlock>
+            <TextBlock>Trips</TextBlock>
+        </StackPanel>
+        <StackPanel Grid.Row="2"  Grid.Column="3" Orientation="Vertical" >
+            <ListView Margin="2"  ItemsSource="{ Binding NewLocations}"    >
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <DockPanel >
+                            <TextBlock Text="{Binding Display}"  DockPanel.Dock="Top"   FontWeight="SemiBold"  FontSize="16" ></TextBlock>
+                            <TextBlock Text="{Binding ProviderContent}"  DockPanel.Dock="Bottom"   FontWeight="Normal"  FontSize="10"  TextWrapping="Wrap" Margin="6,2,6,2" ></TextBlock>
+                        </DockPanel>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
+
+
+        </StackPanel>
+
+
+    </Grid>
+           
+</view:BaseView>
+
+
+
