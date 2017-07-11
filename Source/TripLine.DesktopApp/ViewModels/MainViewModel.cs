@@ -63,6 +63,10 @@ namespace TripLine.DesktopApp.ViewModels
             await _navigator.NavigateTo(typeof(TripWizardView));
         }
 
+        public async Task GoBack()
+        {
+            await _navigator.GoBack();
+        }
 
         private static void Initialize()
         {

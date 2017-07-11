@@ -105,7 +105,7 @@ namespace TripLine.DesktopApp
             return RightWindowCommands.Items.Contains(element);
         }
 
-        public void EnableButtons(bool enable)
+        public async void EnableButtons(bool enable)
         {
             //foreach (var item in RightWindowCommands.Items)
             //{
@@ -116,7 +116,7 @@ namespace TripLine.DesktopApp
             //{
             //    (item as FrameworkElement).IsEnabled = enable;
             //}
-
+            await _mainViewModel.GoBack();
 
         }
 
@@ -137,6 +137,11 @@ namespace TripLine.DesktopApp
             //{
             //    await dialog.RequestCloseAsync();
             //}
+        }
+
+        private async void BackBtn_OnClick(object sender, RoutedEventArgs e)
+        {
+            await _mainViewModel.GoBack();
         }
     }
 }

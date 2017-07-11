@@ -32,7 +32,7 @@
         </StackPanel>
 
         <StackPanel  Grid.Row="0" Grid.Column="1"  Margin="7,0,7,0"  Orientation="Vertical">
-            <Button>GO BACK</Button> 
+            <Button Name="BackBtn" Click="BackBtn_OnClick" MaxWidth="40" >Back</Button> 
         </StackPanel>
         
         <ContentControl Grid.Row="1"  Grid.Column="1"  x:Name="ContentControl"  Margin="7,0,7,0" />

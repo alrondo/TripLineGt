@@ -55,6 +55,10 @@
     <Compile Include="ViewModels\TripWizardMainViewModelTests.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\TLine.WPF.MVVM\TLine.WPF.MVVM.csproj">
+      <Project>{f4827cdc-880a-4819-badf-745b0cf8b9db}</Project>
+      <Name>TLine.WPF.MVVM</Name>
+    </ProjectReference>
     <ProjectReference Include="..\TripLine.DesktopApp\TripLine.DesktopApp.csproj">
       <Project>{01B3A38C-9480-4396-BFB0-7E32A68A1284}</Project>
       <Name>TripLine.DesktopApp</Name>

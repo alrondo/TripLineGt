@@ -19,15 +19,13 @@
 
             <DataTemplate  x:Key="hliteItemTemplate" DataType="{x:Type vmodel:HighliteItemViewModel}"  >
                 <StackPanel  Orientation="Vertical" Width="200"  Height="190">
-                    <StackPanel    >
+            
                         <Button Height="160"  Width="200" Background="{StaticResource TLineViewBackground}"
                                 Command="{Binding OpenCommand}" >
                             <Image Source="{Binding Path=Thumbnail, Converter={StaticResource ImageConverter}}" Stretch="UniformToFill" ></Image>
                             <!--<Image  Source="pack://application:,,,/Resources/hawai.jpg" />-->
                         </Button>
                         <TextBlock  Text="{Binding Path=DisplayName}" Style="{StaticResource WizardTextLine}"                                   />
-                    </StackPanel>
-
                 </StackPanel>
             </DataTemplate>
         </Grid.Resources>
@@ -51,7 +49,8 @@
             <ListBox  ItemsSource="{Binding Path=Topics}" SelectionMode="Single" 
                       Background="{StaticResource TLineViewBackground}"    
                       SelectedValue="{Binding NoSelection}"  IsSynchronizedWithCurrentItem="True" 
-                      VirtualizingStackPanel.IsVirtualizing="False"  ScrollViewer.VerticalScrollBarVisibility="Visible" >
+                      VirtualizingStackPanel.IsVirtualizing="False"  ScrollViewer.VerticalScrollBarVisibility="auto"
+                      ScrollViewer.HorizontalScrollBarVisibility="auto" >
                 <ListBox.ItemTemplate >
                     <DataTemplate>
                         <StackPanel  Orientation="Vertical" Margin="0,0,0,0" Background="{StaticResource TLineViewBackground}"  >
@@ -66,7 +65,9 @@
                                       >
                                 <ListBox.ItemsPanel>
                                     <ItemsPanelTemplate>
-                                        <StackPanel Orientation="Horizontal" Background="{StaticResource TLineViewBackground}"   /></ItemsPanelTemplate>
+                                        <WrapPanel Orientation="Horizontal"  Margin="4,0,0,4" Background="{StaticResource TLineViewBackground}"  />
+                                        <!--<StackPanel Orientation="Horizontal"    />-->
+                                    </ItemsPanelTemplate>
                                 </ListBox.ItemsPanel>
                             </ListBox>
                                       
