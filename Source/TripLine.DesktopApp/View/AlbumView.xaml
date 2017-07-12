@@ -17,7 +17,7 @@
 
             <DataTemplate  x:Key="albumItemTemplate" DataType="{x:Type vmodel:AlbumItemViewModel}" > <StackPanel
                 Height="160">
-                    <Button Height="130"  Width="100" Background="{StaticResource TLineViewBackground}">
+                    <Button Height="130"  Width="100" Background="{StaticResource TLineViewBackground}" Command="{Binding OpenCommand}" >
                         <Image Source="{Binding Path=Thumbnail, Converter={StaticResource ImageConverter}}" 
                                Stretch="UniformToFill" >
                         </Image>
@@ -50,8 +50,8 @@
         </StackPanel>
 
         <DockPanel  Name="SelectedPhoto" Grid.Row="2" Grid.ColumnSpan="2"  Background="{StaticResource TLineViewBackground}">
-            <TextBlock  Text="{Binding Path=SelectedItem.DisplayName}" Style="{StaticResource WizardTextLine}" DockPanel.Dock="Bottom" />
-            <Image  Source="{Binding Path=SelectedItem.PhotoUrl, Converter={StaticResource ImageConverter}}" Stretch="Uniform" />
+            <TextBlock  Text="{Binding Path=SelectedSection.SelectedItem.DisplayName,  Mode=TwoWay}" Style="{StaticResource WizardTextLine}" DockPanel.Dock="Bottom" />
+            <Image  Source="{Binding Path=SelectedSection.SelectedItem.PhotoUrl, Mode=TwoWay, Converter={StaticResource ImageConverter}}" Stretch="Uniform" />
         </DockPanel>
 
         <DockPanel Name="PhotoStrip"  Grid.Row="3" Grid.ColumnSpan="2"  Background="{StaticResource TLineViewBackground}">

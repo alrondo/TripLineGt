@@ -100,14 +100,14 @@ namespace TripLine.DesktopApp.ViewModels
             
         }
 
-        private void Stopped()
+        private async void Stopped()
         {
             _refreshTimer.Enabled = false;
             _refreshTimer.Stop();
 
             SetValueFromDetectTripResult(_tripCreationService.TripCreationDetectResult);
 
-            _mainViewModel.GoHome();
+            await _mainViewModel.GoHome();
 
         }
 

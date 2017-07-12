@@ -10,14 +10,16 @@ using TripLine.Toolbox.Extensions;
 
 using TripLine.WPF.MVVM;
 using System.Collections.ObjectModel;
+using System.Threading.Tasks;
 using System.Windows.Controls;
+using System.Windows.Input;
 using TripLine.Service;
 using TripLine.Dtos;
 
 namespace TripLine.DesktopApp.ViewModels
 {
     
-    public class AlbumItemViewModel 
+    public class AlbumItemViewModel :  BaseViewModel
     {
         public string DefaultImg { get; set; } = "pack://application:,,,/Resources/hawai.jpg";
 
@@ -29,10 +31,36 @@ namespace TripLine.DesktopApp.ViewModels
 
         public int    Id      { get; set; }
 
-        public HighliteTarget Target { get; set; }      
+        public HighliteTarget Target { get; set; }
+
+        public event Action<AlbumItemViewModel> OnOpen;
+
+        public event Action<AlbumItemViewModel> OnRemoved;
+
+
+        public AlbumItemViewModel() : base("AlbumItem")
+        { }
+
+        public ICommand OpenCommand
+        {
+            get
+            {
+                return new VMBladeCommand(async () => await ExecOpen(), () => true, ""); // CanExecuteOk(), "");
+            }
+        }
+
+
+        private async Task ExecOpen()
+        {
+            this?.OnOpen(this);
+
+            OnPropertyChanged(nameof(DisplayName));
+        }
+
+
     }
 
-    
+
     public class AlbumSectionViewModel : BaseViewModel
     {
         public string DisplayName { get; set; }
@@ -42,7 +70,11 @@ namespace TripLine.DesktopApp.ViewModels
         public AlbumItemViewModel NoSelection
         {
             get { return null; }   // no selection
-            set { OnPropertyChanged(); }
+            set
+            {
+                OnPropertyChanged();
+                OnPropertyChanged(nameof(SelectedItem));
+            }
         }
 
 
@@ -140,7 +172,7 @@ namespace TripLine.DesktopApp.ViewModels
 
         public AlbumSectionViewModel SelectedSection { get; set; }
 
-        public AlbumItemViewModel SelectedItem => SelectedSection?.SelectedItem;
+        //public AlbumItemViewModel SelectedItem => SelectedSection?.SelectedItem;
 
         
         private void Load ()
@@ -154,7 +186,7 @@ namespace TripLine.DesktopApp.ViewModels
 
             OnPropertyChanged(nameof(DisplayName));
             OnPropertyChanged(nameof(SelectedSection));
-            OnPropertyChanged(nameof(SelectedItem));
+            //OnPropertyChanged(nameof(SelectedItem));
         }
 
         public ObservableCollection<AlbumSectionViewModel> LoadFromHighliteTarget(HighliteTarget target, int id)
@@ -230,27 +262,28 @@ namespace TripLine.DesktopApp.ViewModels
         {
             AlbumItemViewModel vmodel = AutoMapper.Mapper.Map<AlbumItemViewModel>(photo);
 
+            SetupCommands(vmodel);
             return vmodel;
         }
 
 
-        private AlbumSectionViewModel CreateSectionViewModel( HighliteTopic topic)
+
+        private void  SetupCommands(AlbumItemViewModel vmodel)
         {
-            AlbumSectionViewModel vmodel = AutoMapper.Mapper.Map<AlbumSectionViewModel>(topic);
-            vmodel.Items = topic.Items.Take(5).Select(i => CreateAlbumItemsViewModel(i)).ToList();
-
-
-            return vmodel;
-         }
-
-        private AlbumItemViewModel CreateAlbumItemsViewModel(IHighliteItem item)
+            vmodel.OnOpen += OnItemOpen;
+            vmodel.OnRemoved += OnItemRemoved;
+        }
+        
+        private async void OnItemOpen(AlbumItemViewModel obj)
         {
-            AlbumItemViewModel vmodel = AutoMapper.Mapper.Map<AlbumItemViewModel>(item);
+            SelectedSection.SelectedItem = obj;
 
-            return vmodel;
         }
 
-
+        private async void OnItemRemoved(AlbumItemViewModel obj)
+        {
+            throw new NotImplementedException();
+        }
 
     }
 }

@@ -29,7 +29,7 @@ namespace TripLine.DesktopApp.Converters
                 img.EndInit();
                 return img;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 return DependencyProperty.UnsetValue;
             }
