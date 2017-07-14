@@ -7,7 +7,7 @@
       xmlns:view="clr-namespace:TripLine.DesktopApp.View"
       xmlns:vmodel="clr-namespace:TripLine.DesktopApp.ViewModels"
       mc:Ignorable="d" 
-      d:DesignHeight="300" d:DesignWidth="400"    Height="800">
+      d:DesignHeight="500" d:DesignWidth="600"   >
 
 
 
