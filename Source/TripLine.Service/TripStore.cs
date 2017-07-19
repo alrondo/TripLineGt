@@ -11,8 +11,73 @@ using TripLine.Dtos;
 namespace TripLine.Service
 {
 
+    public class TripItem
+    {
+        public int TripId { get; set; }
+
+        public int NumPictures { get; set; }
+
+        public long Weight { get; set; }
+
+        public TripItem(int id)
+        {
+            TripId = id;
+        }
+    }
+
+    public class TripByLocationGroup
+    {
+        public string GroupName { get; set; }
+
+        public List<TripItem> Items { get; set; }
+
+        public TripByLocationGroup(string groupName, List<TripItem> items)
+        {
+            GroupName = groupName;
+            Items = items;
+        }
+    }
+
+    public class TripByYearGroup
+    {
+        public int Year { get; set; }
+
+        public List<TripItem> Items { get; set; }
+    }
+
+
     public class TripStore
     {
+        public List<TripByYearGroup> GetTripByYear()
+        {
+            throw new NotImplementedException();
+        }
+
+        public List<TripByLocationGroup> GetTripByCity()
+        {
+            List<TripByLocationGroup> listByYear = new List<TripByLocationGroup>();
+
+            var res = _tripRepo.Content.Trips.GroupBy(t => t.Location.City).ToList();
+            
+            foreach (var grp in res)
+            {
+                var city = grp.Key;
+
+                var tripItems = grp.Select(i => CreateTripItem(i.Id)).ToList();
+                listByYear.Add(new TripByLocationGroup(city, tripItems));
+            }
+            return listByYear;
+        }
+
+
+        private TripItem CreateTripItem (int tripId)
+        {
+            var titem = new TripItem(tripId);
+
+            // get photos count...
+
+            return titem;
+        }
         private readonly LocationService _locationService;
         private readonly PhotoStore _photoStore;
         private readonly TripSmartBuilder _smartBuilder;
@@ -63,7 +128,6 @@ namespace TripLine.Service
                     break;
             }
 
-
             return destinations;
         }
 
@@ -72,7 +136,6 @@ namespace TripLine.Service
             Trip trip = ServiceMapper.Map<Trip>(tripCandidate);
 
             trip.Id = _tripRepo.Content.NewId++;
-
 
             foreach (var sessionId in tripCandidate.PhotoSessions.Select(s => s.SessionId))
             {

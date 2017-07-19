@@ -9,3 +9,14 @@ C:\CodeAlrn\TripLineRoot\TripLineJn\Source\TLine.WPF.MVVM\bin\Debug\MahApps.Metr
 C:\CodeAlrn\TripLineRoot\TripLineJn\Source\TLine.WPF.MVVM\obj\Debug\TLine.WPF.MVVM.csprojResolveAssemblyReference.cache
 C:\CodeAlrn\TripLineRoot\TripLineJn\Source\TLine.WPF.MVVM\obj\Debug\TLine.WPF.MVVM.dll
 C:\CodeAlrn\TripLineRoot\TripLineJn\Source\TLine.WPF.MVVM\obj\Debug\TLine.WPF.MVVM.pdb
+C:\Users\alron\Documents\GitHub\TripLineGt\Source\TLine.WPF.MVVM\bin\Debug\TLine.WPF.MVVM.dll
+C:\Users\alron\Documents\GitHub\TripLineGt\Source\TLine.WPF.MVVM\bin\Debug\TLine.WPF.MVVM.pdb
+C:\Users\alron\Documents\GitHub\TripLineGt\Source\TLine.WPF.MVVM\bin\Debug\log4net.dll
+C:\Users\alron\Documents\GitHub\TripLineGt\Source\TLine.WPF.MVVM\bin\Debug\MahApps.Metro.dll
+C:\Users\alron\Documents\GitHub\TripLineGt\Source\TLine.WPF.MVVM\bin\Debug\System.Windows.Interactivity.dll
+C:\Users\alron\Documents\GitHub\TripLineGt\Source\TLine.WPF.MVVM\bin\Debug\log4net.xml
+C:\Users\alron\Documents\GitHub\TripLineGt\Source\TLine.WPF.MVVM\bin\Debug\MahApps.Metro.pdb
+C:\Users\alron\Documents\GitHub\TripLineGt\Source\TLine.WPF.MVVM\bin\Debug\MahApps.Metro.xml
+C:\Users\alron\Documents\GitHub\TripLineGt\Source\TLine.WPF.MVVM\obj\Debug\TLine.WPF.MVVM.csprojResolveAssemblyReference.cache
+C:\Users\alron\Documents\GitHub\TripLineGt\Source\TLine.WPF.MVVM\obj\Debug\TLine.WPF.MVVM.dll
+C:\Users\alron\Documents\GitHub\TripLineGt\Source\TLine.WPF.MVVM\obj\Debug\TLine.WPF.MVVM.pdb

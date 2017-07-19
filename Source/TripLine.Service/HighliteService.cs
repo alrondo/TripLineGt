@@ -25,6 +25,11 @@ namespace TripLine.Service
             _photoStore = photoStore;
         }
 
+
+        private List<Trip> _selectedTrips;
+        private List<Photo> _selectedPhotos;
+        
+
         private List<Photo> _allPhoto;
 
         private int GetNumberOfPhotosForLocation(int id) =>
@@ -53,23 +58,19 @@ namespace TripLine.Service
 
             var topic3 = CreateHighliteTopicViewModel("Recent trips", _tripStore.GetTrips(15) );
 
-            var topic4 = CreateHighliteTopicViewModel("Destinations", GetRandomPhotos(_allPhoto.ToList()));
-
             var topic5 = CreateHighliteTopicViewModel("A long time ago", GetRandomPhotos(_allPhoto.ToList()));
-
-
-
 
             var topics = new List<HighliteTopic>() {
                 topic1,
                 topic2,
                 topic3,
-                topic4,
                 topic5
             };
 
             return topics;
         }
+
+
 
         private static List<Photo> GetRandomPhotos(List<Photo> photos, int numPhotoWanted=5)
         {
