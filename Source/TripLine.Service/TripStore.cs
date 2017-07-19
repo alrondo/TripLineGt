@@ -13,6 +13,8 @@ namespace TripLine.Service
 
     public class TripItem
     {
+        public  Photo CoverPhoto { get; set; }
+
         public int TripId { get; set; }
 
         public int NumPictures { get; set; }
@@ -55,7 +57,7 @@ namespace TripLine.Service
 
         public List<TripByLocationGroup> GetTripByCity()
         {
-            List<TripByLocationGroup> listByYear = new List<TripByLocationGroup>();
+            List<TripByLocationGroup> tripsByCity = new List<TripByLocationGroup>();
 
             var res = _tripRepo.Content.Trips.GroupBy(t => t.Location.City).ToList();
             
@@ -63,18 +65,39 @@ namespace TripLine.Service
             {
                 var city = grp.Key;
 
-                var tripItems = grp.Select(i => CreateTripItem(i.Id)).ToList();
-                listByYear.Add(new TripByLocationGroup(city, tripItems));
+                var tripItems = grp.Select(i => CreateTripItem(i)).ToList();
+                tripsByCity.Add(new TripByLocationGroup(city, tripItems));
             }
-            return listByYear;
+            return tripsByCity;
+        }
+
+        public List<TripByLocationGroup> GetTripByLocationName()
+        {
+            List<TripByLocationGroup> tripsByCity = new List<TripByLocationGroup>();
+
+            var res = _tripRepo.Content.Trips.Where( t => t.Location != null).GroupBy(t => t.Location.DisplayName).ToList();
+
+            foreach (var grp in res)
+            {
+                var locationName = grp.Key;
+
+                var tripItems = grp.Select(i => CreateTripItem(i)).ToList();
+                tripsByCity.Add(new TripByLocationGroup(locationName, tripItems));
+            }
+            return tripsByCity;
         }
 
 
-        private TripItem CreateTripItem (int tripId)
+
+        private TripItem CreateTripItem (Trip  trip)
         {
-            var titem = new TripItem(tripId);
+            var titem = new TripItem(trip.Id);
 
             // get photos count...
+            var photos = _photoStore.GetPhotosByTrip(trip.Id);
+
+            titem.NumPictures = photos.Count;
+            titem.CoverPhoto = photos.First();
 
             return titem;
         }

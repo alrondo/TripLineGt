@@ -1,3 +1,32 @@
+syntax: glob
+bin/
+Artifacts/
+tmp/
+*pch
+*.user
+src/Common/Averna.DpSystem.Hardware/RegisterMap/MemoryMap.cs
+scripts/hg_revision.rb
+src/include/hg_revision.h
+obj/
+src/DPDebugger/GUI/RegisterMap.xml
+scripts/build_options.rb
+*.suo
+*.7z
+*.dll-*
+src/Services/Averna.DpSystemService/TestResults/
+*.sdf
+*.opensdf
+*.sln.ide/
+QA/~$TestPlan.xlsx
+.vs/
+TestResults/
+scripts/VersionChecker.*
+Debug/*
+Release/*
+x64/*
+ipch/*
+src/3rd/packages/*
+
 # Windows image file caches
 Thumbs.db
 ehthumbs.db

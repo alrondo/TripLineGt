@@ -52,7 +52,11 @@ namespace TripLine.Service
                               } 
                 );
 
-            var topic1 = CreateHighliteTopicViewModel("Visited locations", locationsFirstPhoto);
+
+            var tripByLocationName = _tripStore.GetTripByLocationName();
+
+
+            var topic1 = CreateHighliteTopicViewModel("Visited locations", tripByLocationName);
 
             var topic2 = CreateHighliteTopicViewModel("Random pictures", GetRandomPhotos(_allPhoto.ToList()));
 
@@ -98,6 +102,23 @@ namespace TripLine.Service
         }
 
 
+        private HighliteTopic CreateHighliteTopicViewModel(string topicName, List<TripByLocationGroup> tripByLocationGroup, int count=5)
+        {
+            List<TripItem> tripItems = tripByLocationGroup.Select(g => g.Items.First()).ToList();
+            
+            var topic = new HighliteTopic()
+            {
+                DisplayName = topicName,
+                Items = tripItems.Select(x => CreateHighliteItem(
+                    x.CoverPhoto,
+                    x.NumPictures,
+                    HighliteTarget.Trip)).ToList()
+            };
+
+            return topic;
+
+        }
+        
         private HighliteTopic CreateHighliteTopicViewModel(string topicName, List<Trip> trips)
         {
 
@@ -196,6 +217,13 @@ namespace TripLine.Service
                 Thumbnail = photo.PhotoUrl
             };
             return item;
+        }
+
+
+        public Photo GetPhoto(ITripComponent trip)
+        {
+            throw new NotImplementedException();
+            
         }
 
     }
