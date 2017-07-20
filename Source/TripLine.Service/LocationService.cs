@@ -258,5 +258,43 @@ namespace TripLine.Service
             _locationRepo.Save();
         }
 
+
+        public Location DetectParentLocation(IEnumerable<Location> childLocations)
+        {
+            if (childLocations.Count() == 1)
+                // single location (trip location is same a s destination
+                return childLocations.First(); ;
+
+            Location tripLocation = null;
+
+            foreach (var loc in childLocations)
+            {
+                if (tripLocation == null)
+                {
+                    tripLocation = new Location { Country = loc.Country, City = loc.City, State = loc.State };
+                    continue;
+                }
+
+                if (loc.Country != tripLocation.Country)
+                    tripLocation.Country = null;
+
+                if (loc.State != tripLocation.State)
+                    tripLocation.State = null;
+
+                if (loc.City != tripLocation.City)
+                    tripLocation.City = null;
+            }
+
+            tripLocation.DisplayName = BuildDisplayName(tripLocation.City, tripLocation.State, tripLocation.Country);
+
+            Debug.Assert(tripLocation.Country != null);
+
+            var resolvedLocation = GetLocation(tripLocation.DisplayName);
+
+            Debug.Assert(resolvedLocation != null);
+
+            return resolvedLocation;
+        }
+
     }
 }

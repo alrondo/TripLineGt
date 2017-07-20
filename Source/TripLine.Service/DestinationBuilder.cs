@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -103,6 +104,16 @@ namespace TripLine.Service
 
             // Merge();
             Candidates = Candidates.OrderByDescending(l => l.TotalScore).ToList();
+
+            // fill in the destination  from the session locations
+            foreach (var candidate in Candidates)
+            {
+                var childLocation = candidate.Sessions.Select(s => s.Location).ToList();
+
+                candidate.Location = _locationService.DetectParentLocation(childLocation);
+
+                Debug.Assert(candidate.Location != null);
+            }
         }
 
 
@@ -145,7 +156,12 @@ namespace TripLine.Service
             return true;
         }
 
+        private Location DetectParentLocation(TripCandidate tripCandidate)
+        {
+            var childLocations = tripCandidate.Destinations.Select(d => d.Location);
 
+            return _locationService.DetectParentLocation(childLocations);
+        }
 
     }
 
