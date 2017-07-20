@@ -97,8 +97,8 @@ namespace TripLine.Service
                     CurrentTripCandidate.Destinations.Add(destCandidate);
                 }
 
-                CurrentTripCandidate.InitializeName();
-
+                InitializeTripCandidate(CurrentTripCandidate);
+                
                 BuildedTrips.Add(CurrentTripCandidate);
             }
 
@@ -113,6 +113,53 @@ namespace TripLine.Service
 
             return session.FromDate.Subtract(CurrentTripCandidate.ToDate).TotalHours < MaxIdleHours;
         }
-                
+
+
+        void InitializeTripCandidate(TripCandidate tripCandidate)
+        {
+            tripCandidate.Location = DetectLocation(tripCandidate);
+            tripCandidate.DisplayName = tripCandidate.Location.DisplayName;
+        }
+
+
+        private Location DetectLocation( TripCandidate tripCandidate)
+        {
+            var destinationLocations = tripCandidate.Destinations.Select(d => d.Location);
+
+            if (destinationLocations.Count() == 1)
+                // single location (trip location is same a s destination
+                return destinationLocations.First(); ;
+
+
+            Location tripLocation = null;
+
+            foreach (var loc in destinationLocations)
+            {
+                if (tripLocation == null)
+                {
+                    tripLocation = new Location { Country = loc.Country, City = loc.City, State = loc.State };
+                    continue;
+                }
+
+                if (loc.Country != tripLocation.Country)
+                    tripLocation.Country = null;
+
+                if (loc.State != tripLocation.State)
+                    tripLocation.State = null;
+
+                if (loc.City != tripLocation.City)
+                    tripLocation.City = null;
+            }
+
+            Debug.Assert(tripLocation.Country != null );
+
+            var resolvedLocation = _locationService.GetLocation(tripLocation.DisplayName);
+
+            Debug.Assert(resolvedLocation != null);
+
+            return resolvedLocation;
+        }
+
+
     }
 }

@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
+using System.Runtime.InteropServices;
 using TripLine.Dtos;
 
 namespace TripLine.Service
@@ -19,18 +21,11 @@ namespace TripLine.Service
                 ToDate = PhotoSessions.Last().ToDate;
             }
         }
-
-        public void InitializeName()
-        {
-            if (Destinations.Any())
-                DisplayName = "Trip to " + Destinations.First().DisplayName;
-            else
-                DisplayName = "Trip to " + PhotoSessions.First().Location.DisplayName;
-                
-        }
-
+       
         public string ElapsedFrom => $"{FromDate.ToString(DtoDefs.DateFormatter)}, {(int)Duration.TotalDays,2} days";
         public string Describe => $"{ElapsedFrom}  Trip {DisplayName,20} =>  {Destinations.Count,2} destination,  {PhotoSessions.Count,2} sessions, {TotalPhotos,3}, photos";
 
+
+        
     }
 }
