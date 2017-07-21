@@ -13,6 +13,7 @@ namespace TripLine.Service
 
     public class TripItem
     {
+        public string DisplayName { get; set; }
         public  Photo CoverPhoto { get; set; }
 
         public int TripId { get; set; }
@@ -96,9 +97,10 @@ namespace TripLine.Service
             // get photos count...
             var photos = _photoStore.GetPhotosByTrip(trip.Id);
 
+            titem.DisplayName = trip.DisplayName;
             titem.NumPictures = photos.Count;
             titem.CoverPhoto = photos.First();
-
+            
             return titem;
         }
         private readonly LocationService _locationService;

@@ -12,6 +12,7 @@ using TripLine.Dtos;
 
 using System.Diagnostics;
 using static System.FormattableString;
+using TripLine.Toolbox.Extensions;
 
 namespace TripLine.Service
 {
@@ -205,7 +206,9 @@ namespace TripLine.Service
             if (!string.IsNullOrEmpty(country))
                 parts.Add(country);
 
-            return string.Join(",", parts);
+            var dname = string.Join(",", parts);
+
+            return dname.RemoveDiacritics();
         }
 
 

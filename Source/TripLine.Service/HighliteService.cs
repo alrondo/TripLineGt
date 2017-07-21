@@ -110,6 +110,8 @@ namespace TripLine.Service
             {
                 DisplayName = topicName,
                 Items = tripItems.Select(x => CreateHighliteItem(
+                    x.TripId,
+                    x.DisplayName,
                     x.CoverPhoto,
                     x.NumPictures,
                     HighliteTarget.Trip)).ToList()
@@ -118,6 +120,7 @@ namespace TripLine.Service
             return topic;
 
         }
+
         
         private HighliteTopic CreateHighliteTopicViewModel(string topicName, List<Trip> trips)
         {
@@ -188,6 +191,22 @@ namespace TripLine.Service
             };
             return item;
         }
+
+        private IHighliteItem CreateHighliteItem(int tripId,  string displayName, Photo photo, int count, HighliteTarget target)
+        {
+            Debug.Assert(photo.Location != null);
+
+            var item = new HighliteItem()
+            {
+                Id = tripId,
+                DisplayName = displayName,
+                Target = target,
+                PhotoUrl = photo.PhotoUrl,
+                Thumbnail = photo.PhotoUrl
+            };
+            return item;
+        }
+
 
         private IHighliteItem CreateHighliteItem(Trip  trip, Photo photo, int count, HighliteTarget target)
         {
