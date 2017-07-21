@@ -41,21 +41,24 @@ namespace TripLine.Service
         }
     }
 
-    public class TripByYearGroup
+    public class TripByDateGroup
     {
-        public int Year { get; set; }
+        public int Year;
 
         public List<TripItem> Items { get; set; }
+
+
+        public TripByDateGroup(int year, List<TripItem> items)
+        {
+            Year = year;
+            Items = items;
+        }
     }
 
 
     public class TripStore
     {
-        public List<TripByYearGroup> GetTripByYear()
-        {
-            throw new NotImplementedException();
-        }
-
+    
         public List<TripByLocationGroup> GetTripByCity()
         {
             List<TripByLocationGroup> tripsByCity = new List<TripByLocationGroup>();
@@ -74,7 +77,7 @@ namespace TripLine.Service
 
         public List<TripByLocationGroup> GetTripByLocationName()
         {
-            List<TripByLocationGroup> tripsByCity = new List<TripByLocationGroup>();
+            List<TripByLocationGroup> tripsByLocation = new List<TripByLocationGroup>();
 
             var res = _tripRepo.Content.Trips.Where( t => t.Location != null).GroupBy(t => t.Location.DisplayName).ToList();
 
@@ -83,9 +86,44 @@ namespace TripLine.Service
                 var locationName = grp.Key;
 
                 var tripItems = grp.Select(i => CreateTripItem(i)).ToList();
-                tripsByCity.Add(new TripByLocationGroup(locationName, tripItems));
+                tripsByLocation.Add(new TripByLocationGroup(locationName, tripItems));
             }
-            return tripsByCity;
+            return tripsByLocation;
+        }
+
+
+
+        public List<TripByLocationGroup> GetTripByCountry()
+        {
+            List<TripByLocationGroup> tripsByLocation = new List<TripByLocationGroup>();
+
+            var res = _tripRepo.Content.Trips.Where(t => t.Location != null && !string.IsNullOrEmpty(t.Location.Country) ).GroupBy(t => t.Location.Country).ToList();
+
+            foreach (var grp in res)
+            {
+                var locationName = grp.Key;
+
+                var tripItems = grp.Select(i => CreateTripItem(i)).ToList();
+                tripsByLocation.Add(new TripByLocationGroup(locationName, tripItems));
+            }
+            return tripsByLocation;
+        }
+
+
+        public List<TripByDateGroup> GetTripByYear()
+        {
+            List<TripByDateGroup> tripsByDate = new List<TripByDateGroup>();
+
+            var res = _tripRepo.Content.Trips.Where(t => t.Location != null).GroupBy(t => t.Date.Year).ToList();
+
+            foreach (var grp in res)
+            {
+                int  year =  grp.Key;
+
+                var tripItems = grp.Select(i => CreateTripItem(i)).ToList();
+                tripsByDate.Add(new TripByDateGroup(year , tripItems));
+            }
+            return tripsByDate;
         }
 
 

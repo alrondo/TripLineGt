@@ -39,26 +39,16 @@ namespace TripLine.Service
         {
             List<string> choseLocationNames = new List<string>();
 
-            List<string> locations = new List<string>();
-                
             _allPhoto = _photoStore.GetPhotos().Where(p => p.Location != null).ToList();
-
-            List<Photo> locationsFirstPhoto = new List<Photo>();
-
-            _allPhoto.Where(p => locations.Count < 6 && ! locations.Contains( p.Location.DisplayName) )
-                .ForEach(p2 =>{
-                                locations.Add(p2.Location.DisplayName);
-                                locationsFirstPhoto.Add(p2);
-                              } 
-                );
 
 
             var tripByLocationName = _tripStore.GetTripByLocationName();
 
-
             var topic1 = CreateHighliteTopicViewModel("Visited locations", tripByLocationName);
 
-            var topic2 = CreateHighliteTopicViewModel("Random pictures", GetRandomPhotos(_allPhoto.ToList()));
+            var tripByLocationCountry = _tripStore.GetTripByCountry();
+
+            var topic2 = CreateHighliteTopicViewModel("Visited country", tripByLocationCountry);
 
             var topic3 = CreateHighliteTopicViewModel("Recent trips", _tripStore.GetTrips(15) );
 
@@ -73,6 +63,7 @@ namespace TripLine.Service
 
             return topics;
         }
+
 
 
 
@@ -91,11 +82,19 @@ namespace TripLine.Service
                 modulo = Math.Max(1, photos.Count / numPhotoWanted);
             }
 
-            int photoIndex = 0;
+            IList<int> numbers = (Enumerable.Range(0, photos.Count - 1)).ToList();
+            
+            numbers.Shuffle();
+
+            int photoIndex = numbers.First();  // random start
+
             while (randomPhotos.Count() < numPhotoWanted)
             {
                 randomPhotos.Add(photos[photoIndex]);
                 photoIndex += modulo;
+
+                if (photoIndex >= photos.Count)
+                    photoIndex = 0;
             }
 
             return randomPhotos;
@@ -247,4 +246,5 @@ namespace TripLine.Service
 
     }
 
+  
 }
