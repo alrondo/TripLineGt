@@ -18,7 +18,49 @@ using TripLine.Dtos;
 
 namespace TripLine.DesktopApp.ViewModels
 {
-    
+    public class DebugInfoViewModel : BaseViewModel
+    {
+        private ILog _log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
+
+        private readonly PhotoStore _photoStore;
+        private readonly Photo _photo;
+
+        private readonly MainViewModel _mainViewModel;
+        private readonly LocationService _locationService;
+
+        public DebugInfoViewModel(PhotoStore photoStore, LocationService locationService) : base("Highlite")
+        {
+            _photoStore = photoStore;
+            _mainViewModel = MainViewModel.Instance;
+            _locationService = locationService;
+            Load();
+        }
+
+        private Location _location;
+        public Location Location { get { return _location; } }
+
+        public string TripLid 
+        {
+            get { return _photo.TripId  + ":" + _photo.DestId + ":" + _photo.PlaceId; }
+        }
+
+        public string PhotoLid
+        {
+            get { return _photo.SessionId + ":" + _photo.Id; }
+        }
+        
+        public Photo Photo => _photo;
+
+        private void Load()
+        {
+            OnPropertyChanged(nameof(Photo));
+
+            _location = _locationService.GetLocation(_photo.Location.Id);
+
+            OnPropertyChanged(nameof(Location));
+        }
+    }
+
     public class AlbumItemViewModel :  BaseViewModel
     {
         public string DefaultImg { get; set; } = "pack://application:,,,/Resources/hawai.jpg";

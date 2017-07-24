@@ -63,9 +63,7 @@ namespace TripLine.Service
 
             return topics;
         }
-
-
-
+        
 
         private static List<Photo> GetRandomPhotos(List<Photo> photos, int numPhotoWanted=5)
         {

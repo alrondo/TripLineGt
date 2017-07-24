@@ -27,6 +27,8 @@ namespace TripLine.DesktopApp.ViewModels
 
         public HighliteItemViewModel CurrentHighliteItemViewModel { get; set; }
 
+        public int SelectedPhoto { get; set; }
+
         public static MainViewModel Instance { get; set; }
 
         private readonly TripCreationService _tripCreationService;
