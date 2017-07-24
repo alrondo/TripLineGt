@@ -36,7 +36,7 @@ namespace TripLine.Dtos
         }
         //public List<Visit> Visit { get; set; } 
 
-        public List<Destination> Destinations { get; set; }
+        public IEnumerable<Destination> Destinations { get; set; }
     }
 
 

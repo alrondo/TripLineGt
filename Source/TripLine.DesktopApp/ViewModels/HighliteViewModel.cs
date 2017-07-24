@@ -42,7 +42,7 @@ namespace TripLine.DesktopApp.ViewModels
         {
             get
             {
-                return new VMBladeCommand(async () => await ExecOpen(), () => true, ""); // CanExecuteOk(), "");
+                return new VMBladeCommand(async () => await ExecOpen(), () => true, "");  
             }
         }
 
@@ -77,8 +77,6 @@ namespace TripLine.DesktopApp.ViewModels
 
         public HighliteTopicViewModel() : base("HighliteTopic")
         { }
-
-
     }
 
 

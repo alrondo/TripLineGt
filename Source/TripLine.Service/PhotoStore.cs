@@ -65,7 +65,13 @@ namespace TripLine.Service
             return _photoRepo.Content.Photos.Where(p => p.TripId == tripId).ToList();
         }
 
-		public List<Photo> GetPhotosAtLocation(int locationId)
+
+        public Photo GetPhoto(int photoId)
+        {
+            return _photoRepo.Content.Photos.FirstOrDefault(p => p.Id == photoId);
+        }
+
+        public List<Photo> GetPhotosAtLocation(int locationId)
         {
             return _photoRepo.Content.Photos.Where(p => p.Location.Id == locationId).ToList();
         }
@@ -105,6 +111,7 @@ namespace TripLine.Service
 
         public List<Photo> GetSessionPhoto(int sessionId)
             => _photoRepo.Content.Photos.Where(p => p.SessionId == sessionId).ToList();
+
 
 
 

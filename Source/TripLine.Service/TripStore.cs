@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Linq;
+using AutoMapper.Execution;
 using TripLine.Dtos;
 
 namespace TripLine.Service
@@ -172,27 +173,16 @@ namespace TripLine.Service
         }
 
 
+
+
         public List<Trip> GetTrips(int maxCount) => _tripRepo.Content.Trips.Take(maxCount).ToList();
 
         public Trip GetTrip(int id) => _tripRepo.Content.Trips.First(t => t.Id == id);
 
-        public List<Destination> GetDestinations(int maxCount)
-        {
-            List<Destination> destinations = new List<Destination>();
+        public Destination GetDestination(int destinationId) => GetDestinations().FirstOrDefault (d => d.Id == destinationId);
 
-            foreach (var trip in _tripRepo.Content.Trips)
-            {
-                if (trip.Destinations.Count <= 1)
-                    continue;
-
-                destinations.AddRange(trip.Destinations.Take(maxCount));
-
-                if (destinations.Count > maxCount)
-                    break;
-            }
-
-            return destinations;
-        }
+        public IEnumerable<Destination> GetDestinations() => _tripRepo.Content.Trips.SelectMany(t => t.Destinations);
+        
 
         public Trip CreateTrip(TripCandidate tripCandidate)
         {

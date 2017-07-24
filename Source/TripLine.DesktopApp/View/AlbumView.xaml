@@ -34,7 +34,7 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="auto"  />
             <RowDefinition Height="auto"  />
-            <RowDefinition Height="400"   />          
+            <RowDefinition Height="500"   />  
             <RowDefinition Height="auto"   />
             <RowDefinition Height="auto"  />
 
@@ -55,7 +55,17 @@
         </DockPanel>
 
         <DockPanel Name="PhotoStrip"  Grid.Row="3" Grid.ColumnSpan="2"  Background="{StaticResource TLineViewBackground}">
-            <ListBox  ItemsSource="{Binding Path=SelectedSection.Items}" SelectionMode="Extended"  
+            
+           <ScrollViewer>
+               <StackPanel>
+                    <TextBlock Text="{Binding Path=DebugInfo.DisplayName,  Mode=TwoWay}"  Style="{StaticResource WizardTextLine}"  Margin="0,0,0,0" />
+
+                </StackPanel>
+           </ScrollViewer>
+            
+            
+            <ListBox Visibility="Hidden"
+                ItemsSource="{Binding Path=SelectedSection.Items}" SelectionMode="Extended"  
                                       Background="{StaticResource TLineViewBackgroundPanel}" 
                                       ItemTemplate="{StaticResource albumItemTemplate}"
                                       SelectedValue="{Binding NoSelection}"  IsSynchronizedWithCurrentItem="True" 
@@ -79,6 +89,22 @@
 
     </Grid>
 </view:BaseView>
+       
+
+
+
+
+       
+
+
+
+
+    
+       
+
+
+
+
        
 
 

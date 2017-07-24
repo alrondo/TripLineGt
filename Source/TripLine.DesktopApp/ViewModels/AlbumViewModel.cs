@@ -18,49 +18,6 @@ using TripLine.Dtos;
 
 namespace TripLine.DesktopApp.ViewModels
 {
-    public class DebugInfoViewModel : BaseViewModel
-    {
-        private ILog _log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
-
-        private readonly PhotoStore _photoStore;
-        private readonly Photo _photo;
-
-        private readonly MainViewModel _mainViewModel;
-        private readonly LocationService _locationService;
-
-        public DebugInfoViewModel(PhotoStore photoStore, LocationService locationService) : base("Highlite")
-        {
-            _photoStore = photoStore;
-            _mainViewModel = MainViewModel.Instance;
-            _locationService = locationService;
-            Load();
-        }
-
-        private Location _location;
-        public Location Location { get { return _location; } }
-
-        public string TripLid 
-        {
-            get { return _photo.TripId  + ":" + _photo.DestId + ":" + _photo.PlaceId; }
-        }
-
-        public string PhotoLid
-        {
-            get { return _photo.SessionId + ":" + _photo.Id; }
-        }
-        
-        public Photo Photo => _photo;
-
-        private void Load()
-        {
-            OnPropertyChanged(nameof(Photo));
-
-            _location = _locationService.GetLocation(_photo.Location.Id);
-
-            OnPropertyChanged(nameof(Location));
-        }
-    }
-
     public class AlbumItemViewModel :  BaseViewModel
     {
         public string DefaultImg { get; set; } = "pack://application:,,,/Resources/hawai.jpg";
@@ -166,6 +123,7 @@ namespace TripLine.DesktopApp.ViewModels
         private readonly LocationService _locationService;
         private readonly MainViewModel _mainViewModel;
 
+
         public string DisplayName { get; set; } = "Your selected album";
 
         // Little trick to disable listbox selection...   We bind Listbox selectitems to NoSelection.  
@@ -192,8 +150,26 @@ namespace TripLine.DesktopApp.ViewModels
         {
            
         }
-        
-        
+
+
+        public event Action<AlbumViewModel> OnInfo;
+
+
+        public ICommand InfoCommand
+        {
+            get
+            {
+                return new VMBladeCommand(async () => await ExecInfo(), () => true, ""); // CanExecuteOk(), "");
+            }
+        }
+
+        private async Task ExecInfo()
+        {
+            this?.OnInfo(this);
+
+            //OnPropertyChanged(nameof(DisplayName));
+        }
+
         public ObservableCollection<AlbumSectionViewModel> _sections = new ObservableCollection<AlbumSectionViewModel>();
 
         public ObservableCollection<AlbumSectionViewModel> Sections
@@ -214,9 +190,11 @@ namespace TripLine.DesktopApp.ViewModels
 
         public AlbumSectionViewModel SelectedSection { get; set; }
 
-        //public AlbumItemViewModel SelectedItem => SelectedSection?.SelectedItem;
 
-        
+        public DebugInfoViewModel DebugInfo { get; set; }
+
+
+
         private void Load ()
         {
             List<string> choseLocationNames = new List<string>();
@@ -228,7 +206,6 @@ namespace TripLine.DesktopApp.ViewModels
 
             OnPropertyChanged(nameof(DisplayName));
             OnPropertyChanged(nameof(SelectedSection));
-            //OnPropertyChanged(nameof(SelectedItem));
         }
 
         public ObservableCollection<AlbumSectionViewModel> LoadFromHighliteTarget(HighliteTarget target, int id)
@@ -243,8 +220,6 @@ namespace TripLine.DesktopApp.ViewModels
                 default:
                     throw new NotImplementedException();
             }
-           
-
         }
 
 
@@ -261,8 +236,6 @@ namespace TripLine.DesktopApp.ViewModels
             var photos = _photoStore.GetPhotosAtLocation(id);
             return new ObservableCollection<AlbumSectionViewModel>(CreateSections(location));
         }
-
-
 
         private List<AlbumSectionViewModel> CreateSections(Trip trip)
         {
