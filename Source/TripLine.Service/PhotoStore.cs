@@ -372,6 +372,10 @@ namespace TripLine.Service
             if(photo.IsValid)
                 _lastAddedValidPhoto = photo;
 
+
+            photo.DisplayName = (photo.Location != null) ? photo.Location.GetShortDisplay() : "Unknown Place";
+
+           
             photo.Excluded = photo.Location == null || photo.Location.Excluded || ! photo.IsValid;
 
             _photoRepo.Content.Photos.Add(photo);

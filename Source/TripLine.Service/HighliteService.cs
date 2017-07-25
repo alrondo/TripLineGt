@@ -11,6 +11,31 @@ using TripLine.Toolbox.Extensions;
 
 namespace TripLine.Service
 {
+    public class HighliteSelectOptions
+    {
+
+        public bool Random { get; set; } = true;
+
+        public int?  MaxNumberOfTarget { get; set; }
+
+        public HighliteTarget? Target { get; set; } = null;
+
+        //order by & and other stuff
+
+
+        public HighliteSelectOptions(HighliteTarget target)
+        {
+            Target = target;
+        }
+
+        public HighliteSelectOptions()
+        {
+            Target = null;
+        }
+
+    }
+
+
     public class HighliteService 
     {
         private ILog _log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
@@ -24,18 +49,60 @@ namespace TripLine.Service
             _tripStore = tripStore;
             _photoStore = photoStore;
         }
-
-
-        private List<Trip> _selectedTrips;
-        private List<Photo> _selectedPhotos;
-        
+    
 
         private List<Photo> _allPhoto;
+
+        private HighliteSelectOptions _selectOptions = null;
 
         private int GetNumberOfPhotosForLocation(int id) =>
             _allPhoto.Count(p => p.Location!=null && p.Location.Id == id);
         
-        public List<HighliteTopic> GetHighlites()
+        public List<HighliteTopic> GetHighlites(HighliteSelectOptions selectOptions=null)
+        {
+            _selectOptions = selectOptions ?? new HighliteSelectOptions();
+
+            if (! _selectOptions.Target.HasValue)
+            {
+                return GetRandomHighlites();
+            }
+
+            List<HighliteTopic> topics = null;
+
+            switch (_selectOptions.Target.Value)
+            {
+                case HighliteTarget.Trip:
+                    topics = GetTripHighlites();
+                    break;
+
+                default:
+                    throw new NotImplementedException();
+            }
+
+            return topics;
+        }
+
+
+        private List<HighliteTopic> GetTripHighlites()
+        {
+            List<HighliteTopic> topics = null;
+
+            var trips = _tripStore.GetTrips(15);
+
+            foreach (var trip in trips)
+            {
+                var photos = _photoStore.GetPhotosByTrip(trip.Id);
+
+                var topic = CreateHighliteTopicViewModel($"Trip to {trip.DisplayName}", photos);
+
+                topics.Add(topic);
+            }
+
+            return topics;
+        }
+
+
+        private List<HighliteTopic> GetRandomHighlites()
         {
             List<string> choseLocationNames = new List<string>();
 
@@ -50,11 +117,12 @@ namespace TripLine.Service
 
             var topic2 = CreateHighliteTopicViewModel("Visited country", tripByLocationCountry);
 
-            var topic3 = CreateHighliteTopicViewModel("Recent trips", _tripStore.GetTrips(15) );
+            var topic3 = CreateHighliteTopicViewModel("Recent trips", _tripStore.GetTrips(15));
 
             var topic5 = CreateHighliteTopicViewModel("A long time ago", GetRandomPhotos(_allPhoto.ToList()));
 
-            var topics = new List<HighliteTopic>() {
+            var topics = new List<HighliteTopic>()
+            {
                 topic1,
                 topic2,
                 topic3,
@@ -63,7 +131,7 @@ namespace TripLine.Service
 
             return topics;
         }
-        
+
 
         private static List<Photo> GetRandomPhotos(List<Photo> photos, int numPhotoWanted=5)
         {

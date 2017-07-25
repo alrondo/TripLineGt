@@ -111,6 +111,7 @@ namespace TripLine.Service
                 var childLocation = candidate.Sessions.Select(s => s.Location).ToList();
 
                 candidate.Location = _locationService.DetectParentLocation(childLocation);
+                candidate.DisplayName = candidate?.Location.DisplayName ?? "Unknown";
 
                 Debug.Assert(candidate.Location != null);
             }

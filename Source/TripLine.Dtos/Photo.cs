@@ -27,7 +27,7 @@ namespace TripLine.Dtos
 
 
         public int Id { get; set; }
-        public string DisplayName { get; private set; } = "";
+        public string DisplayName { get; set; } = "";
 
         public string PhotoUrl { get; set; } = "";
         public string FileKey { get; set; } = "";

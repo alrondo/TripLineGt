@@ -23,7 +23,10 @@ namespace TripLine.DesktopApp.ViewModels
 
             set { _navigator = value; }
         }
+        
 
+        public HighliteSelectOptions HighliteSelectOptions { get; set; }
+        
 
         public HighliteItemViewModel CurrentHighliteItemViewModel { get; set; }
 
@@ -51,7 +54,20 @@ namespace TripLine.DesktopApp.ViewModels
             if (_tripCreationService.PeakForNewTripPhotos())
                 await GoWizard();
             else
+            {
+                HighliteSelectOptions = null;
                 await GoHome();
+            }
+                
+        }
+
+
+        public async Task GoTripsView()
+        {
+            HighliteSelectOptions = new HighliteSelectOptions(HighliteTarget.Trip);
+          
+
+            await _navigator.NavigateTo(typeof(HighliteView));
         }
 
 

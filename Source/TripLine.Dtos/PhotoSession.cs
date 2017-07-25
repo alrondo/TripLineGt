@@ -17,7 +17,7 @@ namespace TripLine.Dtos
         {
             get
             {
-                return (_displayName != string.Empty) ? _displayName : Location.DisplayName;
+                return (_displayName != string.Empty) ? _displayName : Location?.DisplayName ?? "Unknown";
             }
             set
             {

@@ -79,7 +79,7 @@ namespace TripLine.DesktopApp.ViewModels
         { }
     }
 
-
+    
 
     //[NotifyProperty(ApplyToStateMachine = false)]
     public class HighliteViewModel : BaseViewModel , IDisposable
