@@ -46,6 +46,10 @@ namespace TripLine.DesktopApp.ViewModels
             get { return _photo.SessionId + ":" + _photo.Id; }
         }
 
+
+
+
+
         public void Load( Photo photo )
         {
             _photo = photo;
