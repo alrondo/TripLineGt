@@ -56,12 +56,16 @@
 
         <DockPanel Name="PhotoStrip"  Grid.Row="3" Grid.ColumnSpan="2"  Background="{StaticResource TLineViewBackground}">
             
-           <ScrollViewer>
-               <StackPanel>
-                    <TextBlock Text="{Binding Path=DebugInfo.DisplayName,  Mode=TwoWay}"  Style="{StaticResource WizardTextLine}"  Margin="0,0,0,0" />
+           
+           <StackPanel>
+                
+                <TextBlock Text="{Binding Path=Title}"  Style="{StaticResource WizardTextLine}"  Margin="0,0,0,0" />
 
-                </StackPanel>
-           </ScrollViewer>
+                <TextBlock Text="{Binding Path=DebugInfo.Photo.Date}"  Style="{StaticResource WizardTextLine}"  Margin="0,0,0,0" />
+
+                <TextBlock Text="{Binding Path=DebugInfo.Photo.Location.DisplayName}"  Style="{StaticResource WizardTextLine}"  Margin="0,0,0,0" />
+
+            </StackPanel>
             
             
             <ListBox Visibility="Hidden"

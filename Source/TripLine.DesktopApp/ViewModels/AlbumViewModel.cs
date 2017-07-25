@@ -135,13 +135,19 @@ namespace TripLine.DesktopApp.ViewModels
         }
 
 
+        DebugInfoViewModel _debugInfoVModel;
+
+        public string Title => "Photo";
+
         public AlbumViewModel (TripStore tripStore, PhotoStore photoStore, HighliteService highliteService,
-    							LocationService locationService) : base("Highlite")
+    							LocationService locationService, DebugInfoViewModel debugInfo) : base("Highlite")
         {
             _tripStore = tripStore;
             _photoStore = photoStore;
             _highliteService = highliteService;
             _locationService = locationService;
+
+            _debugInfoVModel = debugInfo;
             _mainViewModel = MainViewModel.Instance;
             Load();
         }
@@ -191,7 +197,7 @@ namespace TripLine.DesktopApp.ViewModels
         public AlbumSectionViewModel SelectedSection { get; set; }
 
 
-        public DebugInfoViewModel DebugInfo { get; set; }
+        public DebugInfoViewModel DebugInfo  => _debugInfoVModel;
 
 
 
@@ -204,8 +210,12 @@ namespace TripLine.DesktopApp.ViewModels
          
             SelectedSection = Sections.First();
 
+            var photo = _photoStore.GetPhoto(SelectedSection.Items.First().Id);
+            DebugInfo.Load(photo);
+            
             OnPropertyChanged(nameof(DisplayName));
             OnPropertyChanged(nameof(SelectedSection));
+            OnPropertyChanged(nameof(DebugInfo));
         }
 
         public ObservableCollection<AlbumSectionViewModel> LoadFromHighliteTarget(HighliteTarget target, int id)
