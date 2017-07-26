@@ -135,13 +135,16 @@ namespace TripLine.DesktopApp.ViewModels
         }
 
 
+        DebugInfoViewModel _debugInfoVModel;
+        public string Title => "Photo";
         public AlbumViewModel (TripStore tripStore, PhotoStore photoStore, HighliteService highliteService,
-    							LocationService locationService) : base("Highlite")
+    							LocationService locationService, DebugInfoViewModel debugInfo) : base("Highlite")
         {
             _tripStore = tripStore;
             _photoStore = photoStore;
             _highliteService = highliteService;
             _locationService = locationService;
+            _debugInfoVModel = debugInfo;
             _mainViewModel = MainViewModel.Instance;
             Load();
         }
@@ -159,13 +162,15 @@ namespace TripLine.DesktopApp.ViewModels
         {
             get
             {
-                return new VMBladeCommand(async () => await ExecInfo(), () => true, ""); // CanExecuteOk(), "");
+                return new VMBladeCommand( () => ExecInfo(), () => true, ""); // CanExecuteOk(), "");
             }
         }
 
-        private async Task ExecInfo()
+        private void ExecInfo()
         {
-            this?.OnInfo(this);
+            ShowInfo = ! ShowInfo;
+
+            this.OnInfo?.Invoke(this);
 
             //OnPropertyChanged(nameof(DisplayName));
         }
@@ -191,9 +196,26 @@ namespace TripLine.DesktopApp.ViewModels
         public AlbumSectionViewModel SelectedSection { get; set; }
 
 
-        public DebugInfoViewModel DebugInfo { get; set; }
+        public DebugInfoViewModel DebugInfo  => _debugInfoVModel;
 
 
+        private bool _showInfo = false;
+        public bool ShowInfo
+        {
+            get { return _showInfo; }
+            set
+            {
+                if (value == _showInfo)
+                    return;
+
+                _showInfo = value;
+
+                OnPropertyChanged();
+                OnPropertyChanged(nameof(ShowPhoto));
+            }         
+        }
+
+        public bool ShowPhoto => !ShowInfo;
 
         private void Load ()
         {
@@ -204,8 +226,13 @@ namespace TripLine.DesktopApp.ViewModels
          
             SelectedSection = Sections.First();
 
+            var photo = _photoStore.GetPhoto(SelectedSection.Items.First().Id);
+            DebugInfo.Load(photo);
             OnPropertyChanged(nameof(DisplayName));
             OnPropertyChanged(nameof(SelectedSection));
+            OnPropertyChanged(nameof(DebugInfo));
+
+            ShowInfo = false;
         }
 
         public ObservableCollection<AlbumSectionViewModel> LoadFromHighliteTarget(HighliteTarget target, int id)

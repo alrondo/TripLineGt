@@ -47,9 +47,6 @@ namespace TripLine.DesktopApp.ViewModels
         }
 
 
-
-
-
         public void Load( Photo photo )
         {
             _photo = photo;
