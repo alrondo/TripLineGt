@@ -116,7 +116,8 @@ namespace TripLine.DesktopApp.ViewModels
         {
            
         }
-        
+
+       
         
         public ObservableCollection<HighliteTopicViewModel> _topics = new ObservableCollection<HighliteTopicViewModel>();
 
@@ -140,7 +141,9 @@ namespace TripLine.DesktopApp.ViewModels
         {
             List<string> choseLocationNames = new List<string>();
 
-            var highlites = _highliteService.GetHighlites();
+            var highliteOptions = _mainViewModel.HighliteSelectOptions;
+
+            var highlites = _highliteService.GetHighlites(highliteOptions);
             
             Topics = new ObservableCollection<HighliteTopicViewModel>(CreateHighlites(highlites));
 

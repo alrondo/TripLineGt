@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Controls;
+using System.Windows.Input;
 using TripLine.DesktopApp.View;
 using TripLine.Dtos;
 using TripLine.Service;
@@ -36,6 +37,63 @@ namespace TripLine.DesktopApp.ViewModels
 
         private readonly TripCreationService _tripCreationService;
 
+
+        private int _numTrips = 0;
+
+        public int NumTrips
+        {
+            get
+            {
+                return _numTrips;
+            }
+            set
+            {
+                if (value == _numTrips)
+                    return;
+
+                _numTrips = value;
+                OnPropertyChanged();
+                OnPropertyChanged(nameof(NumTripsString));
+            }
+        }
+
+
+        public string NumTripsString => $"{NumTrips} trips";
+
+        
+        private int _numDestinations = 0;
+
+        public int NumDestinations
+        {
+            get
+            {
+                return _numDestinations;
+            }
+            set
+            {
+                if (value == _numDestinations)
+                    return;
+
+                _numDestinations = value;
+                OnPropertyChanged();
+                OnPropertyChanged(nameof(NumDestinationsString));
+
+            }
+        }
+
+        public string NumDestinationsString => $"{NumTrips} destinations";
+
+
+
+        public ICommand ShowTripsCommand
+        {
+            get
+            {
+                return new VMBladeCommand(() => GoTripsView(), () => true, ""); // CanExecuteOk(), "");
+            }
+        }
+
+
         public MainViewModel(ContentControl contentControl) : base("Home")
         {
             Initialize();
@@ -46,6 +104,7 @@ namespace TripLine.DesktopApp.ViewModels
             Instance = this;
 
             _tripCreationService = Navigator.Configuration.IoC.Resolve(typeof(TripCreationService)) as TripCreationService;
+
         }
 
 

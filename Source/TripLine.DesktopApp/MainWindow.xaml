@@ -50,18 +50,21 @@
             <TextBlock  Style="{StaticResource WizardHeaderTextSm}" >Your collection</TextBlock>
 
             <StackPanel  Orientation="Vertical" Margin="0,7,0,7" >
-                <DockPanel     Width="100" >
-                    <TextBlock Margin="0,5,4,0" Style="{StaticResource WizardHeaderTextXSm}" 
-                               HorizontalAlignment="Center"  DockPanel.Dock="Bottom" >
-                               5 Trips</TextBlock>
-                    <Image  Source="pack://application:,,,/Resources/hawai.jpg"   Stretch="Fill" 
-                            DockPanel.Dock="Top" />
-                </DockPanel>
+
+                <Button   Command="{Binding ShowTripsCommand}"  >
+                    <DockPanel     Width="100" >
+                        <TextBlock Margin="0,5,4,0" Style="{StaticResource WizardHeaderTextXSm}" 
+                                   HorizontalAlignment="Center"  DockPanel.Dock="Bottom"  Text="{Binding NumTripsString}" />
+
+                        <Image  Source="pack://application:,,,/Resources/hawai.jpg"   Stretch="Fill" 
+                                DockPanel.Dock="Top" />
+                    </DockPanel>
+                </Button>
+                
                 
                 <DockPanel  Margin="8"   Width="100" >
                     <TextBlock Margin="0,5,4,0" Style="{StaticResource WizardHeaderTextXSm}" 
-                               HorizontalAlignment="Center"  DockPanel.Dock="Bottom" >
-                               8 Destinations</TextBlock>
+                               HorizontalAlignment="Center"  DockPanel.Dock="Bottom"  Text="{Binding NumTripsString}" />
                     <Image  Source="pack://application:,,,/Resources/hawai.jpg"   Stretch="Fill" DockPanel.Dock="Top" />
                 </DockPanel>
                 <DockPanel  Margin="8"   Width="100" >
