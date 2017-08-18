@@ -260,7 +260,6 @@ namespace TripLine.DesktopApp.ViewModels
         public ObservableCollection<AlbumSectionViewModel> LoadFromLocation(int id)
         {
             var location = _locationService.GetLocation(id);
-            var photos = _photoStore.GetPhotosAtLocation(id);
             return new ObservableCollection<AlbumSectionViewModel>(CreateSections(location));
         }
 

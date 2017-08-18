@@ -26,13 +26,30 @@
         </Grid.ColumnDefinitions>
 
         <StackPanel  Grid.Row="0"  Grid.RowSpan="3" Grid.Column="0"  Margin="7,9,0,0" >
-            <TextBlock Margin="5,5"  Style="{StaticResource WizardHeaderTextSm}" >A little Overview</TextBlock>
-            <TextBlock Margin="5,5" Style="{StaticResource WizardHeaderTextXSm}">Most popular</TextBlock>
-            <TextBlock Margin="5,5" Style="{StaticResource WizardHeaderTextXSm}">Your best</TextBlock>
+            <Button  Command="{Binding ShowOverviewCommand}"   Margin="5,5"  BorderThickness="0"   HorizontalContentAlignment="Left"  >
+            <TextBlock Style="{StaticResource WizardHeaderTextSm}" Text="A little Overview"  HorizontalAlignment="Left" />
+            </Button>
+
+            <Button  Command="{Binding ShowTripsCommand}"   Margin="5,5"  BorderThickness="0"   HorizontalContentAlignment="Left"  >
+                <TextBlock Style="{StaticResource WizardHeaderTextSm}" Text="Most popular"   />
+            </Button>
+
             <TextBlock Margin="5,5" Style="{StaticResource WizardHeaderTextXSm}"></TextBlock>
 
-            <TextBlock Margin="5,5" Style="{StaticResource WizardHeaderTextSm}">In the sun</TextBlock>
-            <TextBlock Margin="5,5" Style="{StaticResource WizardHeaderTextXSm}">Nice plaves</TextBlock>
+
+            <Button  Command="{Binding ShowTripsCommand}"   Margin="5,5"  BorderThickness="0"   HorizontalContentAlignment="Left"  >
+                <TextBlock Style="{StaticResource WizardHeaderTextSm}" Text="In the sun"   />
+            </Button>
+
+            <Button  Command="{Binding ShowTripsCommand}"   Margin="5,5"  BorderThickness="0"   HorizontalContentAlignment="Left"  >
+                <TextBlock Style="{StaticResource WizardHeaderTextSm}" Text="Nice places"  HorizontalAlignment="Left" />
+            </Button>
+
+
+            <Button  Command="{Binding ShowTripsCommand}"   Margin="5,5"  BorderThickness="0"   HorizontalContentAlignment="Left"  >
+                <TextBlock Style="{StaticResource WizardHeaderTextSm}" Text="So far away"  HorizontalAlignment="Left" />
+            </Button>
+      
         </StackPanel>
 
         <StackPanel  Grid.Row="1" Grid.Column="1"  Margin="0,0,0,0"  Height="30"  Orientation="Horizontal" >
@@ -56,23 +73,28 @@
                         <TextBlock Margin="0,5,4,0" Style="{StaticResource WizardHeaderTextXSm}" 
                                    HorizontalAlignment="Center"  DockPanel.Dock="Bottom"  Text="{Binding NumTripsString}" />
 
-                        <Image  Source="pack://application:,,,/Resources/hawai.jpg"   Stretch="Fill" 
-                                DockPanel.Dock="Top" />
+                        <Image  Source="pack://application:,,,/Resources/hawai.jpg"   Stretch="Fill" DockPanel.Dock="Top" />
+                    </DockPanel>
+                </Button>
+
+                <Button   Command="{Binding ShowLocationsCommand}"  >
+                    <DockPanel     Width="100" >
+                        <TextBlock Margin="0,5,4,0" Style="{StaticResource WizardHeaderTextXSm}" 
+                                   HorizontalAlignment="Center"  DockPanel.Dock="Bottom"  Text="{Binding NumLocationsString}" />
+
+                        <Image  Source="pack://application:,,,/Resources/hawai.jpg"   Stretch="Fill" DockPanel.Dock="Top" />
+                    </DockPanel>
+                </Button>
+
+                <Button     >
+                    <DockPanel     Width="100" >
+                        <TextBlock Margin="0,5,4,0" Style="{StaticResource WizardHeaderTextXSm}" 
+                                   HorizontalAlignment="Center"  DockPanel.Dock="Bottom"  Text="{Binding NumPlacesString}" />
+
+                        <Image  Source="pack://application:,,,/Resources/hawai.jpg"   Stretch="Fill" DockPanel.Dock="Top" />
                     </DockPanel>
                 </Button>
                 
-                
-                <DockPanel  Margin="8"   Width="100" >
-                    <TextBlock Margin="0,5,4,0" Style="{StaticResource WizardHeaderTextXSm}" 
-                               HorizontalAlignment="Center"  DockPanel.Dock="Bottom"  Text="{Binding NumTripsString}" />
-                    <Image  Source="pack://application:,,,/Resources/hawai.jpg"   Stretch="Fill" DockPanel.Dock="Top" />
-                </DockPanel>
-                <DockPanel  Margin="8"   Width="100" >
-                    <TextBlock Margin="0,5,4,0" Style="{StaticResource WizardHeaderTextXSm}" 
-                               HorizontalAlignment="Center"  DockPanel.Dock="Bottom" >
-                               35 Places</TextBlock>
-                    <Image  Source="pack://application:,,,/Resources/hawai.jpg"   Stretch="Fill" DockPanel.Dock="Top" />
-                </DockPanel>
             </StackPanel>
             
         </StackPanel>

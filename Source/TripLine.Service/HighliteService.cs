@@ -51,18 +51,18 @@ namespace TripLine.Service
 
         private readonly PhotoStore _photoStore;
         private readonly TripStore _tripStore;
+        private readonly LocationService _locationService;
 
 
-        public HighliteService(PhotoStore photoStore, TripStore tripStore) 
+        public HighliteService(PhotoStore photoStore, TripStore tripStore, LocationService locationService) 
         {
             _tripStore = tripStore;
             _photoStore = photoStore;
+            _locationService = locationService;
         }
     
 
         private HighliteSelectOptions _selectOptions = null;
-        
-           
         
         public List<HighliteTopic> GetHighlites(HighliteSelectOptions selectOptions=null)
         {
@@ -81,6 +81,12 @@ namespace TripLine.Service
                     topics = GetTripHighlites();
                     break;
 
+
+                case HighliteTarget.Location:
+                    topics = GetLocationHighlites();
+                    break;
+
+
                 default:
                     throw new NotImplementedException();
             }
@@ -98,6 +104,22 @@ namespace TripLine.Service
             foreach (var trip in trips)
             {
                 var topic = CreateHighliteTopicViewModelForTrip($"Trip to {trip.DisplayName}",  trip);
+
+                topics.Add(topic);
+            }
+
+            return topics;
+        }
+
+        private List<HighliteTopic> GetLocationHighlites()
+        {
+            List<HighliteTopic> topics = new List<HighliteTopic>();
+
+            var locations = _locationService.GetLocations();
+
+            foreach (var location in locations)
+            {
+                var topic = CreateHighliteTopicViewModelForLocation($"{location.DisplayName}", location);
 
                 topics.Add(topic);
             }
@@ -260,6 +282,28 @@ namespace TripLine.Service
             return topic;
         }
 
+        private HighliteTopic CreateHighliteTopicViewModelForLocation(string topicName, Location location)
+        {
+            var photos = _photoStore.GetPhotosAtLocation(location.Id);
+            var photosByDate = photos.GroupBy(p => p.Creation.ToShortDateString());
+
+            var highliteItems = photosByDate.Select(g => DoCreateHighliteItem(
+                g.First().Id,
+                g.First(),
+                g.Count(),
+                HighliteTarget.Photos,
+                $"{g.Key}")).ToList();
+
+            // on photo per day
+            var topic = new HighliteTopic()
+            {
+                DisplayName = topicName,
+                Items = highliteItems
+            };
+            return topic;
+        }
+
+        
 
         // doer
         private HighliteTopic DoCreateHighliteTopicViewModel(string topicName, List<Photo> photos,   HighliteTarget target, TitleSource itemTitleSource)

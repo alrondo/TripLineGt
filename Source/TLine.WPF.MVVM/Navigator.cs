@@ -220,6 +220,9 @@ namespace TripLine.WPF.MVVM
 
         public async Task GoBack()
         {
+            if (!_breadcrumb.Any())
+                return;
+
             var stamp = _breadcrumb.Pop();
             if (OnPopStamp != null) OnPopStamp(stamp);
 

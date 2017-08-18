@@ -36,7 +36,8 @@ namespace TripLine.DesktopApp.ViewModels
         public static MainViewModel Instance { get; set; }
 
         private readonly TripCreationService _tripCreationService;
-
+        private readonly TripStore _tripStore;
+        private readonly LocationService _locationService;
 
         private int _numTrips = 0;
 
@@ -61,27 +62,39 @@ namespace TripLine.DesktopApp.ViewModels
         public string NumTripsString => $"{NumTrips} trips";
 
         
-        private int _numDestinations = 0;
+        private int _numLocations = 0;
 
-        public int NumDestinations
+        public int NumLocations
         {
             get
             {
-                return _numDestinations;
+                return _numLocations;
             }
             set
             {
-                if (value == _numDestinations)
+                if (value == _numLocations)
                     return;
 
-                _numDestinations = value;
+                _numLocations = value;
                 OnPropertyChanged();
-                OnPropertyChanged(nameof(NumDestinationsString));
+                OnPropertyChanged(nameof(NumLocationsString));
 
             }
         }
 
-        public string NumDestinationsString => $"{NumTrips} destinations";
+        public string NumLocationsString => $"{NumLocations} locations";
+
+
+
+        public string NuPlacesString => $"99 places";
+
+        public ICommand ShowOverviewCommand
+        {
+            get
+            {
+                return new VMBladeCommand(() => GoHome(), () => true, "");
+            }
+        }
 
 
 
@@ -89,10 +102,21 @@ namespace TripLine.DesktopApp.ViewModels
         {
             get
             {
-                return new VMBladeCommand(() => GoTripsView(), () => true, ""); // CanExecuteOk(), "");
+                return new VMBladeCommand(() => GoTripsView(), () => true, "");  
             }
         }
 
+        public ICommand ShowLocationsCommand
+        {
+            get
+            {
+                return new VMBladeCommand(() => GoLocationsView(), () => true, "");
+            }
+        }
+
+        
+
+       
 
         public MainViewModel(ContentControl contentControl) : base("Home")
         {
@@ -104,6 +128,13 @@ namespace TripLine.DesktopApp.ViewModels
             Instance = this;
 
             _tripCreationService = Navigator.Configuration.IoC.Resolve(typeof(TripCreationService)) as TripCreationService;
+            
+            _tripStore =  Navigator.Configuration.IoC.Resolve(typeof(TripStore)) as TripStore;
+            _locationService = Navigator.Configuration.IoC.Resolve(typeof(LocationService)) as LocationService;
+
+            NumTrips = _tripStore.GetTrips().Count;
+
+            NumLocations = _locationService.GetLocations().Count();
 
         }
 
@@ -123,20 +154,35 @@ namespace TripLine.DesktopApp.ViewModels
 
         public async Task GoTripsView()
         {
-            HighliteSelectOptions = new HighliteSelectOptions(HighliteTarget.Trip);
-          
+            ViewTitle = "Your Trips";
 
+            HighliteSelectOptions = new HighliteSelectOptions(HighliteTarget.Trip);
             await _navigator.NavigateTo(typeof(HighliteView));
         }
 
 
+        public async Task GoLocationsView()
+        {
+            ViewTitle = "Your Trips";
+
+            HighliteSelectOptions = new HighliteSelectOptions(HighliteTarget.Location);
+            await _navigator.NavigateTo(typeof(HighliteView));
+        }
+
+        public string ViewTitle = "";
+
         public async Task GoHome()
         {
+            ViewTitle = "A Little Overview";
+
+            HighliteSelectOptions = null;
             await _navigator.NavigateTo(typeof(HighliteView));
         }
 
         public async Task GoWizard()
         {
+            ViewTitle = "Trip Creation Wizard";
+
             await _navigator.NavigateTo(typeof(TripWizardView));
         }
 

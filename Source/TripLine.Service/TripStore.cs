@@ -175,7 +175,7 @@ namespace TripLine.Service
 
 
 
-        public List<Trip> GetTrips(int maxCount) => _tripRepo.Content.Trips.Take(maxCount).ToList();
+        public List<Trip> GetTrips(int maxCount=int.MaxValue) => _tripRepo.Content.Trips.Take(maxCount).ToList();
 
         public Trip GetTrip(int id) => _tripRepo.Content.Trips.First(t => t.Id == id);
 

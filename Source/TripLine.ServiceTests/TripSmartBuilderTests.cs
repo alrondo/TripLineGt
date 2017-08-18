@@ -45,7 +45,7 @@ namespace TripLine.ServiceTests
             _tripSmartBuilder = new TripSmartBuilder(_locationService, _photoStore, new DestinationBuilder(_locationService));
 
             _tripStore = new TripStore(_photoStore, _locationService, _tripSmartBuilder, new TripsRepo(forceNew:true));
-            _highliteService = new HighliteService(_photoStore, _tripStore);
+            _highliteService = new HighliteService(_photoStore, _tripStore, _locationService);
         }
 
         [TestMethod()]
@@ -105,7 +105,7 @@ namespace TripLine.ServiceTests
 
             _tripSmartBuilder = new TripSmartBuilder(_locationService, _photoStore, new DestinationBuilder(_locationService));
             _tripStore = new TripStore(_photoStore, _locationService, _tripSmartBuilder, new TripsRepo(forceNew: _forceNew));
-            _highliteService = new HighliteService(_photoStore, _tripStore);
+            _highliteService = new HighliteService(_photoStore, _tripStore, _locationService);
 
 
         }

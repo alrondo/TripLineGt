@@ -89,7 +89,7 @@ namespace TripLine.DesktopApp.ViewModels
         private readonly PhotoStore _photoStore;
         private readonly HighliteService _highliteService;
 
-        public string DisplayName { get; set; } = "A little overview";
+        public string Title { get; set; } = "A little overview";
 
         // Little trick to disable listbox selection...   We bind Listbox selectitems to NoSelection.  
         // The real selections are handled by the checkboxes inside the list items.
@@ -142,6 +142,8 @@ namespace TripLine.DesktopApp.ViewModels
             List<string> choseLocationNames = new List<string>();
 
             var highliteOptions = _mainViewModel.HighliteSelectOptions;
+
+            Title = _mainViewModel.ViewTitle;
 
             var highlites = _highliteService.GetHighlites(highliteOptions);
             

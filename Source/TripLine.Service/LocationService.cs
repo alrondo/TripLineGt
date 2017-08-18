@@ -29,7 +29,10 @@ namespace TripLine.Service
         private IEnumerable<Location> ExcludedLocation => _locationRepo.Locations.Where(l => l.Excluded == true);
 
         private bool Connected => true;
-
+        
+        public IEnumerable<Location> GetLocations() => _locationRepo.Locations.Where(l =>! ExcludedLocation.Contains(l));
+        
+        public IEnumerable<Location> GetAllLocations() => _locationRepo.Locations;
 
         public LocationService(GoogleClient googleClient, LocationRepo locationRepo )
         {
