@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using Newtonsoft.Json;
 
 
 using TripLine.Toolbox.Extensions;
@@ -10,9 +11,11 @@ using TripLine.Toolbox.Extensions;
 
 using TripLine.WPF.MVVM;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.Threading.Tasks;
 using System.Windows.Controls;
 using System.Windows.Input;
+using System.Xml;
 using TripLine.Service;
 using TripLine.Dtos;
 
@@ -27,6 +30,9 @@ namespace TripLine.DesktopApp.ViewModels
 
         public string DisplayName { get; set; } = "abc";
         public string Description { get; set; }
+
+
+        public int PhotoId { get; set; }
 
         public int    Id      { get; set; }
 
@@ -254,6 +260,8 @@ namespace TripLine.DesktopApp.ViewModels
         {
             var trip = _tripStore.GetTrip(id);
 
+            _tripStore.DumpTrip(id,  "LoadFromTrip");
+
             return  new ObservableCollection<AlbumSectionViewModel>(CreateSections(trip));
         }
 
@@ -303,6 +311,8 @@ namespace TripLine.DesktopApp.ViewModels
         {
             AlbumItemViewModel vmodel = AutoMapper.Mapper.Map<AlbumItemViewModel>(photo);
 
+            vmodel.PhotoId = photo.Id;
+
             SetupCommands(vmodel);
             return vmodel;
         }
@@ -319,7 +329,18 @@ namespace TripLine.DesktopApp.ViewModels
         {
             SelectedSection.SelectedItem = obj;
 
+            //if (obj.Target == HighliteTarget.Photos)
+            //{
+            var photo = _photoStore.GetPhoto(obj.Id);
+
+            Debug.WriteLine($"> Photo {obj.DisplayName}");
+            Debug.WriteLine($">       {obj.PhotoUrl}");
+
+            photo.Dump("Open item ");
+
         }
+
+       
 
         private async void OnItemRemoved(AlbumItemViewModel obj)
         {

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -95,7 +96,11 @@ namespace TripLine.Dtos
             return photo;
         }
 
-
+        public void Dump( string prefix=" ")
+        {
+            Debug.WriteLine($">{prefix} Photo {DisplayName} Creation {Creation}");
+            Debug.WriteLine($"    " + JsonConvert.SerializeObject(this, Newtonsoft.Json.Formatting.Indented));
+        }
 
     }
 }

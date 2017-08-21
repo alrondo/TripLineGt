@@ -1,6 +1,7 @@
 ﻿using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -40,6 +41,13 @@ namespace TripLine.Dtos
             str = str.Replace(@"[{,", (Environment.NewLine +  @"[{" ));
 
             return str;
+        }
+
+        public void DebugWrite()
+        {
+            string str = JsonConvert.SerializeObject(this, Formatting.Indented);
+
+            Debug.WriteLine(str);
         }
     }
 

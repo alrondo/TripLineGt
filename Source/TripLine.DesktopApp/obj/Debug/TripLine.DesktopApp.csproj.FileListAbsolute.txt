@@ -344,7 +344,6 @@ C:\CodeAlrn\TripLineRoot\TripLineJn\Source\TripLine.DesktopApp\bin\Debug\AutoMap
 C:\CodeAlrn\TripLineRoot\TripLineJn\Source\TripLine.DesktopApp\bin\Debug\log4net.xml
 C:\CodeAlrn\TripLineRoot\TripLineJn\Source\TripLine.DesktopApp\bin\Debug\MahApps.Metro.pdb
 C:\CodeAlrn\TripLineRoot\TripLineJn\Source\TripLine.DesktopApp\bin\Debug\MahApps.Metro.xml
-C:\CodeAlrn\TripLineRoot\TripLineJn\Source\TripLine.DesktopApp\bin\Debug\Newtonsoft.Json.xml
 C:\CodeAlrn\TripLineRoot\TripLineJn\Source\TripLine.DesktopApp\obj\Debug\App.baml
 C:\CodeAlrn\TripLineRoot\TripLineJn\Source\TripLine.DesktopApp\obj\Debug\ContentUserControl\Main.baml
 C:\CodeAlrn\TripLineRoot\TripLineJn\Source\TripLine.DesktopApp\obj\Debug\View\AlbumView.baml
@@ -406,3 +405,4 @@ C:\Users\alron\Documents\GitHub\TripLineGt\Source\TripLine.DesktopApp\obj\Debug\
 C:\Users\alron\Documents\GitHub\TripLineGt\Source\TripLine.DesktopApp\obj\Debug\TripLine.DesktopApp.g.resources
 C:\Users\alron\Documents\GitHub\TripLineGt\Source\TripLine.DesktopApp\obj\Debug\TripLine.DesktopApp.Properties.Resources.resources
 C:\Users\alron\Documents\GitHub\TripLineGt\Source\TripLine.DesktopApp\obj\Debug\TripLine.DesktopApp.csproj.GenerateResource.Cache
+C:\CodeAlrn\TripLineRoot\TripLineJn\Source\TripLine.DesktopApp\bin\Debug\Newtonsoft.Json.xml

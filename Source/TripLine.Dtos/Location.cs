@@ -1,5 +1,6 @@
 ﻿
 using System.Collections;
+using System.Diagnostics;
 using System.Runtime.Serialization.Json;
 using Newtonsoft.Json;
 
@@ -57,6 +58,13 @@ namespace TripLine.Dtos
         }
 
         public string GetShortDisplay() => $"{Country},{State},{City}";
+
+
+        public void Dump(string prefix = " ")
+        {
+            Debug.WriteLine($">{prefix} Location {DisplayName}");
+            Debug.WriteLine($"    " + JsonConvert.SerializeObject(this, Newtonsoft.Json.Formatting.Indented));
+        }
     }
 
 }

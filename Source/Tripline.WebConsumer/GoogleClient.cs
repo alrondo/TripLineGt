@@ -175,14 +175,14 @@ namespace Tripline.WebConsumer
         {
             var address = ComponentOfType(eAddressTypes.locality);
 
-            return address?.short_name ?? null as string;
+            return address?.short_name.RemoveDiacritics() ?? null as string;
         }
 
         public string GetCountry()
         {
             var address = ComponentOfType(eAddressTypes.country);
 
-            return address?.long_name ?? null as string;
+            return address?.long_name.RemoveDiacritics() ?? null as string;
         }
 
         public string GetState()
@@ -190,8 +190,8 @@ namespace Tripline.WebConsumer
             var address = ComponentOfType(eAddressTypes.administrative_area_level_1); ;
 
             var name = (GetCity() != null && GetCountry() != null)
-                ? (address?.short_name ?? address?.long_name)
-                : (address?.long_name ?? address?.short_name);
+                ? (address?.short_name.RemoveDiacritics() ?? address?.long_name.RemoveDiacritics())
+                : (address?.long_name.RemoveDiacritics() ?? address?.short_name.RemoveDiacritics());
 
             return name;
         }

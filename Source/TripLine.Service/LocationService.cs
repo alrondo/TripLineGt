@@ -177,7 +177,7 @@ namespace TripLine.Service
 
             location.Id = _locationRepo.GetNewId();
 
-            location.SearchedAddress = address;
+            location.SearchedAddress = address.RemoveDiacritics();
             location.SearchedPosition = position;
             location.Position = new GeoPosition(response.results.First().Latitude, response.results.First().Longitude);
 

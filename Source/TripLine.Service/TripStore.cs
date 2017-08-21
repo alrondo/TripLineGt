@@ -206,6 +206,19 @@ namespace TripLine.Service
             return trip;
         }
 
+        public void DumpTrip(int tripId, string prefix=" ")
+        {
+            var trip = GetTrip(tripId);
+            
+            trip.Dump(prefix);
+
+            var photos = _photoStore.GetPhotosByTrip(trip.Id);
+
+            photos.FirstOrDefault()?.Dump("first");
+            photos.LastOrDefault()?.Dump("last");
+
+        }
+
 
     }
 
