@@ -17,60 +17,64 @@
             <cvt:InvisibilityConverter x:Key="InvisibilityConverter"/>
             <cvt:PathToImageSourceConverter x:Key="ImageConverter"/>
 
-            <DataTemplate  x:Key="albumItemTemplate" DataType="{x:Type vmodel:AlbumItemViewModel}" > <StackPanel
-                Height="160">
-                    <Button Height="130"  Width="100" Background="{StaticResource TLineViewBackground}" Command="{Binding OpenCommand}" >
-                        <Image Source="{Binding Path=Thumbnail, Converter={StaticResource ImageConverter}}" 
-                               Stretch="UniformToFill" >
-                        </Image>
-                    </Button>
-                    <TextBlock  Text="{Binding Path=DisplayName}" Style="{StaticResource WizardTextLine}"                                   />
-             </StackPanel> </DataTemplate>
-        </Grid.Resources>
+            <DataTemplate  x:Key="albumItemTemplate" DataType="{x:Type vmodel:AlbumItemViewModel}" >
+                <DockPanel Width="120" Height="130"  >
+                    <TextBlock DockPanel.Dock="Bottom"  Text="{Binding Path=DisplayName}" Style="{StaticResource WizardTextLine}"  />
 
+                    <Button  Background="{StaticResource TLineViewBackground}" Command="{Binding OpenCommand}" HorizontalAlignment="Stretch"  VerticalAlignment="Stretch" >
+                        <Image  Source="{Binding Path=Thumbnail, Converter={StaticResource ImageConverter}}"  Stretch="UniformToFill"  HorizontalAlignment="Stretch"  VerticalAlignment="Stretch"  > </Image>
+                    </Button>
+                    
+             </DockPanel> </DataTemplate>
+        </Grid.Resources>
        
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="auto"/>
-            <ColumnDefinition Width="auto"/>
+            <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
+            <RowDefinition Height="auto"  />  
             <RowDefinition Height="auto"  />
-            <RowDefinition Height="auto"  />
-            <RowDefinition Height="500"   />
-            <RowDefinition Height="100"   />
-            <RowDefinition Height="*"   />
-            <!--<RowDefinition Height="10"  />-->
+            <RowDefinition Height="*"   />       <!-- 2 selected image or info-->
+            <RowDefinition Height="auto" />     <!-- 3 thumb strip           -->
+            <RowDefinition Height="30"   />      <!-- 4 button strip           -->
         </Grid.RowDefinitions>
 
-        <StackPanel Grid.Row="0"  Grid.ColumnSpan="2" Orientation="Vertical"  Background="{StaticResource TLineViewBackgroundPanel}"  Margin="0,7,0,7" >
+        <StackPanel Grid.Row="0"  Orientation="Vertical"  Background="{StaticResource TLineViewBackgroundPanel}"  Margin="0,7,0,7" >
             <TextBlock Text="{Binding Path=DisplayName }"  Style="{StaticResource WizardHeaderTextLg}"  Margin="0,0,0,0" />
         </StackPanel>
 
-        <StackPanel Grid.Row="1"  Grid.ColumnSpan="2" Orientation="Vertical"  Background="{StaticResource TLineViewBackgroundPanel}"  Margin="0,7,0,7" >
+        <StackPanel Grid.Row="1"   Orientation="Vertical"  Background="{StaticResource TLineViewBackgroundPanel}"  Margin="0,7,0,7" >
             <TextBlock Text="{Binding Path=SelectedSection.DisplayName}"  Style="{StaticResource WizardTextLine}"  Margin="0,0,0,0" />
         </StackPanel>
 
-        <DockPanel Grid.Row="2" Grid.ColumnSpan="2"   Visibility="{Binding ShowPhoto, Converter={StaticResource VisibilityHideConverter}}"   Background="{StaticResource TLineViewBackground}">
+        
+        <DockPanel Grid.Row="2"  Visibility="{Binding ShowPhoto, Converter={StaticResource VisibilityHideConverter}}"   Background="{StaticResource TLineViewBackground}">
             <TextBlock  Text="{Binding Path=SelectedSection.SelectedItem.DisplayName,  Mode=TwoWay}" Style="{StaticResource WizardTextLine}" DockPanel.Dock="Bottom" />
-            <Image  Source="{Binding Path=SelectedSection.SelectedItem.PhotoUrl, Mode=TwoWay, Converter={StaticResource ImageConverter}}" Stretch="Uniform" />
+            <Image      Source="{Binding Path=SelectedSection.SelectedItem.PhotoUrl, Mode=TwoWay, Converter={StaticResource ImageConverter}}" 
+                        Stretch="UniformToFill" HorizontalAlignment="Stretch"  VerticalAlignment="Stretch"   />
         </DockPanel>
+        <StackPanel  Grid.Row="2"  Orientation="Vertical"  VerticalAlignment="Top"   Visibility="{Binding ShowInfo, Converter={StaticResource VisibilityHideConverter}}"  >
+            <TextBlock Text="{Binding Path=Title}"  Style="{StaticResource WizardTextLine}"  Margin="0,0,0,0" />
+            <TextBlock Text="{Binding Path=DebugInfo.Photo.Creation}"  Style="{StaticResource WizardTextLine}"  Margin="0,0,0,0" />
+            <TextBlock Text="{Binding Path=DebugInfo.Photo.Location.DisplayName}"  Style="{StaticResource WizardTextLine}"  Margin="0,0,0,0" />
 
-
-        <StackPanel  Grid.Row="2" Grid.ColumnSpan="2"  Orientation="Vertical"  VerticalAlignment="Top"   Visibility="{Binding ShowInfo, Converter={StaticResource VisibilityHideConverter}}"  >
-                <TextBlock Text="{Binding Path=Title}"  Style="{StaticResource WizardTextLine}"  Margin="0,0,0,0" />
-                <TextBlock Text="{Binding Path=DebugInfo.Photo.Creation}"  Style="{StaticResource WizardTextLine}"  Margin="0,0,0,0" />
-                <TextBlock Text="{Binding Path=DebugInfo.Photo.Location.DisplayName}"  Style="{StaticResource WizardTextLine}"  Margin="0,0,0,0" />
+            <TextBlock Text="File info:"  Style="{StaticResource WizardTextLine}"  Margin="0,0,0,0" />
+            <TextBlock Text="{Binding Path=DebugInfo.Photo.Url}"  Style="{StaticResource WizardTextLine}"  Margin="0,0,0,0" />
+            <TextBlock Text="{Binding Path=DebugInfo.Photo.FileDate}"  Style="{StaticResource WizardTextLine}"  Margin="0,0,0,0" />
+            
+            <TextBlock Text="ExifDate info:"  Style="{StaticResource WizardTextLine}"  Margin="0,0,0,0" />
+            <TextBlock Text="{Binding Path=DebugInfo.Photo.ExifDate}"  Style="{StaticResource WizardTextLine}"  Margin="0,0,0,0" />
         </StackPanel>
 
-
-        <DockPanel    Grid.Row="3" Grid.ColumnSpan="2"  Background="{StaticResource TLineViewBackground}" >
+        <!--Thumbnail Strip-->
+        <DockPanel    Grid.Row="3"  Background="{StaticResource TLineViewBackground}"   >
       
                 <ListBox ItemsSource="{Binding Path=SelectedSection.Items}" SelectionMode="Extended"  
                                       Background="{StaticResource TLineViewBackgroundPanel}" 
                                       ItemTemplate="{StaticResource albumItemTemplate}"
                                       SelectedValue="{Binding NoSelection}"  IsSynchronizedWithCurrentItem="True" 
                                       VirtualizingStackPanel.IsVirtualizing="False"  
-                                      ScrollViewer.HorizontalScrollBarVisibility="Visible"
+                                      ScrollViewer.HorizontalScrollBarVisibility="Auto"
                                       >
                 <ListBox.ItemsPanel>
                     <ItemsPanelTemplate>
@@ -85,10 +89,10 @@
         <!--DockPanel.Dock="Top"-->
 
         
-        <StackPanel Orientation="Horizontal"  Name="Detail" Grid.Row="4" Grid.ColumnSpan="2"  Background="{StaticResource TLineViewBackground}"  MinHeight="180">
-            <Button Height="130"  Width="100" Background="{StaticResource TLineViewBackground}" Command="{Binding InfoCommand}"  Content="Info"></Button>
-            <TextBlock Text="100"  Style="{StaticResource WizardTextLine}"  Margin="0,0,0,0" />
-            <TextBlock Text=",100"  Style="{StaticResource WizardTextLine}"  Margin="0,0,0,0" />
+        <StackPanel Orientation="Horizontal"  Name="Detail" Grid.Row="4"   Background="{StaticResource TLineViewBackground}"  >
+            <Button Background="{StaticResource TLineViewBackground}" Command="{Binding InfoCommand}"  Content="Info"></Button>
+            <!--<TextBlock Text="100"  Style="{StaticResource WizardTextLine}"  Margin="0,0,0,0" />
+            <TextBlock Text=",100"  Style="{StaticResource WizardTextLine}"  Margin="0,0,0,0" />-->
         </StackPanel>
 
 

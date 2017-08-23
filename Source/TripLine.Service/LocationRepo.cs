@@ -41,6 +41,11 @@ namespace TripLine.Service
             return Locations.FirstOrDefault(l => l.Id == id);
         }
 
+        public Location GetLocation(string displayName)
+        {
+            return Locations.FirstOrDefault(l => l.DisplayName.ToLower() == displayName.ToLower());
+        }
+
         public Location GetHomeLocation() => GetLocation(Content.HomeLocationId);
 
 

@@ -187,8 +187,12 @@ namespace TripLine.Service
 
             location.DisplayName = BuildDisplayName(location.City, location.State, location.Country);
 
+            var exitingLocation = _locationRepo.GetLocation(location.DisplayName);
+
+            if (exitingLocation != null)
+                return exitingLocation;
+            
             location.Excluded = IsExcludedLocation(location);
-           
 
             Debug.WriteLine($"New location for {address} {location.Id} {location.DisplayName} ");
 
