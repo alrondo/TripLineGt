@@ -156,14 +156,7 @@ namespace TripLine.Service
 
             return true;
         }
-
-        private Location DetectParentLocation(TripCandidate tripCandidate)
-        {
-            var childLocations = tripCandidate.Destinations.Select(d => d.Location);
-
-            return _locationService.DetectParentLocation(childLocations);
-        }
-
+        
     }
 
 }

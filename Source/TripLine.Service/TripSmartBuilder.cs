@@ -123,7 +123,7 @@ namespace TripLine.Service
 
         private Location DetectParentLocation(TripCandidate tripCandidate)
         {
-            var childLocations = tripCandidate.Destinations.Select(d => d.Location);
+            var childLocations = tripCandidate.Destinations.Select(d => d.Location).ToList();
 
             return _locationService.DetectParentLocation(childLocations);
         }

@@ -285,21 +285,29 @@ namespace TripLine.Service
                     continue;
                 }
 
-                if (loc.Country != tripLocation.Country)
+                if (loc.Country != tripLocation.Country && tripLocation.Country!= null)
                     tripLocation.Country = null;
 
-                if (loc.State != tripLocation.State)
+                if (loc.State != tripLocation.State  && tripLocation.State != null)
                     tripLocation.State = null;
 
-                if (loc.City != tripLocation.City)
+                if (loc.City != tripLocation.City && tripLocation.City != null)
                     tripLocation.City = null;
             }
+            
 
-            tripLocation.DisplayName = BuildDisplayName(tripLocation.City, tripLocation.State, tripLocation.Country);
+            if (tripLocation?.Country == null)
+            {
+                // todo :  something about concatanating the country...
+                //var countries = childLocations.Where(l => l.Country != null).Select(s => s.Country);
+                tripLocation = childLocations.First(l => l.Country != null);
+            }
 
-            Debug.Assert(tripLocation.Country != null);
+            Debug.Assert( tripLocation != null && tripLocation.Country != null);
 
-            var resolvedLocation = GetLocation(tripLocation.DisplayName);
+            var locationName = BuildDisplayName(tripLocation.City, tripLocation.State, tripLocation.Country);
+
+            var resolvedLocation = GetLocation(locationName);
 
             Debug.Assert(resolvedLocation != null);
 

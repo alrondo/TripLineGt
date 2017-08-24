@@ -329,9 +329,14 @@ namespace TripLine.Service
 
             if (!DateHelper.IsValidDate(creationDate))
             {
-                creationDate = finfo.LastAccessTimeUtc;
+                creationDate = DateHelper.LowestDate(finfo.LastAccessTimeUtc, finfo.LastAccessTimeUtc); ;
 
                 // todo try get date from filename
+            }
+
+            if (finfo?.ExifInfo.DateTime != null )
+            {
+                creationDate = DateHelper.LowestDate(creationDate, finfo.ExifInfo.DateTime.Value);
             }
 
             var photo = Photo.NewPhoto(_photoRepo.Content.NewId++, finfo.FilePath, finfo.FileKey, creationDate);
@@ -345,8 +350,7 @@ namespace TripLine.Service
                     photo.Location = _locationService.GetLocation(photo.Position);
                 }
 
-                if (finfo.ExifInfo.DateTime.HasValue)
-                    photo.ExifDate = finfo.ExifInfo.DateTime.Value;
+              
             }
 
             if (_lastAddedValidPhoto == null || (_lastAddedValidPhoto.Creation.DayOfYear != finfo.Creation.DayOfYear))
@@ -362,6 +366,8 @@ namespace TripLine.Service
                 )               
             {   // No GPS info nut photo has same search path as previous... 
                 photo.Location = _lastAddedValidPhoto.Location;
+
+                photo.DebugInfo += "LocationFromPhoto" + _lastAddedValidPhoto.Id + ";";
             }
 
             if (photo.Location == null   )
@@ -372,11 +378,11 @@ namespace TripLine.Service
             if(photo.IsValid)
                 _lastAddedValidPhoto = photo;
 
-
             photo.DisplayName = (photo.Location != null) ? photo.Location.GetShortDisplay() : "Unknown Place";
-
            
             photo.Excluded = photo.Location == null || photo.Location.Excluded || ! photo.IsValid;
+
+            photo.FileInfoContent = finfo.Serialize(pretty:true);
 
             _photoRepo.Content.Photos.Add(photo);
         }

@@ -33,15 +33,24 @@ namespace TripLine.Dtos
 
     public abstract class DtoBase<T>
     {
-        public string Serialize()
+        public string Serialize(bool pretty=false)
         {
+            Formatting formatting = pretty ? Formatting.Indented : Formatting.None;
+
             string str = JsonConvert.SerializeObject(this);
 
-            str = str.Replace(@"},", (@"}," + Environment.NewLine));
-            str = str.Replace(@"[{,", (Environment.NewLine +  @"[{" ));
+            if (!pretty)
+            {
+
+                str = str.Replace(@"},", (@"}," + Environment.NewLine));
+                str = str.Replace(@"[{,", (Environment.NewLine + @"[{"));
+            }
 
             return str;
         }
+
+      
+
 
         public void DebugWrite()
         {

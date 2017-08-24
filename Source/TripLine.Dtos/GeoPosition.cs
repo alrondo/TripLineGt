@@ -11,6 +11,9 @@ namespace TripLine.Dtos
         public float Longitude { get; set; } = 0;
 
 
+        public string LatLong => $"{Latitude},{Longitude}";
+
+
         public bool IsAlike(GeoPosition position, uint units = 3)
         {
             return (IsAlike(position.Latitude, position.Longitude, units));

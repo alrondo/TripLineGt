@@ -9,8 +9,6 @@
       mc:Ignorable="d" 
       d:DesignHeight="500" d:DesignWidth="600"   >
 
-
-
     <Grid Margin="7,0,7,0"  Background="{StaticResource TLineViewBackgroundPanel}" >
         <Grid.Resources>
             <cvt:VisibilityConverter x:Key="VisibilityConverter"/>
@@ -61,7 +59,7 @@
                                       Background="{StaticResource TLineViewBackgroundPanel}" 
                                       ItemTemplate="{StaticResource hliteItemTemplate}"
                                       SelectedValue="{Binding NoSelection}"  IsSynchronizedWithCurrentItem="True" 
-                                      VirtualizingStackPanel.IsVirtualizing="False"  ScrollViewer.HorizontalScrollBarVisibility="Visible"
+                                      VirtualizingStackPanel.IsVirtualizing="False"  ScrollViewer.HorizontalScrollBarVisibility="Visible" ScrollViewer.VerticalScrollBarVisibility="Disabled"
                                       >
                                 <ListBox.ItemsPanel>
                                     <ItemsPanelTemplate>

@@ -57,9 +57,12 @@
             <TextBlock Text="{Binding Path=Title}"  Style="{StaticResource WizardTextLine}"  Margin="0,0,0,0" />
             <TextBlock Text="{Binding Path=DebugInfo.Photo.Creation}"  Style="{StaticResource WizardTextLine}"  Margin="0,0,0,0" />
             <TextBlock Text="{Binding Path=DebugInfo.Photo.Location.DisplayName}"  Style="{StaticResource WizardTextLine}"  Margin="0,0,0,0" />
-
+            <TextBlock Text="{Binding Path=DebugInfo.Photo.Location.Position.LatLong}"  Style="{StaticResource WizardTextLine}"  Margin="0,0,0,0" />
+            <TextBlock Text="{Binding Path=DebugInfo.Photo.Location.SearchedPosition}"  Style="{StaticResource WizardTextLine}"  Margin="0,0,0,0" />
+            <TextBlock Text="{Binding Path=DebugInfo.Photo.Location.SearchedAddress}"  Style="{StaticResource WizardTextLine}"  Margin="0,0,0,0" />
+            
             <TextBlock Text="File info:"  Style="{StaticResource WizardTextLine}"  Margin="0,0,0,0" />
-            <TextBlock Text="{Binding Path=DebugInfo.Photo.Url}"  Style="{StaticResource WizardTextLine}"  Margin="0,0,0,0" />
+            <TextBlock Text="{Binding Path=DebugInfo.Photo.PhotoUrl}"  Style="{StaticResource WizardTextLine}"  Margin="0,0,0,0" />
             <TextBlock Text="{Binding Path=DebugInfo.Photo.FileDate}"  Style="{StaticResource WizardTextLine}"  Margin="0,0,0,0" />
             
             <TextBlock Text="ExifDate info:"  Style="{StaticResource WizardTextLine}"  Margin="0,0,0,0" />

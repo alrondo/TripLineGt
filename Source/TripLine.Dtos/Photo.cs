@@ -69,6 +69,10 @@ namespace TripLine.Dtos
             return (Tags.Contains(tag.ToString()));
         }
 
+        public string FileInfoContent { get; set; }
+
+        public string DebugInfo { get; set; }
+
 
         public void AddTag(PhotoTag tag)
         {
