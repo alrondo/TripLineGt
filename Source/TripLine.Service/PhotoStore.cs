@@ -348,9 +348,11 @@ namespace TripLine.Service
                     photo.Position = new GeoPosition( finfo.ExifInfo.GPS_Latitude.Value, finfo.ExifInfo.GPS_Longitude.Value);
 
                     photo.Location = _locationService.GetLocation(photo.Position);
+
+                    if (photo.Location != null) photo.DebugInfo += "LocFromPos" + ";";
                 }
 
-              
+
             }
 
             if (_lastAddedValidPhoto == null || (_lastAddedValidPhoto.Creation.DayOfYear != finfo.Creation.DayOfYear))
@@ -367,12 +369,15 @@ namespace TripLine.Service
             {   // No GPS info nut photo has same search path as previous... 
                 photo.Location = _lastAddedValidPhoto.Location;
 
-                photo.DebugInfo += "LocationFromPhoto" + _lastAddedValidPhoto.Id + ";";
+                photo.DebugInfo += "LocFromPhoto" + _lastAddedValidPhoto.Id + ";";
             }
 
             if (photo.Location == null   )
-            {   
+            {
+                photo.DebugInfo += "FromPath" + ";";
                 photo.Location = _locationService.GetLocation(finfo.RelativePath);
+
+                if (photo.Location != null) photo.DebugInfo += "LocFromPath" + ";";
             }
  
             if(photo.IsValid)

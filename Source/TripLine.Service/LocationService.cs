@@ -120,7 +120,6 @@ namespace TripLine.Service
             addressLine = addressLine.Replace("-", "+");
             addressLine = addressLine.ToLower().Replace("é", "e");
             addressLine = addressLine.ToLower().Replace("vol", "+");
-            addressLine = addressLine.ToLower().Replace("mini", "+");
             addressLine = addressLine.Replace("+++", "+").Replace("++", "+");
             addressLine = addressLine.Replace("+++", "+").Replace("++", "+");
             addressLine = addressLine.Replace("-", "+").Replace("++", "+");

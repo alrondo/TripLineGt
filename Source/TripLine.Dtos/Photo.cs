@@ -50,6 +50,8 @@ namespace TripLine.Dtos
         public int DestId { get; set; } = 0;
         public int PlaceId { get; set; } = 0;
 
+        public string Ids => $"{TripId}.{DestId}";
+
         public GeoPosition Position { get; set; } = new GeoPosition();
 
         public Location    Location { get; set; }
@@ -72,7 +74,6 @@ namespace TripLine.Dtos
         public string FileInfoContent { get; set; }
 
         public string DebugInfo { get; set; }
-
 
         public void AddTag(PhotoTag tag)
         {

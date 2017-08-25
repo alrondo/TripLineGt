@@ -7,7 +7,7 @@
       xmlns:view="clr-namespace:TripLine.DesktopApp.View"
       xmlns:vmodel="clr-namespace:TripLine.DesktopApp.ViewModels"
       mc:Ignorable="d" 
-      d:DesignHeight="300" d:DesignWidth="400"   >
+      d:DesignHeight="500" d:DesignWidth="400"   >
 
     <Grid Margin="7,0,7,0"  Background="{StaticResource TLineViewBackgroundPanel}" >
         <Grid.Resources>
@@ -54,19 +54,45 @@
                         Stretch="UniformToFill" HorizontalAlignment="Stretch"  VerticalAlignment="Stretch"   />
         </DockPanel>
         <StackPanel  Grid.Row="2"  Orientation="Vertical"  VerticalAlignment="Top"   Visibility="{Binding ShowInfo, Converter={StaticResource VisibilityHideConverter}}"  >
-            <TextBlock Text="{Binding Path=Title}"  Style="{StaticResource WizardTextLine}"  Margin="0,0,0,0" />
-            <TextBlock Text="{Binding Path=DebugInfo.Photo.Creation}"  Style="{StaticResource WizardTextLine}"  Margin="0,0,0,0" />
-            <TextBlock Text="{Binding Path=DebugInfo.Photo.Location.DisplayName}"  Style="{StaticResource WizardTextLine}"  Margin="0,0,0,0" />
-            <TextBlock Text="{Binding Path=DebugInfo.Photo.Location.Position.LatLong}"  Style="{StaticResource WizardTextLine}"  Margin="0,0,0,0" />
-            <TextBlock Text="{Binding Path=DebugInfo.Photo.Location.SearchedPosition}"  Style="{StaticResource WizardTextLine}"  Margin="0,0,0,0" />
-            <TextBlock Text="{Binding Path=DebugInfo.Photo.Location.SearchedAddress}"  Style="{StaticResource WizardTextLine}"  Margin="0,0,0,0" />
+            <Grid Background="{StaticResource TLineViewBackgroundPanel}" >
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="auto"  />
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="2*"/>
+                </Grid.ColumnDefinitions>
+                <StackPanel  Orientation="Vertical"  Grid.Column="0"  >
+                    <TextBlock Text="Photo:"  Style="{StaticResource WizardHeaderTextXSm}"  Margin="0,0,0,0" />
+                    <TextBlock Text="   Creation"  Style="{StaticResource WizardTextLine}"  Margin="0,0,0,0" />
+                    <TextBlock Text="   Debug"  Style="{StaticResource WizardTextLine}"  Margin="0,0,0,0" />
+                    <TextBlock Text="Location:"  Style="{StaticResource WizardHeaderTextXSm}"  Margin="0,0,0,0" />
+                    <TextBlock Text="   Lat Long"  Style="{StaticResource WizardTextLine}"  Margin="0,0,0,0" />
+                    <TextBlock Text="   Searched Pos"  Style="{StaticResource WizardTextLine}"  Margin="0,0,0,0" />
+                    <TextBlock Text="   Searched Addr"  Style="{StaticResource WizardTextLine}"  Margin="0,0,0,0" />
+                    <TextBlock Text="File "  Style="{StaticResource WizardHeaderTextXSm}"  Margin="0,0,0,0" />
+                    <TextBlock Text="   Date"  Style="{StaticResource WizardTextLine}"  Margin="0,0,0,0" />
+                    <TextBlock Text="   ExifDate"  Style="{StaticResource WizardTextLine}"  Margin="0,0,0,0" />
+                </StackPanel>
+                <StackPanel  Orientation="Vertical"  Grid.Column="1"  >
+                    <TextBlock Text="{Binding Path=Title}"  Style="{StaticResource WizardTextLine}"  Margin="0,0,0,0" />
+                    <TextBlock Text="{Binding Path=DebugInfo.Photo.Creation}"  Style="{StaticResource WizardTextLine}"  Margin="5,0,0,0" />
+                    <TextBlock Text="{Binding Path=DebugInfo.Photo.DebugInfo}"  Style="{StaticResource WizardTextLine}"  Margin="5,0,0,0" />
+                    <TextBlock Text="{Binding Path=DebugInfo.Photo.Location.DisplayName}"  Style="{StaticResource WizardTextLine}"  Margin="0,0,0,0" />
+                    <TextBlock Text="{Binding Path=DebugInfo.Photo.Location.Position.LatLong}"  Style="{StaticResource WizardTextLine}"  Margin="5,0,0,0" />
+                    <TextBlock Text="{Binding Path=DebugInfo.Photo.Location.SearchedPosition}"  Style="{StaticResource WizardTextLine}"  Margin="5,0,0,0" />
+                    <TextBlock Text="{Binding Path=DebugInfo.Photo.Location.SearchedAddress}"  Style="{StaticResource WizardTextLine}"  Margin="5,0,0,0" />
+                    <TextBlock Text="{Binding Path=DebugInfo.Photo.PhotoUrl}"  Style="{StaticResource WizardTextLine}"  Margin="0,0,0,0" />
+                    <TextBlock Text="{Binding Path=DebugInfo.Photo.FileDate}"  Style="{StaticResource WizardTextLine}"  Margin="5,0,0,0" />
+                    <TextBlock Text="{Binding Path=DebugInfo.Photo.ExifDate}"  Style="{StaticResource WizardTextLine}"  Margin="5,0,0,0" />
+                </StackPanel>
+            </Grid>
+            <TextBlock Text="Extended File Info:"  Style="{StaticResource WizardHeaderTextXSm}"  Margin="0,0,0,0" 
+                       LineHeight="10" Width="500" TextWrapping="Wrap" LineStackingStrategy="MaxHeight" />
+            <TextBlock Text="{Binding Path=DebugInfo.Photo.FileInfoContent}"  Style="{StaticResource WizardTextLine}"  Margin="10,0,0,0" 
+                       LineHeight="10" Width="500" TextWrapping="Wrap" LineStackingStrategy="MaxHeight" />
             
-            <TextBlock Text="File info:"  Style="{StaticResource WizardTextLine}"  Margin="0,0,0,0" />
-            <TextBlock Text="{Binding Path=DebugInfo.Photo.PhotoUrl}"  Style="{StaticResource WizardTextLine}"  Margin="0,0,0,0" />
-            <TextBlock Text="{Binding Path=DebugInfo.Photo.FileDate}"  Style="{StaticResource WizardTextLine}"  Margin="0,0,0,0" />
-            
-            <TextBlock Text="ExifDate info:"  Style="{StaticResource WizardTextLine}"  Margin="0,0,0,0" />
-            <TextBlock Text="{Binding Path=DebugInfo.Photo.ExifDate}"  Style="{StaticResource WizardTextLine}"  Margin="0,0,0,0" />
+
         </StackPanel>
 
         <!--Thumbnail Strip-->

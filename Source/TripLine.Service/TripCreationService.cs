@@ -165,7 +165,7 @@ namespace TripLine.Service
          
            _buildState.CurrentStep = BuildStep.DetecingFiles;
 
-           _photoStore.GetNewFiles();
+           var files =_photoStore.GetNewFiles();
 
            lock (_buildState)
            {

@@ -86,6 +86,7 @@ namespace TripLine.ServiceTests
             _tripCreationService = new TripCreationService(_tripStore, _photoStore, _locationService);
 
             _tripCreationService.DetectNewFiles();
+
             var result = _tripCreationService.DetectTripsFromNewPhotos();
 
             Assert.IsTrue(result.NumNewPhotos > 0);
