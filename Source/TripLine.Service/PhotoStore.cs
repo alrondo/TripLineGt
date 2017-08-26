@@ -13,7 +13,7 @@ namespace TripLine.Service
 {
     public class PhotoStore
     {
-        private readonly LocalFileFolders _fileFolder=null;
+        private readonly LocalFileFolders _fileFolder;
 
         private readonly LocationService _locationService;
 

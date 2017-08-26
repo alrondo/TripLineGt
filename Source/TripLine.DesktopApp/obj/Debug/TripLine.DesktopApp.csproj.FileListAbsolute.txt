@@ -407,8 +407,6 @@ C:\Users\alron\Documents\GitHub\TripLineGt\Source\TripLine.DesktopApp\obj\Debug\
 C:\Users\alron\Documents\GitHub\TripLineGt\Source\TripLine.DesktopApp\obj\Debug\TripLine.DesktopApp.csproj.GenerateResource.Cache
 C:\CodeAlrn\TripLineRoot\TripLineJn\Source\TripLine.DesktopApp\bin\Debug\Newtonsoft.Json.xml
 C:\Users\alron\Documents\GitHub\TripLineGt2\Source\TripLine.DesktopApp\bin\Debug\TripLine.DesktopApp.exe.config
-C:\Users\alron\Documents\GitHub\TripLineGt2\Source\TripLine.DesktopApp\obj\Debug\TripLine.DesktopApp.exe
-C:\Users\alron\Documents\GitHub\TripLineGt2\Source\TripLine.DesktopApp\obj\Debug\TripLine.DesktopApp.pdb
 C:\Users\alron\Documents\GitHub\TripLineGt2\Source\TripLine.DesktopApp\bin\Debug\TripLine.DesktopApp.exe
 C:\Users\alron\Documents\GitHub\TripLineGt2\Source\TripLine.DesktopApp\bin\Debug\TripLine.DesktopApp.pdb
 C:\Users\alron\Documents\GitHub\TripLineGt2\Source\TripLine.DesktopApp\bin\Debug\AutoMapper.dll
@@ -459,3 +457,5 @@ C:\Users\alron\Documents\GitHub\TripLineGt2\Source\TripLine.DesktopApp\obj\Debug
 C:\Users\alron\Documents\GitHub\TripLineGt2\Source\TripLine.DesktopApp\obj\Debug\TripLine.DesktopApp.g.resources
 C:\Users\alron\Documents\GitHub\TripLineGt2\Source\TripLine.DesktopApp\obj\Debug\TripLine.DesktopApp.Properties.Resources.resources
 C:\Users\alron\Documents\GitHub\TripLineGt2\Source\TripLine.DesktopApp\obj\Debug\TripLine.DesktopApp.csproj.GenerateResource.Cache
+C:\Users\alron\Documents\GitHub\TripLineGt2\Source\TripLine.DesktopApp\obj\Debug\TripLine.DesktopApp.exe
+C:\Users\alron\Documents\GitHub\TripLineGt2\Source\TripLine.DesktopApp\obj\Debug\TripLine.DesktopApp.pdb
