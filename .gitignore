@@ -1,5 +1,12 @@
 *.dll
 *.pdb
+*,*.dll
+*.*.pdb
+*.*.*.dll
+*.*.*.pdb
+*.cache
+*.*.cache
+*.*.*.cache
 
 # Created by http://www.gitignore.io
 
