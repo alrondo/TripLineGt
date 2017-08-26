@@ -290,3 +290,13 @@ Temporary Items
 Solution/.vs/TripLine/v14/.suo
 *.dll
 *.pdb
+Source/TripLine.DesktopApp/bin/Debug/TLine.Toolbox.UI.dll
+Source/TLine.Style/bin/Debug/TLine.Style.dll
+Source/TLine.Style/bin/Debug/TLine.Style.pdb
+Source/TLine.Style/obj/Debug/TLine.Style.dll
+Source/TLine.Style/obj/Debug/TLine.Style.pdb
+Source/TLine.Toolbox.UI/bin/Debug/TLine.Toolbox.dll
+Source/TLine.Toolbox.UI/bin/Debug/TLine.Toolbox.pdb
+Source/TLine.Toolbox.UI/bin/Debug/TLine.Toolbox.UI.dll
+Source/TLine.Toolbox.UI/bin/Debug/TLine.Toolbox.UI.pdb
+Source/TLine.Toolbox.UI/obj/Debug/TLine.Toolbox.UI.csprojResolveAssemblyReference.cache
