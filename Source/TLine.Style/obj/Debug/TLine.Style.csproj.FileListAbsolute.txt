@@ -54,3 +54,17 @@ C:\Users\alron\Documents\GitHub\TripLineGt\Source\TLine.Style\obj\Debug\TLine.St
 C:\Users\alron\Documents\GitHub\TripLineGt\Source\TLine.Style\obj\Debug\TLine.Style.g.resources
 C:\Users\alron\Documents\GitHub\TripLineGt\Source\TLine.Style\obj\Debug\TLine.Style.dll
 C:\Users\alron\Documents\GitHub\TripLineGt\Source\TLine.Style\obj\Debug\TLine.Style.pdb
+C:\Users\alron\Documents\GitHub\TripLineGt2\Source\TLine.Style\bin\Debug\TLine.Style.dll.config
+C:\Users\alron\Documents\GitHub\TripLineGt2\Source\TLine.Style\bin\Debug\TLine.Style.dll
+C:\Users\alron\Documents\GitHub\TripLineGt2\Source\TLine.Style\bin\Debug\TLine.Style.pdb
+C:\Users\alron\Documents\GitHub\TripLineGt2\Source\TLine.Style\bin\Debug\MahApps.Metro.dll
+C:\Users\alron\Documents\GitHub\TripLineGt2\Source\TLine.Style\bin\Debug\System.Windows.Interactivity.dll
+C:\Users\alron\Documents\GitHub\TripLineGt2\Source\TLine.Style\bin\Debug\MahApps.Metro.pdb
+C:\Users\alron\Documents\GitHub\TripLineGt2\Source\TLine.Style\bin\Debug\MahApps.Metro.xml
+C:\Users\alron\Documents\GitHub\TripLineGt2\Source\TLine.Style\obj\Debug\TLine.Style.csprojResolveAssemblyReference.cache
+C:\Users\alron\Documents\GitHub\TripLineGt2\Source\TLine.Style\obj\Debug\TLineViewStyle.baml
+C:\Users\alron\Documents\GitHub\TripLineGt2\Source\TLine.Style\obj\Debug\TLineStyle.baml
+C:\Users\alron\Documents\GitHub\TripLineGt2\Source\TLine.Style\obj\Debug\TLine.Style_MarkupCompile.cache
+C:\Users\alron\Documents\GitHub\TripLineGt2\Source\TLine.Style\obj\Debug\TLine.Style.g.resources
+C:\Users\alron\Documents\GitHub\TripLineGt2\Source\TLine.Style\obj\Debug\TLine.Style.dll
+C:\Users\alron\Documents\GitHub\TripLineGt2\Source\TLine.Style\obj\Debug\TLine.Style.pdb

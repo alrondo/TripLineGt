@@ -45,3 +45,16 @@ C:\Users\alron\Documents\GitHub\TripLineGt\Source\TLine.Toolbox\bin\Debug\Newton
 C:\Users\alron\Documents\GitHub\TripLineGt\Source\TLine.Toolbox\obj\Debug\TLine.Toolbox.csprojResolveAssemblyReference.cache
 C:\Users\alron\Documents\GitHub\TripLineGt\Source\TLine.Toolbox\obj\Debug\TLine.Toolbox.dll
 C:\Users\alron\Documents\GitHub\TripLineGt\Source\TLine.Toolbox\obj\Debug\TLine.Toolbox.pdb
+C:\Users\alron\Documents\GitHub\TripLineGt2\Source\TLine.Toolbox\bin\Debug\TLine.Toolbox.dll
+C:\Users\alron\Documents\GitHub\TripLineGt2\Source\TLine.Toolbox\bin\Debug\TLine.Toolbox.pdb
+C:\Users\alron\Documents\GitHub\TripLineGt2\Source\TLine.Toolbox\bin\Debug\log4net.dll
+C:\Users\alron\Documents\GitHub\TripLineGt2\Source\TLine.Toolbox\bin\Debug\MahApps.Metro.dll
+C:\Users\alron\Documents\GitHub\TripLineGt2\Source\TLine.Toolbox\bin\Debug\Newtonsoft.Json.dll
+C:\Users\alron\Documents\GitHub\TripLineGt2\Source\TLine.Toolbox\bin\Debug\System.Windows.Interactivity.dll
+C:\Users\alron\Documents\GitHub\TripLineGt2\Source\TLine.Toolbox\bin\Debug\log4net.xml
+C:\Users\alron\Documents\GitHub\TripLineGt2\Source\TLine.Toolbox\bin\Debug\MahApps.Metro.pdb
+C:\Users\alron\Documents\GitHub\TripLineGt2\Source\TLine.Toolbox\bin\Debug\MahApps.Metro.xml
+C:\Users\alron\Documents\GitHub\TripLineGt2\Source\TLine.Toolbox\bin\Debug\Newtonsoft.Json.xml
+C:\Users\alron\Documents\GitHub\TripLineGt2\Source\TLine.Toolbox\obj\Debug\TLine.Toolbox.csprojResolveAssemblyReference.cache
+C:\Users\alron\Documents\GitHub\TripLineGt2\Source\TLine.Toolbox\obj\Debug\TLine.Toolbox.dll
+C:\Users\alron\Documents\GitHub\TripLineGt2\Source\TLine.Toolbox\obj\Debug\TLine.Toolbox.pdb

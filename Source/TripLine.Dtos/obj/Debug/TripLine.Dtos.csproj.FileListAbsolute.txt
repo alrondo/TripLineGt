@@ -52,3 +52,12 @@ C:\Users\alron\Documents\GitHub\TripLineGt\Source\TripLine.Dtos\bin\Debug\Newton
 C:\Users\alron\Documents\GitHub\TripLineGt\Source\TripLine.Dtos\obj\Debug\TripLine.Dtos.csprojResolveAssemblyReference.cache
 C:\Users\alron\Documents\GitHub\TripLineGt\Source\TripLine.Dtos\obj\Debug\TripLine.Dtos.dll
 C:\Users\alron\Documents\GitHub\TripLineGt\Source\TripLine.Dtos\obj\Debug\TripLine.Dtos.pdb
+C:\Users\alron\Documents\GitHub\TripLineGt2\Source\TripLine.Dtos\bin\Debug\TripLine.Dtos.dll
+C:\Users\alron\Documents\GitHub\TripLineGt2\Source\TripLine.Dtos\bin\Debug\TripLine.Dtos.pdb
+C:\Users\alron\Documents\GitHub\TripLineGt2\Source\TripLine.Dtos\bin\Debug\AutoMapper.dll
+C:\Users\alron\Documents\GitHub\TripLineGt2\Source\TripLine.Dtos\bin\Debug\Newtonsoft.Json.dll
+C:\Users\alron\Documents\GitHub\TripLineGt2\Source\TripLine.Dtos\bin\Debug\AutoMapper.xml
+C:\Users\alron\Documents\GitHub\TripLineGt2\Source\TripLine.Dtos\bin\Debug\Newtonsoft.Json.xml
+C:\Users\alron\Documents\GitHub\TripLineGt2\Source\TripLine.Dtos\obj\Debug\TripLine.Dtos.csprojResolveAssemblyReference.cache
+C:\Users\alron\Documents\GitHub\TripLineGt2\Source\TripLine.Dtos\obj\Debug\TripLine.Dtos.dll
+C:\Users\alron\Documents\GitHub\TripLineGt2\Source\TripLine.Dtos\obj\Debug\TripLine.Dtos.pdb
