@@ -288,3 +288,5 @@ Network Trash Folder
 Temporary Items
 .apdisk
 Solution/.vs/TripLine/v14/.suo
+*.dll
+*.pdb
