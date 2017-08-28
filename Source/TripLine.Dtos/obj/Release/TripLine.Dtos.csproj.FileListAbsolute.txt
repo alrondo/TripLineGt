@@ -1,8 +1,0 @@
-C:\devalr\TripLine18\Source\TripLine.Dtos\bin\Release\TripLine.Dtos.dll
-C:\devalr\TripLine18\Source\TripLine.Dtos\bin\Release\TripLine.Dtos.pdb
-C:\devalr\TripLine18\Source\TripLine.Dtos\bin\Release\AutoMapper.dll
-C:\devalr\TripLine18\Source\TripLine.Dtos\bin\Release\Newtonsoft.Json.dll
-C:\devalr\TripLine18\Source\TripLine.Dtos\bin\Release\AutoMapper.xml
-C:\devalr\TripLine18\Source\TripLine.Dtos\bin\Release\Newtonsoft.Json.xml
-C:\devalr\TripLine18\Source\TripLine.Dtos\obj\Release\TripLine.Dtos.dll
-C:\devalr\TripLine18\Source\TripLine.Dtos\obj\Release\TripLine.Dtos.pdb
