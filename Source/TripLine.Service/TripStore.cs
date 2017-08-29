@@ -186,24 +186,35 @@ namespace TripLine.Service
 
         public Trip CreateTrip(TripCandidate tripCandidate)
         {
-            Trip trip = ServiceMapper.Map<Trip>(tripCandidate);
 
-            trip.Id = _tripRepo.Content.NewId++;
-
-            foreach (var sessionId in tripCandidate.PhotoSessions.Select(s => s.SessionId))
+            Trip newTrip;
+            try
             {
-                int? destinationId = null;
+                newTrip = ServiceMapper.Map<Trip>(tripCandidate);
 
-                var destination =
-                    tripCandidate.Destinations.FirstOrDefault(d => d.Sessions.Any(s => s.SessionId == sessionId));
+                newTrip.Id = _tripRepo.Content.NewId++;
 
-                if (destination != null)
-                    destinationId = destination.Id;
+                foreach (var sessionId in tripCandidate.PhotoSessions.Select(s => s.SessionId))
+                {
+                    int? destinationId = null;
 
-                _photoStore.ConfirmPhotoSession(sessionId, trip.Id, destinationId);
+                    var destination =
+                        tripCandidate.Destinations.FirstOrDefault(d => d.Sessions.Any(s => s.SessionId == sessionId));
+
+                    if (destination != null)
+                        destinationId = destination.Id;
+
+                    _photoStore.ConfirmPhotoSession(sessionId, newTrip.Id, destinationId);
+                }
             }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                throw;
+            }
+           
 
-            return trip;
+            return newTrip;
         }
 
         public void DumpTrip(int tripId, string prefix=" ")

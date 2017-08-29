@@ -14,6 +14,10 @@ using TripLine.Service;
 
 namespace Tripline.DesktopApp
 {
+
+   
+
+
     public class Bootstrapper : MvvmBootstrap
     {
         public void Register(MainViewModel mainViewModel)
@@ -52,8 +56,7 @@ namespace Tripline.DesktopApp
             config.CreateMap<HighliteItemViewModel, IHighliteItem>();
             config.CreateMap<IHighliteItem, HighliteItemViewModel>();
            
-            config.CreateMap<TripCandidate, Trip>();
-            config.CreateMap<DestinationCandidate, Destination>();
+            ServiceMapper.ConfigureMapper(config);
 
             // to Album
             config.CreateMap<HighliteTopic, AlbumSectionViewModel>();

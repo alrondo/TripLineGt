@@ -165,13 +165,11 @@ namespace TripLine.Service
          
            _buildState.CurrentStep = BuildStep.DetecingFiles;
 
-           var files =_photoStore.GetNewFiles();
-
            lock (_buildState)
            {
-               filesDetected = _photoStore.NumNewPhotosFiles;
-
-                if (_buildState.TaskState != BuildTaskState.Running || filesDetected==0)
+               var files = _photoStore.GetNewFiles();
+                
+                if (_buildState.TaskState != BuildTaskState.Running || files.Count()==0)
                     DetectionStopped();
                 else
                     _buildState.CurrentStep = BuildStep.FileDetected;
@@ -215,10 +213,13 @@ namespace TripLine.Service
         // prerequisite  task state = running &&  CurrentStep == BuildStep.FileDetected
         public TripCreationDetectResult DetectTripsFromNewPhotos ()
         {
-            if (! _buildState.IsRunning &&  _buildState.CurrentStep != BuildStep.FileDetected)
-                throw new InvalidOperationException("expected step ==  BuildStep.FileDetected");
+            if ( _buildState.IsRunning)
+                throw new InvalidOperationException("DetectTripsFromNewPhotos already running");
 
-            _buildState.CurrentStep = BuildStep.DetectingSession;
+
+            _buildState.TaskState = BuildTaskState.Running;
+
+            _buildState.CurrentStep = BuildStep.DetecingFiles;
 
             _photoStore.CreatePhotoFromNewFiles();
 
@@ -230,11 +231,13 @@ namespace TripLine.Service
             _lastResult.NumNonTravelPhotos = _photoStore.NumNonTravelPhotos;
             _lastResult.NumInvalidPhotos = _photoStore.NewInvalidPhotoCounts;
 
-            if (_buildState.TaskState != BuildTaskState.Running)
+            if (_buildState.TaskState != BuildTaskState.Running  || _photoStore.NumNewPhotosFiles == 0)
             {
                 DetectionStopped();
                 return TripCreationDetectResult;
             }
+
+            _buildState.CurrentStep = BuildStep.DetectingSession;
 
             _newSessions = _photoStore.GetNewSessions(peakForNewPhotos: false);
 

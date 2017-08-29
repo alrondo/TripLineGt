@@ -2,10 +2,11 @@ using System;
 using AutoMapper;
 using TinyIoC;
 using TripLine.Dtos;
+using TripLine.WPF.MVVM;
 
 namespace TripLine.Service
 {
-    public class ServiceMapper
+    public static class ServiceMapper
     {
         public static void RegisterObjects(TinyIoCContainer ioc)
         {
@@ -40,6 +41,25 @@ namespace TripLine.Service
                 Console.WriteLine(e);
                 throw;
             }
+        }
+    }
+
+    public static class ServiceBootStrapper
+    {
+        public static void Configure()
+        {
+            var config = new MvvmConfiguration();
+
+            //base.Configure(config);
+
+            ServiceMapper.RegisterObjects(config.IoC);
+
+            Mapper.Initialize(
+                cfg =>
+                {
+                    ServiceMapper.ConfigureMapper(cfg);
+                });
+
         }
     }
 }

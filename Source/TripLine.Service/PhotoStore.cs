@@ -73,7 +73,7 @@ namespace TripLine.Service
 
         public List<Photo> GetPhotosAtLocation(int locationId)
         {
-            return _photoRepo.Content.Photos.Where(p => p.Location.Id == locationId).ToList();
+            return _photoRepo.Content.Photos.Where(p => p.Location != null &&   p.Location.Id == locationId).ToList();
         }
 
         public void CreateNewPhotos(IEnumerable<FileExtendedInfo> files)
@@ -128,7 +128,7 @@ namespace TripLine.Service
         {
             var newFiles = GetNewFiles();
 
-            if (! newFiles.Any())
+            if (!newFiles.Any())
                 return;
 
             CreateNewPhotos(newFiles);

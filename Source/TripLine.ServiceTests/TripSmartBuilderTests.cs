@@ -12,67 +12,6 @@ using TripLine.Dtos;
 namespace TripLine.ServiceTests
 {
     [TestClass()]
-    public class HighliteTests
-    {
-        
-        private readonly GoogleClient _googleClient;
-
-        private readonly LocationRepo _locationRepo;
-
-        private readonly LocationService _locationService;
-        private readonly PhotoStore _photoStore;
-
-        private readonly PictureExifInformationReader _pictureExifReader;
-
-        private readonly LocalFileFolders _localFileFolder;
-
-        private readonly TripSmartBuilder _tripSmartBuilder;
-
-        private readonly HighliteService _highliteService;
-
-        TripStore _tripStore;
-
-        public HighliteTests()
-        {
-            _googleClient = new GoogleClient();
-            _locationRepo = new LocationRepo(TripLineConfig.TestLocationRepoPath);
-            _locationService = new LocationService(_googleClient, _locationRepo);
-
-            _pictureExifReader = new PictureExifInformationReader();
-            _localFileFolder = new LocalFileFolders(_pictureExifReader);
-            _photoStore = new PhotoStore(new PhotoRepo(forceNew:true), _localFileFolder, _locationService);
-
-            _tripSmartBuilder = new TripSmartBuilder(_locationService, _photoStore, new DestinationBuilder(_locationService));
-
-            _tripStore = new TripStore(_photoStore, _locationService, _tripSmartBuilder, new TripsRepo(forceNew:true));
-            _highliteService = new HighliteService(_photoStore, _tripStore, _locationService);
-        }
-
-        [TestMethod()]
-        public void HighliteTests_GetHighlites_OK()
-        {
-
-            using (
-                var streamWriter =
-                    new StreamWriter(File.Open(@"c:\TripLine\Highlites.txt", FileMode.Create, FileAccess.Write)))
-            {
-                var photos = _photoStore.PeakForNewPhotos();
-
-                streamWriter.WriteLine($"Highlites from {photos.Count} photos");
-
-                var hlites = _highliteService.GetHighlites();
-
-                foreach (var hlite in hlites)
-                {
-                    streamWriter.WriteLine(hlite.Serialize());
-                }
-            }
-        }
-
-    }
-
-
-    [TestClass()]
     public class TripSmartBuilderTests
     {
         private readonly GoogleClient _googleClient;
