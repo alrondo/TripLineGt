@@ -1,6 +1,7 @@
 ﻿
 using System.Collections;
 using System.Diagnostics;
+using System.IO;
 using System.Runtime.Serialization.Json;
 using Newtonsoft.Json;
 
@@ -64,6 +65,12 @@ namespace TripLine.Dtos
         {
             Debug.WriteLine($">{prefix} Location {DisplayName}");
             Debug.WriteLine($"    " + JsonConvert.SerializeObject(this, Newtonsoft.Json.Formatting.Indented));
+        }
+
+        public void Serialize(StreamWriter writer, string prefix=" " )
+        {
+            writer.WriteLine($">{prefix} Location {DisplayName}");
+            writer.WriteLine($"    " + JsonConvert.SerializeObject(this, Newtonsoft.Json.Formatting.Indented));
         }
     }
 

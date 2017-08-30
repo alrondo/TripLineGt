@@ -44,6 +44,7 @@ namespace TripLine.Service
         }
 
 
+
         void InitHomeLocation(string homeAddress = "Montreal, Quebec, Canada, downtown")
         {
             // todo: better 
@@ -61,6 +62,10 @@ namespace TripLine.Service
 
             _locationRepo.Save();
         }
+
+
+
+
 
         public Location GetHome() => _locationRepo.GetHomeLocation();
 

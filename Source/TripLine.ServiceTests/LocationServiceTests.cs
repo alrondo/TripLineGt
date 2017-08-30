@@ -30,7 +30,7 @@ namespace TripLine.Service.Tests
             _exifReader = new PictureExifInformationReader();
 
             _googleClient = new GoogleClient();
-            _locationRepo = new LocationRepo(TripLineConfig.LocationRepoPath, forceNew:true);
+            _locationRepo = new LocationRepo(TripLineConfig.LocationRepoPath, forceNew:false);
 
             _locationService = new LocationService(_googleClient, _locationRepo);
 
@@ -137,6 +137,26 @@ namespace TripLine.Service.Tests
             Assert.IsTrue(_locationRepo.Content.Locations.Count == savedCount);
         }
 
+        [TestMethod()]
+        public void Get_AllLocations_FromRepo()
+        {
+
+            string baseDirectory = @"c:\TripLine\Locations\";
+
+            Directory.CreateDirectory(baseDirectory);
+
+            var locations = _locationService.GetAllLocations();
+
+            foreach (var loc in locations)
+            {
+                string fpath = baseDirectory + loc.DisplayName + $"({loc.Id})" + ".txt";
+                using (var writer = new StreamWriter(File.Open(fpath, FileMode.Create, FileAccess.Write))) 
+                {
+                    loc.Serialize(writer);
+                }
+            }
+
+        }
 
 
 

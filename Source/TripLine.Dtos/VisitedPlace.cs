@@ -37,11 +37,10 @@ namespace TripLine.Dtos
         {
             Formatting formatting = pretty ? Formatting.Indented : Formatting.None;
 
-            string str = JsonConvert.SerializeObject(this);
+            string str = JsonConvert.SerializeObject(this, formatting);
 
             if (!pretty)
             {
-
                 str = str.Replace(@"},", (@"}," + Environment.NewLine));
                 str = str.Replace(@"[{,", (Environment.NewLine + @"[{"));
             }

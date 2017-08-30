@@ -70,6 +70,8 @@ namespace TripLine.ServiceTests
             }
         }
 
+        
+
         [TestMethod()]
         public void TripSmartBuilder_GetPhotoLocations_OK()
         {
@@ -122,7 +124,7 @@ namespace TripLine.ServiceTests
 
                     var position = photo.Position;
 
-                    var posDisplay  = (position != null) ? $" POS {position.GetDisplay()}" : "No position";
+                    var posDisplay  = (position != null) ? $" POS {position.GetDisplay()} " : "No position ";
 
                     var foundByLatLong = loc.SearchedPosition != null;
 
@@ -134,7 +136,7 @@ namespace TripLine.ServiceTests
                         continue;
 
                     string spos = loc.SearchedPosition != null ? loc.SearchedPosition.GetDisplay() : " None ";
-                    var line = $"{loc.DisplayName} pos={posDisplay}  { loc.Id} {photo.PhotoUrl} ";
+                    var line = $"{loc.DisplayName} pos={posDisplay}  {loc.Id} {photo.PhotoUrl} ";
                     var line2 = $"foundByLatLong={foundByLatLong}, spos={spos} ";  
 
 
