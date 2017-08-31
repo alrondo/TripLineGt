@@ -107,5 +107,7 @@ namespace TripLine.Dtos
             Debug.WriteLine($"    " + JsonConvert.SerializeObject(this, Newtonsoft.Json.Formatting.Indented));
         }
 
+
+
     }
 }

@@ -25,6 +25,8 @@ namespace TripLine.Service.Tests
 
         private readonly PictureExifInformationReader _exifReader;
 
+        private readonly PhotoStore _photoStore;
+
         public LocationServiceTests()
         {
             _exifReader = new PictureExifInformationReader();
@@ -35,6 +37,8 @@ namespace TripLine.Service.Tests
             _locationService = new LocationService(_googleClient, _locationRepo);
 
             _localFileFolder = new LocalFileFolders(_exifReader);
+            _photoStore = new PhotoStore(new PhotoRepo(forceNew: false), _localFileFolder, _locationService);
+
         }
 
         List<string> _allGoodTests = new List<string>()
@@ -153,6 +157,26 @@ namespace TripLine.Service.Tests
                 using (var writer = new StreamWriter(File.Open(fpath, FileMode.Create, FileAccess.Write))) 
                 {
                     loc.Serialize(writer);
+
+                    var photos = _photoStore.GetPhotosAtLocation(loc.Id);
+
+                    writer.WriteLine($"Total of {photos.Count} photos at this location.");
+
+
+                    foreach (var photoGroup in photos.GroupBy(p =>  Path.GetDirectoryName(p.PhotoUrl)))
+                    {
+                        writer.WriteLine($"{photoGroup.Key}  has {photoGroup.Count()} photos.");
+
+                        if (photoGroup.Count() >= 1)
+                           writer.WriteLine(photoGroup.First().Serialize(true));
+                        if (photoGroup.Count() >= 2)
+                        {
+                            writer.WriteLine("...");
+                            writer.WriteLine(photoGroup.Last().Serialize(true));
+                        }
+
+                    }
+
                 }
             }
 
