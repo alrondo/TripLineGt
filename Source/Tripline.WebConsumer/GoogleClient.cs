@@ -21,6 +21,7 @@ namespace Tripline.WebConsumer
         language,
         result_type,
         location_type,
+        radius
 
     }
 
@@ -201,7 +202,7 @@ namespace Tripline.WebConsumer
     public class GeocodingRequestResult
     {
         public List<GResult> results { get; set; } =  new List<GResult>();
-        public string Status { get; set; } = "NOT_FOUND";
+        public string status { get; set; } = "NOT_FOUND";
 
         private GResult ResultOfType(eAddressTypes type)
             => results.FirstOrDefault(a => a.types.Any(t => t.ToString().EqualLt(type.ToString())));
@@ -211,7 +212,7 @@ namespace Tripline.WebConsumer
             ?? ResultOfType(eAddressTypes.street_address) 
             ?? results.FirstOrDefault();
 
-        public bool IsOk => Status.EqualLt ("ok");
+        public bool IsOk => status.EqualLt ("ok");
 
 
         public string GetCity()
@@ -239,7 +240,84 @@ namespace Tripline.WebConsumer
 
     }
 
-  
+
+    public class GPhoto
+    {
+        public int height { get; set; }
+        public int width { get; set; }
+
+        public List<string> html_attributions { get; set; }
+
+        public string photo_reference { get; set; } = string.Empty;
+
+    }
+
+    public class GPlacesResult
+    {
+        public List<string> html_attributions { get; set; }
+
+        public List<GPhoto> photos { get; set; }
+
+        public GGeometry geometry { get; set; } = new GGeometry();
+
+
+        public string icon { get; set; } = string.Empty;
+
+        public string id { get; set; } = string.Empty;
+
+        public string name { get; set; } = string.Empty;
+
+        public string places_id { get; set; } = string.Empty;
+
+        public string scope { get; set; } = string.Empty;
+
+        public string[] types { get; set; } = new string[0];
+
+        public string vicinity { get; set; } = string.Empty;
+
+        //public Address_Component ComponentOfType(eAddressTypes type)
+        //    => address_components.Where(a => a.types.Any(t => t.ToString().EqualLt(type.ToString()))).FirstOrDefault();
+
+
+        public float Latitude
+        {
+            get { return (geometry.viewport.northeast.lat + geometry.viewport.southwest.lat) / 2; }
+        }
+
+        public float Longitude
+        {
+            get
+            {
+                return (geometry.viewport.northeast.lng + geometry.viewport.southwest.lng) / 2;
+            }
+        }
+
+    }
+
+    public class PlacesRequestResult
+    {
+        public string next_page_token { get; set; }
+
+
+        public List<GPlacesResult> results { get; set; } = new List<GPlacesResult>();
+
+        public string status { get; set; } = "NOT_FOUND";
+
+        private GPlacesResult ResultOfType(eAddressTypes type)
+            => results.FirstOrDefault(a => a.types.Any(t => t.ToString().EqualLt(type.ToString())));
+
+        private GPlacesResult BestResult
+            => ResultOfType(eAddressTypes.locality)
+               ?? ResultOfType(eAddressTypes.street_address)
+               ?? results.FirstOrDefault();
+
+        public bool IsOk => status.EqualLt("ok");
+    }
+
+
+
+
+
     public class GoogleClient : RestConsumer
     {
         const string key = "AIzaSyDxUiJ2bhkHSY4SIbik5qcpMhoJba9gNAI";
@@ -308,6 +386,19 @@ namespace Tripline.WebConsumer
             string url = geocode + $"&{GeoCodeParams.components}={locality}";
 
             var res = ExecuteGetRequest<GeocodingRequestResult>(url);
+
+            return res;
+        }
+
+
+        public PlacesRequestResult GetNearbyPlaces(float latitude, float longitude, int radius=10)
+        {
+            string latlngValue = latitude.ToString("F", CultureInfo.InvariantCulture) + "," +
+                                 longitude.ToString("F", CultureInfo.InvariantCulture);
+
+            string url = nearbyplaces + $"&{GeoCodeParams.latlng}={latlngValue}&{GeoCodeParams.radius}=radius";
+
+            var res = base.ExecuteGetRequest<PlacesRequestResult>(url);
 
             return res;
         }

@@ -349,7 +349,14 @@ namespace TripLine.Service
 
                     photo.Location = _locationService.GetLocation(photo.Position);
 
-                    if (photo.Location != null) photo.DebugInfo += "LocFromPos" + ";";
+                    if (photo.Location != null)
+                    {
+                        photo.DebugInfo += "LocFromPos" + ";";
+
+                        var place = _locationService.GetNearbyPlace(photo.Location);
+
+                        photo.PlaceId = place.LocationId;
+                    }
                 }
 
 

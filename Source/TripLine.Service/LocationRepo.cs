@@ -17,6 +17,8 @@ namespace TripLine.Service
 
         public List<Location> Locations { get; set; } = new List<Location>();
 
+        public List<VisitedPlace> VisitedPlaces { get; set; } = new List<VisitedPlace>();
+
     }
 
     public class LocationRepo : FileRepo<LocationRepoContent>
@@ -35,6 +37,12 @@ namespace TripLine.Service
         {
             get { return base.Content.Locations; }
         }
+
+        public List<VisitedPlace> VisitedPlaces
+        {
+            get { return base.Content.VisitedPlaces; }
+        }
+
 
         public Location GetLocation(int id)
         {

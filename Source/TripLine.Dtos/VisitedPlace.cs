@@ -10,10 +10,14 @@ namespace TripLine.Dtos
 {
     public class VisitedPlace: DtoBase<VisitedPlace>
     {
+        public static int NewPlaceId=1000;
+
+        public int Id { get; set; }
+    
         public IDateRange Date { get; set; }
         public string PlaceName { get; set; }
         public string Summary { get; set; }
-        public Location Location { get; set; }
+        public int LocationId { get; set; }
         public string Type { get; set; }
         public string Icon { get; set; }
     }

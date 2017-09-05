@@ -180,9 +180,42 @@ namespace TripLine.Service.Tests
                 }
             }
 
+
+
+
         }
 
 
+
+        [TestMethod()]
+        public void Get_LocationNearbyPlaces()
+        {
+
+            string baseDirectory = @"c:\TripLine\Locations\";
+
+            Directory.CreateDirectory(baseDirectory);
+
+            var locations = _locationService.GetAllLocations();
+
+            foreach (var loc in locations)
+            {
+                baseDirectory += loc.DisplayName + @"\";
+
+                Directory.CreateDirectory(baseDirectory);
+
+                var places = _locationService.GetPlaces(loc);
+
+                foreach (var place in places)
+                {
+                    string fpath = baseDirectory + place.PlaceName + ".txt";
+
+                    using (var writer = new StreamWriter(File.Open(fpath, FileMode.Create, FileAccess.Write)))
+                    {
+                        loc.Serialize(writer);
+                    }
+                }
+            }
+        }
 
 
         [TestMethod()]

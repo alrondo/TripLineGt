@@ -40,9 +40,9 @@ namespace TripLine.Service
             _locationRepo = locationRepo;
 
             InitHomeLocation();
-                
         }
 
+        public IEnumerable<VisitedPlace> GetPlaces(Location loc) => _locationRepo.VisitedPlaces.Where(p => p.LocationId == loc.Id);
 
 
         void InitHomeLocation(string homeAddress = "Montreal, Quebec, Canada, downtown")
@@ -100,6 +100,36 @@ namespace TripLine.Service
                 //_unknownAddresses[address] = 1;
             }
 
+
+            return null;
+        }
+
+
+        public VisitedPlace GetNearbyPlace(Location location)
+        {
+            VisitedPlace place = null;
+            var response = _googleClient.GetNearbyPlaces(location.Position.Latitude, location.Position.Longitude);
+
+            if (response.IsOk)
+            {
+
+                place = new VisitedPlace()
+                {
+                    Id = VisitedPlace.NewPlaceId++,
+                    LocationId = location.Id,
+                    PlaceName = response.results?.First().name ?? "na"
+                };
+
+                _locationRepo.VisitedPlaces.Add(place);
+
+                Debug.WriteLine($"Found new place {place.PlaceName} at {location.Position.GetDisplay()} ");
+
+                return place;
+            }
+            else
+            {
+                Debug.WriteLine($"Could not find location by name for {location.Position.GetDisplay()} ");
+            }
 
             return null;
         }
