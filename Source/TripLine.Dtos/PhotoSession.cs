@@ -29,9 +29,9 @@ namespace TripLine.Dtos
         public DateTime ToDate { get; set; }
         public TimeSpan Duration => (ToDate - FromDate);
 
-        public Location Location { get; set; }
-        public int NumPhotos { get; set; }
-        public int Score { get; set; }
+        public Location Location { get; set; } 
+        public int NumPhotos { get; set; } = 0;
+        public int Score { get; set; } = 0;
 
         public PhotoSession(int sessionId)
         {

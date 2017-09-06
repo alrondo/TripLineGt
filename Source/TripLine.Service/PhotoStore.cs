@@ -126,7 +126,7 @@ namespace TripLine.Service
 
         public void CreatePhotoFromNewFiles()
         {
-            var newFiles = GetNewFiles();
+            var newFiles = GetNewFiles().ToList();
 
             if (!newFiles.Any())
                 return;
@@ -355,7 +355,7 @@ namespace TripLine.Service
 
                         var place = _locationService.GetNearbyPlace(photo.Location);
 
-                        photo.PlaceId = place.LocationId;
+                        photo.PlaceId = place?.LocationId ?? 0;
                     }
                 }
 

@@ -25,9 +25,6 @@ namespace TripLine.Dtos
 
         public List<int> PhotoSessionIds { get; set; }
 
-        public List<int> PhotoSessions { get; set; }
-
-
         //public string Summary { get; set; }
 
         //public int Popularity { get; set; }

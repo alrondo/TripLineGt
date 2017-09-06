@@ -199,9 +199,9 @@ namespace TripLine.Service.Tests
 
             foreach (var loc in locations)
             {
-                baseDirectory += loc.DisplayName + @"\";
+                var dir = baseDirectory + loc.DisplayName + @"\";
 
-                Directory.CreateDirectory(baseDirectory);
+                Directory.CreateDirectory(dir);
 
                 var places = _locationService.GetPlaces(loc);
 
