@@ -18,7 +18,7 @@ namespace TripLine.Dtos
         public string PlaceName { get; set; }
         public string Summary { get; set; }
         public int LocationId { get; set; }
-        public string Type { get; set; }
+        public string[] Types { get; set; }
         public string Icon { get; set; }
     }
 

@@ -351,6 +351,31 @@ new GeoPosition(45.4568847222222,73.4437638888889),
             }
         }
 
+        [TestMethod()]
+        public void GetPlace_ForLocationInRepo()
+        {
+            using (
+                var streamWriter =
+                    new StreamWriter(File.Open(@"c:\TripLine\PlaceForLocationByPosition.txt", FileMode.Create, FileAccess.Write)))
+            {
+
+                var locations = _locationService.GetAllLocations();
+
+                foreach (var location in locations)
+                {
+                    var place = _locationService.GetNearbyPlace(location);
+
+                    if (place == null)
+                    {
+                        streamWriter.WriteLine( $"No place found at {location.GetShortDisplay()}");
+                        continue;
+                    }
+                    
+                    streamWriter.WriteLine($"{place.PlaceName} AT {location.DisplayName} : {location.Position.GetDisplay()}");
+                }
+            }
+        }
+
 
         [TestMethod()]
         public void GetLocations_FromFilesExifGPS()

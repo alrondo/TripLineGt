@@ -209,9 +209,7 @@ namespace TripLine.Service
 
             if (placeId.HasValue)
                 photo.PlaceId = placeId.Value;
-
         }
-
 
         private bool IsUnique(List<int> allids, int id)
         {
@@ -356,6 +354,7 @@ namespace TripLine.Service
                         var place = _locationService.GetNearbyPlace(photo.Location);
 
                         photo.PlaceId = place?.LocationId ?? 0;
+                        
                     }
                 }
 

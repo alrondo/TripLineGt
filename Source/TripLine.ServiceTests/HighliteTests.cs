@@ -3,6 +3,8 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Tripline.WebConsumer;
 using TripLine.Dtos;
 using TripLine.Service;
+using System.Linq;
+using System.Diagnostics;
 
 namespace TripLine.ServiceTests
 {
@@ -92,7 +94,7 @@ namespace TripLine.ServiceTests
         }
 
         [TestMethod()]
-        public void TripStoreTests_GetHighlites_Trips_OK()
+        public void TripStoreTests_GetTrips_OK()
         {
             string baseDirectory = @"c:\TripLine\Trips\";
 
@@ -106,9 +108,61 @@ namespace TripLine.ServiceTests
                 using (var writer = new StreamWriter(File.Open(fpath, FileMode.Create, FileAccess.Write)))
                 {
                     writer.WriteLine(trip.Serialize(pretty: true));
+
+                    var photos = _photoStore.GetPhotosByTrip(trip.Id);
+
+                    writer.WriteLine($"Total of {photos.Count} photos for this trip.");
+                    
+                    foreach (var photoGroup in photos.GroupBy(p => Path.GetDirectoryName(p.PhotoUrl)))
+                    {
+                        writer.WriteLine($"{photoGroup.Key}  has {photoGroup.Count()} photos.");
+
+                        if (photoGroup.Count() >= 1)
+                            writer.WriteLine(photoGroup.First().Serialize(true));
+                        if (photoGroup.Count() >= 2)
+                        {
+                            writer.WriteLine("...");
+                            writer.WriteLine(photoGroup.Last().Serialize(true));
+                        }
+
+                    }
                 }
             }
         }
+
+
+        [TestMethod()]
+        public void PhotoStore_GetPhotos_WithPlaces_OK()
+        {
+            string baseDirectory = @"c:\TripLine\OutPhotos\";
+
+            Directory.CreateDirectory(baseDirectory);
+
+            var photosByPlaces = _photoStore.GetPhotos().Where(p => p.PlaceId != 0).GroupBy(p => p.PlaceId);
+
+            Debug.Assert(photosByPlaces.Count() > 2);
+
+            foreach (var group in photosByPlaces)
+            {
+                var place = _locationService.GetPlace(group.Key);
+
+                string fpath = baseDirectory + group.Key + $" {place.PlaceName}" + ".txt";
+                using (var writer = new StreamWriter(File.Open(fpath, FileMode.Create, FileAccess.Write)))
+                {
+                    writer.WriteLine($"{place.PlaceName}  has {group.Count()} photos.");
+
+                    if (group.Count() >= 1)
+                        writer.WriteLine(group.First().Serialize(true));
+                    if (group.Count() >= 2)
+                    {
+                        writer.WriteLine("...");
+                        writer.WriteLine(group.Last().Serialize(true));
+                    }
+                }
+            }
+        }
+
+
 
     }
 }

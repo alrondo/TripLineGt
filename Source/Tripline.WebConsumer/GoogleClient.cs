@@ -21,7 +21,8 @@ namespace Tripline.WebConsumer
         language,
         result_type,
         location_type,
-        radius
+        radius,
+        location
 
     }
 
@@ -267,7 +268,7 @@ namespace Tripline.WebConsumer
 
         public string name { get; set; } = string.Empty;
 
-        public string places_id { get; set; } = string.Empty;
+        public string place_id { get; set; } = string.Empty;
 
         public string scope { get; set; } = string.Empty;
 
@@ -324,7 +325,7 @@ namespace Tripline.WebConsumer
         static readonly string hostName = "https://maps.googleapis.com";
         static readonly string postfix = "maps/api";
 
-        static readonly string nearbyplaces = $"places/nearby/json?key={key}";
+        static readonly string nearbyplaces = $"place/nearbysearch/json?key={key}";
         static readonly string geocode = $"geocode/json?key={key}";
 
        
@@ -391,12 +392,12 @@ namespace Tripline.WebConsumer
         }
 
 
-        public PlacesRequestResult GetNearbyPlaces(float latitude, float longitude, int radius=10)
+        public PlacesRequestResult GetNearbyPlaces(float latitude, float longitude, int radius=500)
         {
             string latlngValue = latitude.ToString("F", CultureInfo.InvariantCulture) + "," +
                                  longitude.ToString("F", CultureInfo.InvariantCulture);
 
-            string url = nearbyplaces + $"&{GeoCodeParams.latlng}={latlngValue}&{GeoCodeParams.radius}=radius";
+            string url = nearbyplaces + $"&{GeoCodeParams.location}={latlngValue}&{GeoCodeParams.radius}={radius}";
 
             var res = base.ExecuteGetRequest<PlacesRequestResult>(url);
 

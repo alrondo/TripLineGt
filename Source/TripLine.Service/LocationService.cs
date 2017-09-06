@@ -44,6 +44,8 @@ namespace TripLine.Service
 
         public IEnumerable<VisitedPlace> GetPlaces(Location loc) => _locationRepo.VisitedPlaces.Where(p => p.LocationId == loc.Id);
 
+        public VisitedPlace GetPlace(int placeId) => _locationRepo.VisitedPlaces.SingleOrDefault(p => p.Id == placeId);
+
 
         void InitHomeLocation(string homeAddress = "Montreal, Quebec, Canada, downtown")
         {
@@ -112,18 +114,23 @@ namespace TripLine.Service
 
             if (response.IsOk)
             {
+                var result = response.results?.FirstOrDefault(r => r.types.Any(t => t == "point_of_interest"));
+
+                if (result == null)
+                    return null;
 
                 place = new VisitedPlace()
                 {
                     Id = VisitedPlace.NewPlaceId++,
                     LocationId = location.Id,
-                    PlaceName = response.results?.First().name ?? "na"
+                    PlaceName = result.name,
+                    Types = result.types
                 };
 
                 _locationRepo.VisitedPlaces.Add(place);
+                _locationRepo.Save();
 
-                Debug.WriteLine($"Found new place {place.PlaceName} at {location.Position.GetDisplay()} ");
-
+                Debug.WriteLine($"Found new place {place.PlaceName} at {location.Position.GetDisplay()} :: {place.Types} ");
                 return place;
             }
             else
