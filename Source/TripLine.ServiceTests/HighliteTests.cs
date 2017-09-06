@@ -31,7 +31,6 @@ namespace TripLine.ServiceTests
         {
             ServiceBootStrapper.Configure();
 
-
             _googleClient = new GoogleClient();
             _locationRepo = new LocationRepo(TripLineConfig.TestLocationRepoPath);
             _locationService = new LocationService(_googleClient, _locationRepo);
@@ -88,6 +87,25 @@ namespace TripLine.ServiceTests
                 {
                     writer.WriteLine(Path.GetFileNameWithoutExtension(fpath));
                     writer.WriteLine(hlite.Serialize(pretty: true));
+                }
+            }
+        }
+
+        [TestMethod()]
+        public void TripStoreTests_GetHighlites_Trips_OK()
+        {
+            string baseDirectory = @"c:\TripLine\Trips\";
+
+            Directory.CreateDirectory(baseDirectory);
+
+            var trips = _tripStore.GetTrips();
+
+            foreach (var trip in trips)
+            {
+                string fpath = baseDirectory + $"{trip.Id} - " + trip.DisplayName + ".txt";
+                using (var writer = new StreamWriter(File.Open(fpath, FileMode.Create, FileAccess.Write)))
+                {
+                    writer.WriteLine(trip.Serialize(pretty: true));
                 }
             }
         }

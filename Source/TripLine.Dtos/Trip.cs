@@ -13,7 +13,7 @@ namespace TripLine.Dtos
 
 
     //}
-    public class Trip: TripComponent
+    public class Trip : TripComponent
     {
         public string Summary { get; set; }
 
@@ -22,7 +22,7 @@ namespace TripLine.Dtos
 
         public string PhotoFolder { get; set; }
 
-        //public IDateRange Date { get; set; }
+        public List<PhotoSession> PhotoSessions { get; set; } = new List<PhotoSession>();
 
         public Trip()
         {
@@ -45,13 +45,9 @@ namespace TripLine.Dtos
             Debug.WriteLine($">{prefix} Trip {DisplayName}  {base.FromDate} {base.Duration} ");
             Debug.WriteLine($"    " + JsonConvert.SerializeObject(this, Newtonsoft.Json.Formatting.Indented));
         }
+
     }
-
-
-    
-
 }
-
 
 
 

@@ -23,7 +23,10 @@ namespace TripLine.Dtos
     {
         public eDestinationType DestinationType { get; set; }
 
+        public List<int> PhotoSessionIds { get; set; }
+
         public List<int> PhotoSessions { get; set; }
+
 
         //public string Summary { get; set; }
 

@@ -11,11 +11,11 @@ namespace TripLine.Service
     {
         public static int NewId { get; set; } = 1;
         
-        public IReadOnlyCollection<PhotoSession> Sessions => _sessions;
+        public IReadOnlyCollection<PhotoSession> Sessions => PhotoSessions;
 
-        private List<PhotoSession> _sessions { get; set; } = new List<PhotoSession>();
+        public List<PhotoSession> PhotoSessions { get; set; } = new List<PhotoSession>();
 
-        public int TotalPhotos => _sessions.Count() > 0 ? _sessions.Sum(s => s.NumPhotos) : 0;
+        public int TotalPhotos => PhotoSessions.Count() > 0 ? PhotoSessions.Sum(s => s.NumPhotos) : 0;
         public int TotalScore { get; set; } = 0;
         //              _sessions.Count() > 0 ? (_sessions.Sum(s => s.Score))  : 0;
         public PhotoSession MainPhotoSession => Sessions.FirstOrDefault();
@@ -31,8 +31,8 @@ namespace TripLine.Service
         {
             Id = NewId++;
 
-            _sessions= new List<PhotoSession>();
-            _sessions.Add(mainPhotoSession);
+            PhotoSessions= new List<PhotoSession>();
+            PhotoSessions.Add(mainPhotoSession);
 
             FromDate = new DateTime(mainPhotoSession.FromDate.Ticks);
             ToDate = new DateTime(mainPhotoSession.ToDate.Ticks);
@@ -42,7 +42,7 @@ namespace TripLine.Service
 
         public void Add(PhotoSession session)
         {
-            _sessions.Add(session);
+            PhotoSessions.Add(session);
 
             TotalScore += session.Score;
         }
@@ -53,7 +53,7 @@ namespace TripLine.Service
 
             int total = rankedSessions.Sum(s => s.Score);
 
-            _sessions.AddRange(rankedSessions);
+            PhotoSessions.AddRange(rankedSessions);
 
             TotalScore += total;
         }

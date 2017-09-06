@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 
 namespace TripLine.Dtos
 {
@@ -42,6 +43,21 @@ namespace TripLine.Dtos
                 theDateToPick = (daysLeftInMounth > to.Day) ? from : to;
             }
             return new DateTime( theDateToPick.Year, theDateToPick.Month, 1); 
+        }
+
+        public string Serialize(bool pretty = false)
+        {
+            Formatting formatting = pretty ? Formatting.Indented : Formatting.None;
+
+            string str = JsonConvert.SerializeObject(this, formatting);
+
+            if (!pretty)
+            {
+                str = str.Replace(@"},", (@"}," + Environment.NewLine));
+                str = str.Replace(@"[{,", (Environment.NewLine + @"[{"));
+            }
+
+            return str;
         }
 
     }
