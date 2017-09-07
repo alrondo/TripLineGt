@@ -140,7 +140,7 @@ namespace TripLine.ServiceTests
 
             var photosByPlaces = _photoStore.GetPhotos().Where(p => p.PlaceId != 0).GroupBy(p => p.PlaceId);
 
-            Debug.Assert(photosByPlaces.Count() > 2);
+            Debug.Assert(photosByPlaces.Count() >= 1);
 
             foreach (var group in photosByPlaces)
             {

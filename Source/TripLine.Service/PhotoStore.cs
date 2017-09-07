@@ -353,7 +353,7 @@ namespace TripLine.Service
 
                         var place = _locationService.GetNearbyPlace(photo.Location);
 
-                        photo.PlaceId = place?.LocationId ?? 0;
+                        photo.PlaceId = place?.Id ?? 0;
                         
                     }
                 }
