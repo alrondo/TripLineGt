@@ -163,6 +163,41 @@ namespace TripLine.ServiceTests
         }
 
 
+        [TestMethod()]
+        public void PhotoStore_GetPhotos_WithGpsPosition_OutputByLocationAndDate()
+        {
+            string baseDirectory = @"c:\TripLine\OutPhotos\";
+
+            Directory.CreateDirectory(baseDirectory);
+
+            var photos = _photoStore.GetPhotos().Where(p => p.PositionFromGps);
+
+            var photosByLocation = photos.GroupBy(p => p.Location.DisplayName);
+
+            foreach (var locationGroup in photosByLocation)
+            {
+                var photosByDate = locationGroup.GroupBy(p => p.Creation.ToShortDateString());
+
+                foreach (var dateGroup in photosByDate)
+                {
+                    string fpath = $"{baseDirectory}{locationGroup.Key} on {dateGroup.Key} ({dateGroup.Count()})" + ".txt";
+                    using (var writer = new StreamWriter(File.Open(fpath, FileMode.Create, FileAccess.Write)))
+                    {
+                        if (dateGroup.Any())
+                            writer.WriteLine(dateGroup.First().Serialize(true));
+
+                        if (dateGroup.Count() >= 2)
+                            writer.WriteLine(dateGroup.Skip(1).First().Serialize(true));
+
+                        if (dateGroup.Count() > 3)
+                            writer.WriteLine("...");
+
+                        if (dateGroup.Count() >= 3)
+                            writer.WriteLine(dateGroup.Last().Serialize(true));
+                    }
+                }
+            }
+        }
 
     }
 }
