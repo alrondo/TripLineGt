@@ -13,67 +13,21 @@ using TripLine.Toolbox.Extensions;
 
 namespace TripLine.Service
 {
-    public class FileInfoRepoContent
-    {
-        public FileInfoRepoContent() { }
-
-        public int NewId { get; set; } = 1;
-
-        public int HomeLocationId { get; set; } = 0;
-
-        public List<VisitedPlace> VisitedPlaces { get; set; } = new List<VisitedPlace>();
-    }
-
-    public class LocalFieRepo : FileRepo<FileInfoRepoContent>
-    {
-        public LocalFieRepo() : this(TripLineConfig.FileInfoRepoPath, forceNew: false)
-        {
-        }
-
-        public LocalFieRepo(string path, bool forceNew = false) : base(path, forceNew)
-        {
-            base.Load();
-        }
-
-        public List<VisitedPlace> VisitedPlaces
-        {
-            get { return base.Content.VisitedPlaces; }
-        }
-
-
-        public VisitedPlace GetPlace(int id)
-        {
-            return VisitedPlaces.FirstOrDefault(l => l.Id == id);
-        }
-
-
-        public void Add(VisitedPlace place)
-        {
-            VisitedPlaces.Add(place);
-        }
-
-        public int GetNewId()
-        {
-            return Content.NewId++;
-        }
-    }
+   
 
 
     public class LocalFileFolders
     {
         private const string PhotoFilter = "*.jpg";
-
-        
-        private IEnumerable<FileExtendedInfo> _previousExtendedInfo = new List<FileExtendedInfo>();
-
         private readonly PictureExifInformationReader  _exifReader;
+        private readonly LocalFileRepo _localFileRepo;
 
         public List<FileExtendedInfo> ExtendedFileInfos { get; set; } = new List<FileExtendedInfo>();
 
 
-        public List<FileExtendedInfo> GetNewFiles()
+        public List<FileExtendedInfo> GetNewFiles(DateTime fromTime)
         {
-            return ExtendedFileInfos.Where(f => f.NewFile).ToList();
+            return ExtendedFileInfos.Where(f => f.DetectedTime > fromTime).ToList();
         }
 
         public List<FileExtendedInfo> GetFiles()
@@ -84,13 +38,13 @@ namespace TripLine.Service
         private string _pictureFolder = "";
 
 
-        public LocalFileFolders ( PictureExifInformationReader exifReader )
+
+        public LocalFileFolders ( PictureExifInformationReader exifReader, LocalFileRepo localFileRepo=null )
         {
             _pictureFolder = TripLineConfig.PictureFolderPath;
-            _previousExtendedInfo = new List<FileExtendedInfo>();
-
             _exifReader = exifReader;
 
+            _localFileRepo = localFileRepo ?? new LocalFileRepo();
             Load(PhotoFilter);
         }
 
@@ -98,10 +52,7 @@ namespace TripLine.Service
         {
             //Debug.Assert(string.IsNullOrWhiteSpace(_basePath));
 
-            if (ExtendedFileInfos.Count() > 0)
-            {
-                _previousExtendedInfo = ExtendedFileInfos;
-            }
+            _localFileRepo.Load();
 
             ExtendedFileInfos.Clear();
 
@@ -113,30 +64,22 @@ namespace TripLine.Service
 
             foreach (var fileinfo in fileInfos)
             {
-                ExtendedFileInfos.Add(CreateFileExtendedInfo(fileinfo));
+                ExtendedFileInfos.Add(CreateFileExtendedInfo(fileinfo, DateTime.Now));
             }
         }
         
 
-        public FileExtendedInfo CreateFileExtendedInfo(FileInfo fileInfo)
+        public FileExtendedInfo CreateFileExtendedInfo(FileInfo fileInfo, DateTime detectedTime)
         {
             var key = GetFileKey(fileInfo);
-            var previous = _previousExtendedInfo.FirstOrDefault(f => f.FileKey == key);
-
-            bool newFile = previous == null;
-            bool hasChanged = previous?.LastWriteDateTimeUtc == fileInfo.LastWriteTimeUtc;
+            var existingInfo = _localFileRepo.GetFileInfo(key);
 
             var exifInfo = _exifReader.GetExifInformation(fileInfo.FullName);
 
+           return existingInfo != null
+                ? existingInfo
+                : new FileExtendedInfo(fileInfo, key, exifInfo, detectedTime);
 
-            if (previous != null && hasChanged == false)
-            {
-                previous.ContentChanged = false;
-                // haven't changed since lasty time
-                return previous;
-            }
-            else
-                return new FileExtendedInfo(fileInfo, key, newFile, exifInfo);
         }
 
 

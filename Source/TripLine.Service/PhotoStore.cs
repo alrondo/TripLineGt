@@ -39,16 +39,18 @@ namespace TripLine.Service
         }
 
 
+        private List<FileExtendedInfo> _newFilesReceived = new List<FileExtendedInfo>();
+
         public IEnumerable<FileExtendedInfo> GetNewFiles()
         {
 
             var excludedfilesKey = _photoRepo.Content.ExcludedFileKeys;
 
-            var files = _fileFolder.GetNewFiles();
+            var _newFilesReceived = _fileFolder.GetNewFiles(_photoRepo.Content.LastFileDetectionTime);
 
-            var newFiles = files.Where(f => !excludedfilesKey.Any(x => f.FileKey == x));
+            var newFilesToProcess = _newFilesReceived.Where(f => !excludedfilesKey.Any(x => f.FileKey == x)).ToList();
 
-            return newFiles.Where(f => !_photoRepo.Content.Photos.Exists(p => p.FileKey == f.FileKey));
+            return newFilesToProcess.Where(f => !_photoRepo.Content.Photos.Exists(p => p.FileKey == f.FileKey));
         }
 
         public void ReleaseNew()
@@ -174,6 +176,9 @@ namespace TripLine.Service
 
             ConfirmedSession.Add(sessionId);
 
+            if(_newFilesReceived.Any())
+                _photoRepo.Content.LastFileDetectionTime = _newFilesReceived.Last().DetectedTime;
+
             _photoRepo.Save();
         }
 
@@ -190,13 +195,13 @@ namespace TripLine.Service
 
                 // ADD
                 _photoRepo.Content.ExcludedFileKeys.Add(photo.FileKey);
-
             }
-    
+
+            if (_newFilesReceived.Any())
+                _photoRepo.Content.LastFileDetectionTime = _newFilesReceived.Last().DetectedTime;
+
             _photoRepo.Save();
         }
-
-     
 
 
         private void SetPinForPhoto(Photo photo, int? tripId, int? destinationId = 0, int? placeId = 0)

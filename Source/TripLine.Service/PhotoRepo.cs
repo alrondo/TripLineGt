@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using TripLine.Dtos;
 
 namespace TripLine.Service
@@ -9,6 +10,7 @@ namespace TripLine.Service
         public int NewId { get; set; } = 1;
         public int NewSessionId { get; set; } = 1;
 
+        public DateTime LastFileDetectionTime { get; set; } = DateTime.MinValue;
 
         public List<string> ExcludedFileKeys { get; set; } = new List<string>();
 

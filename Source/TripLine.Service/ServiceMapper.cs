@@ -10,13 +10,15 @@ namespace TripLine.Service
     {
         public static void RegisterObjects(TinyIoCContainer ioc)
         {
+            ioc.Register<PlaceRepo>().AsSingleton();
+            ioc.Register<LocalFileRepo>().AsSingleton();
             ioc.Register<LocationRepo>().AsSingleton();
             ioc.Register<LocationService>().AsSingleton();
+            ioc.Register<PhotoRepo>().AsSingleton();
+            ioc.Register<TripsRepo>().AsSingleton();
 
             ioc.Register<LocalFileFolders>().AsSingleton();
             ioc.Register<PhotoStore>().AsSingleton();
-            ioc.Register<PhotoRepo>().AsSingleton();
-            ioc.Register<TripsRepo>().AsSingleton();
             ioc.Register<TripCreationService>().AsSingleton();
 
             ioc.Register<TripSmartBuilder>().AsSingleton();

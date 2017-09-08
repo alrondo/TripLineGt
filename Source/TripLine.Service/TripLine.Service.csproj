@@ -60,6 +60,7 @@
     <Compile Include="DestinationCandidate.cs" />
     <Compile Include="FileRepo.cs" />
     <Compile Include="HighliteService.cs" />
+    <Compile Include="LocalFileRepo.cs" />
     <Compile Include="LocalFileFolders.cs" />
     <Compile Include="FileExtendedInfo.cs" />
     <Compile Include="LocationRepo.cs" />
@@ -70,6 +71,7 @@
     <Compile Include="PhotoStore.cs" />
     <Compile Include="PictureExifInformation.cs" />
     <Compile Include="PictureExifInformationReader.cs" />
+    <Compile Include="PlaceRepo.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ServiceMapper.cs" />
     <Compile Include="System\FormattableString.cs" />

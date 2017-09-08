@@ -37,6 +37,7 @@ namespace TripLine.ServiceTests
             _googleClient = new GoogleClient();
             _locationRepo = new LocationRepo(TripLineConfig.TestLocationRepoPath);
             _placeRepo = new PlaceRepo(TripLineConfig.TestPlaceRepoPath);
+            
 
             _locationService = new LocationService(_googleClient, _locationRepo, _placeRepo);
 

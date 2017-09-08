@@ -19,17 +19,17 @@ namespace TripLine.Service
     {
         public PictureExifInformation ExifInfo { get; set; }
 
-        public string Name { get; private set; }
+        public string Name { get; private set; } =  string.Empty;
 
-        public string FilePath { get; private set; }
-        public string RelativePath { get; private set; }
+        public string FilePath { get; private set; } = string.Empty;
+        public string RelativePath { get; private set; } = string.Empty;
 
         public string FileKey { get; set; } = "";
 
         public DateTime Creation { get; private set; }
 
 
-        public string ParentFolder { get; set; }
+        public string ParentFolder { get; set; } = string.Empty;
 
 
         public DateTime LastWriteDateTimeUtc { get; private set; }
@@ -38,26 +38,25 @@ namespace TripLine.Service
 
         public DateTime LastAccessTimeUtc { get; set; }
 
-
-        public bool NewFile { get; set; }
+        public DateTime DetectedTime { get; private set; }
 
         public bool ContentChanged { get; set; }
 
 
-        public FileExtendedInfo(FileInfo fileInfo, string fileKey, bool newFile, PictureExifInformation exifInfoInfo)
+        public FileExtendedInfo(FileInfo fileInfo, string fileKey, PictureExifInformation exifInfoInfo, DateTime detectedTime)
         {
             Name = fileInfo.Name.RemoveDiacritics();
             ParentFolder = fileInfo?.Directory?.Name;
             Creation = fileInfo.CreationTimeUtc;
             FileKey = fileKey;
             LastWriteDateTimeUtc = fileInfo.LastWriteTimeUtc;
-            NewFile = newFile;
             ContentChanged = true;
             FilePath = fileInfo.FullName;
             RelativePath = MakeRelativePath(TripLineConfig.PictureFolderPath, fileInfo.Directory.FullName);
 
             LastAccessTimeUtc = fileInfo.LastAccessTimeUtc;
             LastWriteTime = fileInfo.LastWriteTime;
+            DetectedTime = detectedTime;
 
             ExifInfo = exifInfoInfo;
         }
