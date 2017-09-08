@@ -54,6 +54,8 @@ namespace TripLine.Dtos
 
         public GeoPosition Position { get; set; } = new GeoPosition();
 
+        public bool PositionFromGps { get; set; } 
+
         public Location    Location { get; set; }
 
         private string Tags { get; set; } = "";

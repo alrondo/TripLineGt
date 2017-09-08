@@ -339,26 +339,21 @@ namespace TripLine.Service
 
             var photo = Photo.NewPhoto(_photoRepo.Content.NewId++, finfo.FilePath, finfo.FileKey, creationDate);
 
-            if (finfo.ExifInfo != null )
+            if (finfo.ExifInfo != null &&  finfo.ExifInfo.GPS_Latitude.HasValue && finfo.ExifInfo.GPS_Longitude.HasValue )
             {
-                if ( finfo.ExifInfo.GPS_Latitude.HasValue && finfo.ExifInfo.GPS_Longitude.HasValue )
+                photo.Position = new GeoPosition( finfo.ExifInfo.GPS_Latitude.Value, finfo.ExifInfo.GPS_Longitude.Value);
+
+                photo.Location = _locationService.GetLocation(photo.Position);
+
+                if (photo.Location != null)
                 {
-                    photo.Position = new GeoPosition( finfo.ExifInfo.GPS_Latitude.Value, finfo.ExifInfo.GPS_Longitude.Value);
+                    photo.DebugInfo += "LocFromPos" + ";";
+                    photo.PositionFromGps = true;
 
-                    photo.Location = _locationService.GetLocation(photo.Position);
+                    var place = _locationService.GetNearbyPlace(photo.Location);
 
-                    if (photo.Location != null)
-                    {
-                        photo.DebugInfo += "LocFromPos" + ";";
-
-                        var place = _locationService.GetNearbyPlace(photo.Location);
-
-                        photo.PlaceId = place?.Id ?? 0;
-                        
-                    }
-                }
-
-
+                    photo.PlaceId = place?.Id ?? 0;
+                }               
             }
 
             if (_lastAddedValidPhoto == null || (_lastAddedValidPhoto.Creation.DayOfYear != finfo.Creation.DayOfYear))
@@ -374,6 +369,8 @@ namespace TripLine.Service
                 )               
             {   // No GPS info nut photo has same search path as previous... 
                 photo.Location = _lastAddedValidPhoto.Location;
+                photo.Position = photo.Location.Position;
+                photo.PositionFromGps = false;
 
                 photo.DebugInfo += "LocFromPhoto" + _lastAddedValidPhoto.Id + ";";
             }
