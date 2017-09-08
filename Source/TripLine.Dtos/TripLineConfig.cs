@@ -23,5 +23,7 @@ namespace TripLine.Dtos
         public static string LocationRepoPath = BaseDocument + "Repos\\LocationRepo.txt";
 
         public static string TestLocationRepoPath = BaseDocument + "Repos\\TestLocationRepo.txt";
+        public static string TestPlaceRepoPath = BaseDocument + "Repos\\TestPlaceRepo.txt";
+
     }
 }

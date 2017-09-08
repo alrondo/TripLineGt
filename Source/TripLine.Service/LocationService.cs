@@ -23,8 +23,8 @@ namespace TripLine.Service
         private const int ExclusionDistanceMi = 75;
 
         private readonly GoogleClient _googleClient;
-
         private readonly LocationRepo _locationRepo;
+        private readonly PlaceRepo _placeRepo;
 
         private IEnumerable<Location> ExcludedLocation => _locationRepo.Locations.Where(l => l.Excluded == true);
 
@@ -34,17 +34,18 @@ namespace TripLine.Service
         
         public IEnumerable<Location> GetAllLocations() => _locationRepo.Locations;
 
-        public LocationService(GoogleClient googleClient, LocationRepo locationRepo )
+        public LocationService(GoogleClient googleClient, LocationRepo locationRepo, PlaceRepo placeRepo )
         {
             _googleClient = googleClient;
             _locationRepo = locationRepo;
+            _placeRepo = placeRepo;
 
             InitHomeLocation();
         }
 
-        public IEnumerable<VisitedPlace> GetPlaces(Location loc) => _locationRepo.VisitedPlaces.Where(p => p.LocationId == loc.Id);
+        public IEnumerable<VisitedPlace> GetPlaces(Location loc) => _placeRepo.VisitedPlaces.Where(p => p.LocationId == loc.Id);
 
-        public VisitedPlace GetPlace(int placeId) => _locationRepo.VisitedPlaces.SingleOrDefault(p => p.Id == placeId);
+        public VisitedPlace GetPlace(int placeId) => _placeRepo.VisitedPlaces.SingleOrDefault(p => p.Id == placeId);
 
 
         void InitHomeLocation(string homeAddress = "Montreal, Quebec, Canada, downtown")
@@ -127,8 +128,8 @@ namespace TripLine.Service
                     Types = result.types
                 };
 
-                _locationRepo.VisitedPlaces.Add(place);
-                _locationRepo.Save();
+                _placeRepo.VisitedPlaces.Add(place);
+                _placeRepo.Save();
 
                 Debug.WriteLine($"Found new place {place.PlaceName} at {location.Position.GetDisplay()} :: {place.Types} ");
                 return place;

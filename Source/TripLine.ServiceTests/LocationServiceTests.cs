@@ -20,7 +20,7 @@ namespace TripLine.Service.Tests
         private readonly GoogleClient _googleClient;
 
         private readonly LocationRepo _locationRepo;
-
+        private readonly PlaceRepo _placeRepo;
         private readonly LocationService _locationService;
 
         private readonly PictureExifInformationReader _exifReader;
@@ -33,8 +33,9 @@ namespace TripLine.Service.Tests
 
             _googleClient = new GoogleClient();
             _locationRepo = new LocationRepo(TripLineConfig.LocationRepoPath, forceNew:false);
+            _placeRepo = new PlaceRepo(TripLineConfig.PlaceRepoPath);
 
-            _locationService = new LocationService(_googleClient, _locationRepo);
+            _locationService = new LocationService(_googleClient, _locationRepo, _placeRepo);
 
             _localFileFolder = new LocalFileFolders(_exifReader);
             _photoStore = new PhotoStore(new PhotoRepo(forceNew: false), _localFileFolder, _locationService);

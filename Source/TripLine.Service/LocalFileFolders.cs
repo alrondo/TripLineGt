@@ -13,6 +13,50 @@ using TripLine.Toolbox.Extensions;
 
 namespace TripLine.Service
 {
+    public class FileInfoRepoContent
+    {
+        public FileInfoRepoContent() { }
+
+        public int NewId { get; set; } = 1;
+
+        public int HomeLocationId { get; set; } = 0;
+
+        public List<VisitedPlace> VisitedPlaces { get; set; } = new List<VisitedPlace>();
+    }
+
+    public class LocalFieRepo : FileRepo<FileInfoRepoContent>
+    {
+        public LocalFieRepo() : this(TripLineConfig.FileInfoRepoPath, forceNew: false)
+        {
+        }
+
+        public LocalFieRepo(string path, bool forceNew = false) : base(path, forceNew)
+        {
+            base.Load();
+        }
+
+        public List<VisitedPlace> VisitedPlaces
+        {
+            get { return base.Content.VisitedPlaces; }
+        }
+
+
+        public VisitedPlace GetPlace(int id)
+        {
+            return VisitedPlaces.FirstOrDefault(l => l.Id == id);
+        }
+
+
+        public void Add(VisitedPlace place)
+        {
+            VisitedPlaces.Add(place);
+        }
+
+        public int GetNewId()
+        {
+            return Content.NewId++;
+        }
+    }
 
 
     public class LocalFileFolders
