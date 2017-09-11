@@ -48,13 +48,21 @@ namespace TripLine.Service
 
             var _newFilesReceived = _fileFolder.GetNewFiles(_photoRepo.Content.LastFileDetectionTime);
 
+            if (!_newFilesReceived.Any())
+                return _newFilesReceived;
+
             var newFilesToProcess = _newFilesReceived.Where(f => !excludedfilesKey.Any(x => f.FileKey == x)).ToList();
 
-            return newFilesToProcess.Where(f => !_photoRepo.Content.Photos.Exists(p => p.FileKey == f.FileKey));
-        }
+            newFilesToProcess = newFilesToProcess.Where(f => !_photoRepo.Content.Photos.Exists(p => p.FileKey == f.FileKey)).ToList();
 
-        public void ReleaseNew()
-        {
+            if (!newFilesToProcess.Any()
+                && _photoRepo.Content.LastFileDetectionTime < _newFilesReceived.Last().DetectedTime)
+            {
+                _photoRepo.Content.LastFileDetectionTime = _newFilesReceived.Last().DetectedTime;
+                _photoRepo.Save();
+            }
+            return newFilesToProcess;
+
         }
 
         public List<Photo> GetPhotos()

@@ -24,15 +24,47 @@ namespace TripLine.Service
 
         public List<FileExtendedInfo> ExtendedFileInfos { get; set; } = new List<FileExtendedInfo>();
 
+        private IEnumerable<FileInfo> _fileInfos;
 
-        public List<FileExtendedInfo> GetNewFiles(DateTime fromTime)
+
+        private void SkipOlderFiles(DateTime fromTime)
         {
-            return ExtendedFileInfos.Where(f => f.DetectedTime > fromTime).ToList();
+            int skipCount = 0;
+
+            foreach (var fileinfo in _fileInfos)
+            {
+                var extInfo = ObtainFileExtendedInfo(fileinfo, DateTime.Now);
+
+                if (extInfo.DetectedTime >= fromTime)
+                    break;  // do not skip from here
+
+                skipCount += 1;
+            }
+
+            _fileInfos = _fileInfos.Skip(skipCount);
         }
 
-        public List<FileExtendedInfo> GetFiles()
+        public IEnumerable<FileExtendedInfo> GetFiles() => GetFiles(DateTime.MinValue, int.MaxValue);
+
+        public IEnumerable<FileExtendedInfo> GetFiles(DateTime fromTime, int maxCount= int.MaxValue)
         {
-            return ExtendedFileInfos.ToList();
+            SkipOlderFiles(fromTime);
+
+            List<FileExtendedInfo> extendedInfos = new List<FileExtendedInfo>();
+
+            foreach (var fileinfo in _fileInfos.Take(maxCount))
+            {
+                var extInfo = ObtainFileExtendedInfo(fileinfo, DateTime.Now);
+
+                extendedInfos.Add(extInfo);
+            }
+
+            _fileInfos.Skip(maxCount);
+
+            if (!_fileInfos.Any())
+                _localFileRepo.Save();
+
+            return extendedInfos;
         }
 
         private string _pictureFolder = "";
@@ -60,26 +92,25 @@ namespace TripLine.Service
             //removing C:\\ so zip does not unarchive to root of c drive, this can be modified because in later cases it should be
             string[] fileEntries = Directory.GetFiles(_pictureFolder, filter, SearchOption.AllDirectories);
 
-            IEnumerable<FileInfo> fileInfos = fileEntries.Select(f => new FileInfo(f));
+            _fileInfos = fileEntries.Select(f => new FileInfo(f));
 
-            foreach (var fileinfo in fileInfos)
-            {
-                ExtendedFileInfos.Add(CreateFileExtendedInfo(fileinfo, DateTime.Now));
-            }
+            
         }
-        
 
-        public FileExtendedInfo CreateFileExtendedInfo(FileInfo fileInfo, DateTime detectedTime)
+
+        public FileExtendedInfo ObtainFileExtendedInfo(FileInfo fileInfo, DateTime detectedTime)
         {
             var key = GetFileKey(fileInfo);
             var existingInfo = _localFileRepo.GetFileInfo(key);
 
             var exifInfo = _exifReader.GetExifInformation(fileInfo.FullName);
 
-           return existingInfo != null
-                ? existingInfo
-                : new FileExtendedInfo(fileInfo, key, exifInfo, detectedTime);
+            if (existingInfo != null)
+                return existingInfo;
 
+            var newFInfo = new FileExtendedInfo(fileInfo, key, exifInfo, detectedTime);
+            _localFileRepo.Add(newFInfo);
+            return newFInfo;
         }
 
 
@@ -94,24 +125,7 @@ namespace TripLine.Service
             return ExtendedFileInfos?.FirstOrDefault(x => x.FileKey == fileKey).FilePath;
         }
 
-
-        public void Save()
-        {
-            using (var outFile = File.Create(TripLineConfig.FileInfoRepoPath))
-            {
-                var serializedRepo = this.SerializeToJsonBytes();
-                outFile.Write(serializedRepo.ToArray(), 0, serializedRepo.Length);
-
-            }
-        }
-
-        public byte[] SerializeToJsonBytes(bool addNewLine = true)
-        {
-            var theString = JsonConvert.SerializeObject(this);
-            if (addNewLine) theString += Environment.NewLine;
-
-            return Encoding.ASCII.GetBytes(theString);
-        }
+        
     }
     
 }

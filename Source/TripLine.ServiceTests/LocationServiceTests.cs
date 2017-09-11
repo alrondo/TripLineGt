@@ -396,7 +396,7 @@ new GeoPosition(45.4568847222222,73.4437638888889),
                     new StreamWriter(File.Open(@"c:\TripLine\FileGpsLocation.txt", FileMode.Create, FileAccess.Write))
             )
             {
-                var totalFiles = _localFileFolder.GetFiles().Count;
+                var totalFiles = _localFileFolder.GetFiles().Count();
 
                 foreach (var file in _localFileFolder.GetFiles())
                 {
