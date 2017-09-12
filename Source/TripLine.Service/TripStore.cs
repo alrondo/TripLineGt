@@ -192,7 +192,7 @@ namespace TripLine.Service
             {
                 newTrip = ServiceMapper.Map<Trip>(tripCandidate);
 
-                newTrip.Id = _tripRepo.Content.NewId++;
+                newTrip.Id = _tripRepo.GetNewId();
 
                 foreach (var sessionId in tripCandidate.PhotoSessions.Select(s => s.SessionId))
                 {

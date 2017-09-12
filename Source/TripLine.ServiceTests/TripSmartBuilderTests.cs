@@ -214,7 +214,7 @@ namespace TripLine.ServiceTests
         {
             var expectedPhotos = _photoStore.PeakForNewPhotos();
 
-            _photoStore.CreatePhotoFromNewFiles();
+            _photoStore.CreateNewPhotos();
 
             Assert.IsTrue(_photoStore.NumNewPhotosFiles == expectedPhotos.Count);
             Assert.IsTrue(_photoStore.NewTravelPhotos.Count == expectedPhotos.Count(p => p.Excluded == false));
@@ -237,7 +237,7 @@ namespace TripLine.ServiceTests
         {
             int previousCount = _photoStore.NewTravelPhotos.Count;
 
-            var sessions = _photoStore.GetNewSessions();
+            var sessions = _photoStore.CreateNewPhotoSessions();
 
             Assert.IsTrue(sessions.Count > 0);
 
@@ -257,7 +257,7 @@ namespace TripLine.ServiceTests
                 var streamWriter =
                     new StreamWriter(File.Open(@"c:\TripLine\NewSessions.txt", FileMode.Create, FileAccess.Write)))
             {
-                var sessions = _photoStore.GetNewSessions();
+                var sessions = _photoStore.CreateNewPhotoSessions();
 
              
                 streamWriter.WriteLine($"Got {sessions.Count} sessions");
@@ -300,7 +300,7 @@ namespace TripLine.ServiceTests
                 var streamWriter =
                     new StreamWriter(File.Open(@"c:\TripLine\GetSessionByTrips.txt", FileMode.Create, FileAccess.Write)))
             {
-                var sessions = _photoStore.GetNewSessions();
+                var sessions = _photoStore.CreateNewPhotoSessions();
 
                 streamWriter.WriteLine($"Got {sessions.Count}");
 
@@ -336,7 +336,7 @@ namespace TripLine.ServiceTests
                 var streamWriter =
                     new StreamWriter(File.Open(@"c:\TripLine\BuildTripCandidates.txt", FileMode.Create, FileAccess.Write)))
             {
-                var sessions = _photoStore.GetNewSessions();
+                var sessions = _photoStore.CreateNewPhotoSessions();
 
                 _tripSmartBuilder.Build(sessions);
 

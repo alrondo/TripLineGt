@@ -16,12 +16,9 @@ namespace TripLine.Service
     {
         Idle,
 
-        DetecingFiles = 210,
-        FileDetected = 211,
-        DetectingSession,
-        BuildingCandidates,
-
-        ResultAvailable,
+        BuildingNewPhotos = 210,
+        BuildingPhotoSessions,
+        BuildingCandidates
     }
 
     public enum BuildTaskState
@@ -111,18 +108,6 @@ namespace TripLine.Service
         private TripCreationDetectResult _lastResult = new TripCreationDetectResult();
 
 
-
-        public bool PeakForNewTripPhotos()
-        {
-            if (_buildState.TaskState != BuildTaskState.Stopped
-                && _buildState.TaskState != BuildTaskState.Idle)
-                throw new InvalidOperationException("Cant peak - improper state");
-
-            var photos = _photoStore.PeakForNewPhotos();
-
-            return photos.Any( );
-        }
-
         public TripCreationDetectResult TripCreationDetectResult
         {
             get
@@ -149,36 +134,6 @@ namespace TripLine.Service
         }
 
 
-        // prerequisite  task state = stop 
-        public TripCreationDetectResult DetectNewFiles()
-        {
-            int filesDetected = 0;
-
-            lock (_buildState)
-            {
-                if (   _buildState.TaskState != BuildTaskState.Stopped 
-                    && _buildState.TaskState != BuildTaskState.Idle    )
-                    throw new InvalidOperationException("Cant start not stopped");
-
-                _buildState.TaskState = BuildTaskState.Running;
-           }
-         
-           _buildState.CurrentStep = BuildStep.DetecingFiles;
-
-           lock (_buildState)
-           {
-               var files = _photoStore.GetNewFiles();
-                
-                if (_buildState.TaskState != BuildTaskState.Running || files.Count()==0)
-                    DetectionStopped();
-                else
-                    _buildState.CurrentStep = BuildStep.FileDetected;
-            }
-            
-            return TripCreationDetectResult;
-
-        }
-
         private void DetectionStopped()
         {
             _lastResult = TripCreationDetectResult;
@@ -192,6 +147,7 @@ namespace TripLine.Service
             _lastResult.NumInvalidPhotos = _photoStore.NewInvalidPhotoCounts;
 
             _buildState.TaskState = BuildTaskState.Stopped;
+            _buildState.CurrentStep = BuildStep.Idle;
         }
 
         public void Stop()
@@ -199,7 +155,7 @@ namespace TripLine.Service
             lock (_buildState)
             {
                 if (_buildState.TaskState == BuildTaskState.Running &&
-                    _buildState.CurrentStep == BuildStep.DetecingFiles)
+                    _buildState.CurrentStep == BuildStep.BuildingNewPhotos)
                 {
                     _buildState.TaskState = BuildTaskState.Stopping;
                     return;
@@ -209,37 +165,45 @@ namespace TripLine.Service
             }
         }
 
-
-        // prerequisite  task state = running &&  CurrentStep == BuildStep.FileDetected
-        public TripCreationDetectResult DetectTripsFromNewPhotos ()
+        public bool PeakForNewTripPhotos()
         {
-            if ( _buildState.IsRunning)
-                throw new InvalidOperationException("DetectTripsFromNewPhotos already running");
+            _photoStore.CreateNewPhotos(stopOnFirstTravelPhoto:true);
+
+            return (_photoStore.NewTravelPhotos.Any() );
+        }
+
+        public TripCreationDetectResult Build()
+        {
+            var result = BuildPhotos();
+            result = BuildTrips();
+            return result;
+        }
 
 
+        public TripCreationDetectResult BuildPhotos()
+        {
             _buildState.TaskState = BuildTaskState.Running;
 
-            _buildState.CurrentStep = BuildStep.DetecingFiles;
+            _buildState.CurrentStep = BuildStep.BuildingNewPhotos;
 
-            _photoStore.CreatePhotoFromNewFiles();
+            _photoStore.CreateNewPhotos();
 
-            _lastResult.TotalRepoInvalid = _photoStore.TotalRepoInvalid;
-            _lastResult.TotalRepoPhotos = _photoStore.TotalRepoPhotos;
-            _lastResult.TotalRepoTravelPhotos = _photoStore.TotalRepoTravelPhotos;
-            _lastResult.TotalRepoUnconfirmed = _photoStore.TotalRepoUnconfirmed;
-            _lastResult.NumNotImportedPhoto = _photoStore.NumNotImportedPhoto;
-            _lastResult.NumNonTravelPhotos = _photoStore.NumNonTravelPhotos;
-            _lastResult.NumInvalidPhotos = _photoStore.NewInvalidPhotoCounts;
+            return UpdateLastResult();
+        }
 
-            if (_buildState.TaskState != BuildTaskState.Running  || _photoStore.NumNewPhotosFiles == 0)
+        // prerequisite  task state = running &&  CurrentStep == BuildStep.FileDetected
+        public TripCreationDetectResult BuildTrips ()
+        {
+            if  ( _photoStore.NumNewPhotosFiles == 0)
             {
                 DetectionStopped();
                 return TripCreationDetectResult;
             }
 
-            _buildState.CurrentStep = BuildStep.DetectingSession;
+            _buildState.TaskState = BuildTaskState.Running;
+            _buildState.CurrentStep = BuildStep.BuildingPhotoSessions;
 
-            _newSessions = _photoStore.GetNewSessions(peakForNewPhotos: false);
+            _newSessions = _photoStore.CreateNewPhotoSessions(peakForNewPhotos: false);
 
             if (_buildState.TaskState != BuildTaskState.Running)
             {
@@ -256,8 +220,6 @@ namespace TripLine.Service
                 DetectionStopped();
                 return TripCreationDetectResult;
             }
-
-            _buildState.CurrentStep = BuildStep.ResultAvailable;
 
             return TripCreationDetectResult;
         }
@@ -291,6 +253,21 @@ namespace TripLine.Service
         {
             _photoStore.RejectAllUnconfirmed();
         }
+
+
+
+        private TripCreationDetectResult UpdateLastResult()
+        {
+            _lastResult.TotalRepoInvalid = _photoStore.TotalRepoInvalid;
+            _lastResult.TotalRepoPhotos = _photoStore.TotalRepoPhotos;
+            _lastResult.TotalRepoTravelPhotos = _photoStore.TotalRepoTravelPhotos;
+            _lastResult.TotalRepoUnconfirmed = _photoStore.TotalRepoUnconfirmed;
+            _lastResult.NumNotImportedPhoto = _photoStore.NumNotImportedPhoto;
+            _lastResult.NumNonTravelPhotos = _photoStore.NumNonTravelPhotos;
+            _lastResult.NumInvalidPhotos = _photoStore.NewInvalidPhotoCounts;
+            return _lastResult;
+        }
+
 
     }
 }

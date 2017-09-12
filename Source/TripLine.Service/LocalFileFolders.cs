@@ -56,15 +56,13 @@ namespace TripLine.Service
             {
                 var extInfo = ObtainFileExtendedInfo(fileinfo, DateTime.Now);
 
-                extendedInfos.Add(extInfo);
+                yield return extInfo;
             }
 
             _fileInfos.Skip(maxCount);
 
             if (!_fileInfos.Any())
                 _localFileRepo.Save();
-
-            return extendedInfos;
         }
 
         private string _pictureFolder = "";

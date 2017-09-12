@@ -7,7 +7,8 @@ namespace TripLine.Service
 
     public class PhotoRepoContent
     {
-        public int NewId { get; set; } = 1;
+        internal int NewId { get; set; } = 1;
+
         public int NewSessionId { get; set; } = 1;
 
         public DateTime LastFileDetectionTime { get; set; } = DateTime.MinValue;
@@ -29,7 +30,12 @@ namespace TripLine.Service
         {
             Load();
         }
+        
 
+        public int GetNewId()
+        {
+            return Content.NewId++;
+        }
 
     }
 }

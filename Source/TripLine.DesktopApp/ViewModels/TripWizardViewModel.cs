@@ -83,7 +83,7 @@ namespace TripLine.DesktopApp.ViewModels
         {
             SetStatus($"check your folders for new photos.");
 
-            int numPhotoFiles = _tripCreationService.DetectNewFiles().NumNewPhotos;
+            int numPhotoFiles = _tripCreationService.BuildPhotos().NumNewPhotos;
 
             if (numPhotoFiles == 0)
             {
@@ -96,7 +96,7 @@ namespace TripLine.DesktopApp.ViewModels
 
             SetStatus("detect your travel photos.");
 
-            _tripCreationService.DetectTripsFromNewPhotos();
+            _tripCreationService.BuildTrips();
             
         }
 

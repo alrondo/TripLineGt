@@ -52,7 +52,7 @@ namespace TripLine.ServiceTests
 
             var tripCreationService = new TripCreationService(_tripStore, _photoStore, _locationService);
 
-            var result = tripCreationService.DetectTripsFromNewPhotos();
+            var result = tripCreationService.Build();
             if (result.NumNewTrips > 0)
                 tripCreationService.AddAll();
         }

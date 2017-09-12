@@ -120,18 +120,22 @@ namespace TripLine.Service
                 if (result == null)
                     return null;
 
-                place = new VisitedPlace()
+                place = _placeRepo.VisitedPlaces.FirstOrDefault(p => p.LocationId == location.Id && p.PlaceName == result.name);
+
+                if ( place == null)
                 {
-                    Id = VisitedPlace.NewPlaceId++,
-                    LocationId = location.Id,
-                    PlaceName = result.name,
-                    Types = result.types
-                };
+                    place = new VisitedPlace()
+                    {
+                        Id = _placeRepo.GetNewId(),
+                        LocationId = location.Id,
+                        PlaceName = result.name,
+                        Types = result.types
+                    };
+                    _placeRepo.VisitedPlaces.Add(place);
+                    _placeRepo.Save();
+                    Debug.WriteLine($"Found new place {place.PlaceName} at {location.Position.GetDisplay()} :: {place.Types} ");
+                }
 
-                _placeRepo.VisitedPlaces.Add(place);
-                _placeRepo.Save();
-
-                Debug.WriteLine($"Found new place {place.PlaceName} at {location.Position.GetDisplay()} :: {place.Types} ");
                 return place;
             }
             else

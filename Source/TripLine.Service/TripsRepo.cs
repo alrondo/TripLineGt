@@ -12,11 +12,10 @@ namespace TripLine.Service
 
     public class TripRepoContent
     {
-        public int NewId { get; set; } = 1;
+        internal int NewId { get; set; } = 1;
         public int NewSessionId { get; set; } = 1;
 
         public List<Trip> Trips { get; set; } = new List<Trip>();
-
     }
 
 
@@ -32,6 +31,10 @@ namespace TripLine.Service
         }
 
 
+        public int GetNewId()
+        {
+            return Content.NewId++;
+        }
     }
    
 }

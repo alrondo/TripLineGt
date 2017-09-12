@@ -41,28 +41,17 @@ namespace TripLine.Service
 
         private List<FileExtendedInfo> _newFilesReceived = new List<FileExtendedInfo>();
 
-        public IEnumerable<FileExtendedInfo> GetNewFiles()
+        public IEnumerable<FileExtendedInfo> PeekNewFiles()
         {
-
             var excludedfilesKey = _photoRepo.Content.ExcludedFileKeys;
 
-            var _newFilesReceived = _fileFolder.GetNewFiles(_photoRepo.Content.LastFileDetectionTime);
-
-            if (!_newFilesReceived.Any())
-                return _newFilesReceived;
+            var _newFilesReceived = _fileFolder.GetFiles(_photoRepo.Content.LastFileDetectionTime);
 
             var newFilesToProcess = _newFilesReceived.Where(f => !excludedfilesKey.Any(x => f.FileKey == x)).ToList();
 
             newFilesToProcess = newFilesToProcess.Where(f => !_photoRepo.Content.Photos.Exists(p => p.FileKey == f.FileKey)).ToList();
-
-            if (!newFilesToProcess.Any()
-                && _photoRepo.Content.LastFileDetectionTime < _newFilesReceived.Last().DetectedTime)
-            {
-                _photoRepo.Content.LastFileDetectionTime = _newFilesReceived.Last().DetectedTime;
-                _photoRepo.Save();
-            }
+            
             return newFilesToProcess;
-
         }
 
         public List<Photo> GetPhotos()
@@ -86,10 +75,6 @@ namespace TripLine.Service
             return _photoRepo.Content.Photos.Where(p => p.Location != null &&   p.Location.Id == locationId).ToList();
         }
 
-        public void CreateNewPhotos(IEnumerable<FileExtendedInfo> files)
-        {
-            files.ForEach(f => CreatePhoto(f));
-        }
 
         public List<Photo> NewTravelPhotos => _photoRepo.Content.Photos
             .Where(p => p.IsTravelCandidate)
@@ -121,42 +106,47 @@ namespace TripLine.Service
 
         public List<Photo> GetSessionPhoto(int sessionId)
             => _photoRepo.Content.Photos.Where(p => p.SessionId == sessionId).ToList();
-
-
-
+        
 
         public List<Photo> PeakForNewPhotos()
         {
-            //if (NewTravelPhotos.Count != 0)
-            //    throw new InvalidOperationException("Bad state");  // already loaded
-            CreatePhotoFromNewFiles();
+            CreateNewPhotos();
 
             return NewImportPhotos.ToList();
         }
 
-        public void CreatePhotoFromNewFiles()
+        public void CreateNewPhotos(bool stopOnFirstTravelPhoto=false)
         {
-            var newFiles = GetNewFiles().ToList();
+            var excludedfilesKey = _photoRepo.Content.ExcludedFileKeys;
 
-            if (!newFiles.Any())
-                return;
+            DateTime lastFileDetectedTime=DateTime.MinValue;
+            foreach (var file in  _fileFolder.GetFiles(_photoRepo.Content.LastFileDetectionTime) )
+            {
+                lastFileDetectedTime = file.DetectedTime;
 
-            CreateNewPhotos(newFiles);
+                if ( excludedfilesKey.Any(x => file.FileKey == x))
+                    continue;
 
+                if (_photoRepo.Content.Photos.Exists(p => p.FileKey == file.FileKey))
+                    continue;
+
+                var photo = CreatePhoto(file);
+                
+                AddPhoto(photo);
+
+                if (stopOnFirstTravelPhoto && photo.IsTravelCandidate)
+                    break;
+            }
+
+            if(lastFileDetectedTime > _photoRepo.Content.LastFileDetectionTime)
+                _photoRepo.Content.LastFileDetectionTime = lastFileDetectedTime;
             _photoRepo.Save();
         }
 
 
 
-        public List<PhotoSession>   GetNewSessions(bool peakForNewPhotos = true)
-        {
-            CreatePhotoFromNewFiles();
-            
-            return GetSessionsFromNewPhotos();
-        }
-
-        public List<PhotoSession> GetSessionsFromNewPhotos()
-        {
+        public List<PhotoSession>   CreateNewPhotoSessions(bool peakForNewPhotos = true)
+       {
             List<Photo> newPhotos = NewTravelPhotos.OrderBy(p => p.Creation).Where(p => p.Unclassified).ToList();
 
             var sessions = CreatePhotoSessions(newPhotos.Where(p => p.Location != null).ToList());
@@ -308,7 +298,7 @@ namespace TripLine.Service
         }
 
 
-        private Photo _lastAddedValidPhoto =null;
+        private Photo _lastBuildedPhoto =null;
 
 
 
@@ -334,7 +324,7 @@ namespace TripLine.Service
             return location;
         }
 
-        public void CreatePhoto(FileExtendedInfo finfo)
+        public Photo CreatePhoto(FileExtendedInfo finfo)
         {
             var creationDate = DateHelper.LowestDate(finfo.Creation, finfo.LastWriteDateTimeUtc);
 
@@ -350,7 +340,7 @@ namespace TripLine.Service
                 creationDate = DateHelper.LowestDate(creationDate, finfo.ExifInfo.DateTime.Value);
             }
 
-            var photo = Photo.NewPhoto(_photoRepo.Content.NewId++, finfo.FilePath, finfo.FileKey, creationDate);
+            var photo = Photo.NewPhoto(_photoRepo.GetNewId(), finfo.FilePath, finfo.FileKey, creationDate);
 
             if (finfo.ExifInfo != null &&  finfo.ExifInfo.GPS_Latitude.HasValue && finfo.ExifInfo.GPS_Longitude.HasValue )
             {
@@ -369,23 +359,16 @@ namespace TripLine.Service
                 }               
             }
 
-            if (_lastAddedValidPhoto == null || (_lastAddedValidPhoto.Creation.DayOfYear != finfo.Creation.DayOfYear))
-            {
-                //Debug.WriteLine($"New Photo Date: {finfo.Creation.ToShortDateString()} {finfo.LastWriteDateTimeUtc} ");
-                //Debug.WriteLine($"{JsonConvert.SerializeObject(finfo)} ");
-            }
-
-
-            if (   photo.Location == null  && _lastAddedValidPhoto?.Location != null
-                && ( _locationService.GetSearchPath(photo.PhotoUrl)  == _locationService.GetSearchPath(_lastAddedValidPhoto.PhotoUrl)) 
-                && ( (photo.Creation.DayOfYear - _lastAddedValidPhoto.Creation.DayOfYear) <= 3) 
+            if (   photo.Location == null  && _lastBuildedPhoto?.Location != null
+                && ( _locationService.GetSearchPath(photo.PhotoUrl)  == _locationService.GetSearchPath(_lastBuildedPhoto.PhotoUrl)) 
+                && ( (photo.Creation.DayOfYear - _lastBuildedPhoto.Creation.DayOfYear) <= 3) 
                 )               
             {   // No GPS info nut photo has same search path as previous... 
-                photo.Location = _lastAddedValidPhoto.Location;
+                photo.Location = _lastBuildedPhoto.Location;
                 photo.Position = photo.Location.Position;
                 photo.PositionFromGps = false;
 
-                photo.DebugInfo += "LocFromPhoto" + _lastAddedValidPhoto.Id + ";";
+                photo.DebugInfo += "LocFromPhoto" + _lastBuildedPhoto.Id + ";";
             }
 
             if (photo.Location == null   )
@@ -395,19 +378,22 @@ namespace TripLine.Service
 
                 if (photo.Location != null) photo.DebugInfo += "LocFromPath" + ";";
             }
- 
-            if(photo.IsValid)
-                _lastAddedValidPhoto = photo;
 
             photo.DisplayName = (photo.Location != null) ? photo.Location.GetShortDisplay() : "Unknown Place";
-           
             photo.Excluded = photo.Location == null || photo.Location.Excluded || ! photo.IsValid;
-
             photo.FileInfoContent = finfo.Serialize(pretty:true);
 
-            _photoRepo.Content.Photos.Add(photo);
+            if (photo.IsValid)
+                _lastBuildedPhoto = photo;
+
+            return photo;
         }
 
+
+        public void AddPhoto(Photo photo)
+        {
+            _photoRepo.Content.Photos.Add(photo);
+        }
 
 
     }

@@ -10,8 +10,6 @@ namespace TripLine.Dtos
 {
     public class VisitedPlace: DtoBase<VisitedPlace>
     {
-        public static int NewPlaceId=1000;
-
         public int Id { get; set; }
     
         public IDateRange Date { get; set; }

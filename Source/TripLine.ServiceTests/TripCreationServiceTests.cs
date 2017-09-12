@@ -44,7 +44,7 @@ namespace TripLine.ServiceTests
 
 
         [TestMethod()]
-        public void DetectNewFiles_Twice_RunsOK_SameResults()
+        public void DetectNewFiles_Twice_NewPhotosOnFirstCall()
         {
             _photoStore = new PhotoStore(new PhotoRepo(forceNew:true), _localFileFolder, _locationService);
 
@@ -55,11 +55,10 @@ namespace TripLine.ServiceTests
 
             Assert.IsTrue(result.State.TaskState == BuildTaskState.Idle);
 
-            result = _tripCreationService.DetectNewFiles();
+            result = _tripCreationService.BuildPhotos();
 
             Assert.IsTrue(result.NumNewPhotos > 0);
             Assert.IsTrue(result.State.TaskState == BuildTaskState.Running);
-            Assert.IsTrue(result.State.CurrentStep == BuildStep.FileDetected);
 
             _tripCreationService.Stop();
             _tripCreationService.RejectAll();
@@ -72,9 +71,9 @@ namespace TripLine.ServiceTests
             // second time
             _tripCreationService = new TripCreationService(_tripStore, _photoStore, _locationService);
 
-            var result2 = _tripCreationService.DetectNewFiles();
+            var result2 = _tripCreationService.BuildPhotos();
 
-            Assert.IsTrue(result2.NumNewPhotos == result.NumNewPhotos);
+            Assert.IsTrue(result2.NumNewPhotos == 0);
         }
 
 
@@ -86,9 +85,8 @@ namespace TripLine.ServiceTests
 
             _tripCreationService = new TripCreationService(_tripStore, _photoStore, _locationService);
 
-            _tripCreationService.DetectNewFiles();
 
-            var result = _tripCreationService.DetectTripsFromNewPhotos();
+            var result = _tripCreationService.Build();
 
             Assert.IsTrue(result.NumNewPhotos > 0);
             Assert.IsTrue(result.NumNewTrips > 0);
@@ -110,8 +108,7 @@ namespace TripLine.ServiceTests
 
             _tripCreationService = new TripCreationService(_tripStore, _photoStore, _locationService);
 
-           _tripCreationService.DetectNewFiles();
-            var result = _tripCreationService.DetectTripsFromNewPhotos();
+            var result = _tripCreationService.Build();
 
             Assert.IsTrue(result.NumNewPhotos > 0);
             Assert.IsTrue(result.NumNewTrips > 0);
@@ -126,7 +123,7 @@ namespace TripLine.ServiceTests
             // second time
             _tripCreationService = new TripCreationService(_tripStore, _photoStore, _locationService);
 
-            var result2 = _tripCreationService.DetectNewFiles();
+            var result2 = _tripCreationService.BuildPhotos();
 
             Assert.IsTrue(result2.NumNewPhotos == 0);
 
@@ -139,8 +136,7 @@ namespace TripLine.ServiceTests
 
             _tripCreationService = new TripCreationService(_tripStore, _photoStore, _locationService);
 
-            _tripCreationService.DetectNewFiles();
-            var result = _tripCreationService.DetectTripsFromNewPhotos();
+            var result = _tripCreationService.Build();
 
             Assert.IsTrue(result.NumNewPhotos > 0);
             Assert.IsTrue(result.NumNewTrips > 0);
@@ -155,7 +151,7 @@ namespace TripLine.ServiceTests
             // second time
             _tripCreationService = new TripCreationService(_tripStore, _photoStore, _locationService);
 
-            var result2 = _tripCreationService.DetectNewFiles();
+            var result2 = _tripCreationService.Build();
 
             Assert.IsTrue(result2.NumNewPhotos == 0);
 
