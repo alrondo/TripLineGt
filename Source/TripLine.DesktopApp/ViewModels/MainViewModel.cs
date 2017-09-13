@@ -85,8 +85,28 @@ namespace TripLine.DesktopApp.ViewModels
         public string NumLocationsString => $"{NumLocations} locations";
 
 
+        private int _numPlaces = 0;
 
-        public string NuPlacesString => $"99 places";
+        public int NumPlaces
+        {
+            get
+            {
+                return _numPlaces;
+            }
+            set
+            {
+                if (value == _numPlaces)
+                    return;
+
+                _numPlaces = value;
+                OnPropertyChanged();
+                OnPropertyChanged(nameof(NumPlacesString));
+
+            }
+        }
+
+
+        public string NumPlacesString => $"{NumPlaces} places";
 
         public ICommand ShowOverviewCommand
         {
@@ -136,6 +156,9 @@ namespace TripLine.DesktopApp.ViewModels
 
             NumLocations = _locationService.GetLocations().Count();
 
+            NumPlaces = 99;  // _locationService.GetPlaces().Count();
+
+
         }
 
 
@@ -157,6 +180,14 @@ namespace TripLine.DesktopApp.ViewModels
             ViewTitle = "Your Trips";
 
             HighliteSelectOptions = new HighliteSelectOptions(HighliteTarget.Trip);
+            await _navigator.NavigateTo(typeof(HighliteView));
+        }
+
+        public async Task GoPlacesView()
+        {
+            ViewTitle = "Your Trips";
+
+            HighliteSelectOptions = new HighliteSelectOptions(HighliteTarget.Place);
             await _navigator.NavigateTo(typeof(HighliteView));
         }
 

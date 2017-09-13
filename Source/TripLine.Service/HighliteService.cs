@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Text;
@@ -63,6 +64,9 @@ namespace TripLine.Service
     
 
         private HighliteSelectOptions _selectOptions = null;
+
+
+        //private IEnumerable<int> _outputtedPhotoIds= new List<int>();
         
         public List<HighliteTopic> GetHighlites(HighliteSelectOptions selectOptions=null)
         {
@@ -81,6 +85,9 @@ namespace TripLine.Service
                     topics = GetTripHighlites();
                     break;
 
+                case HighliteTarget.Place:
+                    topics = GetPlaceHighlites();
+                    break;
 
                 case HighliteTarget.Location:
                     topics = GetLocationHighlites();
@@ -110,6 +117,47 @@ namespace TripLine.Service
 
             return topics;
         }
+
+
+        private List<HighliteTopic> GetPlaceHighlites()
+        {
+            List<HighliteTopic> topics = new List<HighliteTopic>();
+
+            var photosByPlaces = _photoStore.GetPhotos().Where(p => p.PlaceId != 0).GroupBy(p => p.PlaceId);
+
+            Debug.Assert(photosByPlaces.Count() >= 1);
+
+            foreach (var group in photosByPlaces)
+            {
+                var place = _locationService.GetPlace(group.Key);
+                
+                var photos = PickPhotos(group);
+
+                var items = photos.Select(p => DoCreateHighliteItem(p.Id, p, 0, HighliteTarget.Place, string.Empty));
+
+                var topic = new HighliteTopic(place.PlaceName);
+                topics.Add(topic);
+            }
+
+            return topics;
+        }
+
+
+        private IHighliteItem  CreatePhotoHighliteItem (Photo p) => DoCreateHighliteItem(p.Id, p, 0, HighliteTarget.Place, string.Empty);
+            
+            
+            
+
+
+        IEnumerable<Photo> PickPhotos(IEnumerable<Photo> photos)
+        {
+            var pciedPhotos = GetRandomPhotos(photos.ToList());
+            return photos;
+        }
+
+        // CreateHighliteItem(photo, count, HighliteTarget.Place,  )
+        
+
 
         private List<HighliteTopic> GetLocationHighlites()
         {
@@ -195,57 +243,24 @@ namespace TripLine.Service
 
         private HighliteTopic CreateHighliteTopicViewModel(string topicName, List<TripByLocationGroup> tripByLocationGroup, int count=5)
         {
-            List<TripItem> tripItems = tripByLocationGroup.Select(g => g.Items.First()).ToList();
+            var tripItems = tripByLocationGroup.Select(g => g.Items.First());
+            var items = tripItems.Select(x => CreateHighliteItem(x.TripId,x.DisplayName,x.CoverPhoto,x.NumPictures, HighliteTarget.Trip));
             
-            var topic = new HighliteTopic()
-            {
-                DisplayName = topicName,
-                Items = tripItems.Select(x => CreateHighliteItem(
-                    x.TripId,
-                    x.DisplayName,
-                    x.CoverPhoto,
-                    x.NumPictures,
-                    HighliteTarget.Trip)).ToList()
-            };
-
-            return topic;
-
+            return new HighliteTopic(topicName, items.ToList());
         }
 
         
         private HighliteTopic CreateHighliteTopicViewModel(string topicName, List<Trip> trips)
         {
+            var items = trips.Select(x => CreateHighliteItem(x, _photoStore.GetPhotos().First(), 5, HighliteTarget.Trip));
 
-            var topic = new HighliteTopic()
-            {
-                DisplayName = topicName,
-                Items = trips.Select(x => CreateHighliteItem(
-                    x,
-                    _photoStore.GetPhotos().First(), 5,
-                    HighliteTarget.Trip)).ToList()
-            };
-
-            return topic;
+            return new HighliteTopic(topicName, items.ToList());
         }
 
         private HighliteTopic CreateHighliteTopicViewModel(string topicName, List<Destination> trips)
         {
-            if (trips==null)
-            {
-
-            }
-
-            var topic = new HighliteTopic()
-            {
-                DisplayName = topicName,
-
-                Items = trips.Select(x => CreateHighliteItem(
-                    x,
-                    _photoStore.GetPhotos().First(), 5,
-                    HighliteTarget.Destination)).ToList()
-            };
-
-            return topic;
+            var items = trips.Select(x => CreateHighliteItem(x,_photoStore.GetPhotos().First(), 5,HighliteTarget.Destination));
+            return new HighliteTopic(topicName, items.ToList());
         }
 
 
@@ -255,8 +270,6 @@ namespace TripLine.Service
 
             return (int) diff.TotalDays;
         }
-
-
 
 
         private HighliteTopic CreateHighliteTopicViewModelForTrip(string topicName, Trip trip)
@@ -274,13 +287,10 @@ namespace TripLine.Service
                 $"Day {g.Key} {g.First().Location.City ?? @"N/A"} ")).ToList();
 
             // on photo per day
-            var topic = new HighliteTopic()
-            {
-                DisplayName = topicName,
-                Items = highliteItems
-            };
-            return topic;
+           return new HighliteTopic(topicName, highliteItems);
+
         }
+
 
         private HighliteTopic CreateHighliteTopicViewModelForLocation(string topicName, Location location)
         {
@@ -293,35 +303,18 @@ namespace TripLine.Service
                 g.Count(),
                 HighliteTarget.Photos,
                 $"{g.Key}")).ToList();
-
-            // on photo per day
-            var topic = new HighliteTopic()
-            {
-                DisplayName = topicName,
-                Items = highliteItems
-            };
-            return topic;
+            
+            return new HighliteTopic(topicName, highliteItems);
         }
-
-        
 
         // doer
         private HighliteTopic DoCreateHighliteTopicViewModel(string topicName, List<Photo> photos,   HighliteTarget target, TitleSource itemTitleSource)
         {
-            
-            var topic = new HighliteTopic()
-            {
-                DisplayName = topicName,
+            var items = photos.Select(p => CreateHighliteItem(p, _photoStore.GetPhotosAtLocation(p.Location.Id)?.Count ?? 0,
+                                                            target, itemTitleSource));
 
-                Items = photos.Select(p => CreateHighliteItem(
-                    p,
-                    _photoStore.GetPhotosAtLocation(p.Location.Id)?.Count ?? 0,
-                    target, itemTitleSource)).ToList()
-            };
-
-            return topic;
+            return new HighliteTopic(topicName, items.ToList() );
         }
-
 
         private IHighliteItem CreateHighliteItem(Photo photo, int count, HighliteTarget target, TitleSource titleSource)
         {

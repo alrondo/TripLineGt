@@ -82,6 +82,17 @@ namespace TripLine.Dtos
         public string DisplayName { get; set; }
 
         public List<IHighliteItem> Items { get; set; }
+
+        public HighliteTopic(string displayName)
+        {
+            DisplayName = displayName;
+        }
+
+        public HighliteTopic(string displayName, List<IHighliteItem> items)
+        {
+            DisplayName = displayName;
+            Items = items;
+        }
     }
 
 }

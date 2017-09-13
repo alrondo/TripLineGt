@@ -166,7 +166,6 @@ namespace TripLine.Service
         public void ConfirmPhotoSession(int sessionId, int? tripId, int? destinationId = null, int? placeId = null)
         {
 
-            // p => p.Unclassified() &
             IEnumerable<Photo> targetPhotos = _photoRepo.Content.Photos.Where(p => p.SessionId == sessionId).ToList();
 
             foreach (var photo in targetPhotos)
@@ -270,9 +269,6 @@ namespace TripLine.Service
 
                 AddPhotoToSession(session, photo);
             }
-
-            //Debug.WriteLine($"New session {session.Describe }");
-
             return session;
         }
 
