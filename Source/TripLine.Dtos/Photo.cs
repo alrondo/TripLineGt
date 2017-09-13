@@ -33,17 +33,7 @@ namespace TripLine.Dtos
         public string PhotoUrl { get; set; } = "";
         public string FileKey { get; set; } = "";
 
-        public DateTime Creation
-        {
-            get
-            {
-                return DateHelper.LowestDate(ExifDate, FileDate);
-            }
-        }
-
-        public DateTime FileDate { get; private set; } = DateTime.MinValue;
-
-        public DateTime ExifDate { get; set; } = DateTime.MinValue;
+        public DateTime Creation { get; set; }
         
         public int SessionId { get; set; } = 0;
         public int TripId { get; set; } = 0;
@@ -90,14 +80,14 @@ namespace TripLine.Dtos
             
         }
 
-        public static Photo NewPhoto(int Id, string url, string fileKey, DateTime fileDate)
+        public static Photo NewPhoto(int Id, string url, string fileKey, DateTime ceationDate)
         {
             var photo = new Photo()
             {
                 Id = Id,
                 PhotoUrl = url,
                 FileKey = fileKey,
-                FileDate = fileDate,
+                Creation = ceationDate,
             };
 
             return photo;

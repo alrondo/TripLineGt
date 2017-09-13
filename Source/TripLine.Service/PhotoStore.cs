@@ -326,20 +326,7 @@ namespace TripLine.Service
 
         public Photo CreatePhoto(FileExtendedInfo finfo)
         {
-            var creationDate = DateHelper.LowestDate(finfo.Creation, finfo.LastWriteDateTimeUtc);
-
-            if (!DateHelper.IsValidDate(creationDate))
-            {
-                creationDate = DateHelper.LowestDate(finfo.LastAccessTimeUtc, finfo.LastAccessTimeUtc); ;
-
-                // todo try get date from filename
-            }
-
-            if (finfo?.ExifInfo.DateTime != null )
-            {
-                creationDate = DateHelper.LowestDate(creationDate, finfo.ExifInfo.DateTime.Value);
-            }
-
+            var creationDate = GetDateForPhoto(finfo);
             var photo = Photo.NewPhoto(_photoRepo.GetNewId(), finfo.FilePath, finfo.FileKey, creationDate);
 
             if (finfo.ExifInfo != null &&  finfo.ExifInfo.GPS_Latitude.HasValue && finfo.ExifInfo.GPS_Longitude.HasValue )
@@ -387,6 +374,21 @@ namespace TripLine.Service
                 _lastBuildedPhoto = photo;
 
             return photo;
+        }
+
+        private DateTime GetDateForPhoto (FileExtendedInfo finfo)
+        {
+            var creationDate = DateHelper.LowestDate(finfo.Creation, finfo.LastWriteDateTimeUtc);
+
+            if (!DateHelper.IsValidDate(creationDate))
+            {
+                creationDate = DateHelper.LowestDate(finfo.LastAccessTimeUtc, finfo.LastAccessTimeUtc); ;
+            }
+            if (finfo?.ExifInfo.DateTime != null)
+            {
+                creationDate = DateHelper.LowestDate(creationDate, finfo.ExifInfo.DateTime.Value);
+            }
+            return creationDate;
         }
 
 

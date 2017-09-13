@@ -273,11 +273,11 @@ namespace TripLine.ServiceTests
                     {
                         var first = sessionPhotos.First();
                         var last  = sessionPhotos.Last();
-                        streamWriter.WriteLine($"  P01) {first.FileDate} {first.PhotoUrl} -> ( {first.ExifDate} )");
+                        streamWriter.WriteLine($"  P01) {first.Creation} {first.PhotoUrl}");
 
                         if (last != first)
                         {
-                            streamWriter.WriteLine($"  P{sessionPhotos.Count,2}) {last.FileDate} {last.PhotoUrl} -> ( {last.ExifDate} )");
+                            streamWriter.WriteLine($"  P{sessionPhotos.Count,2}) {last.Creation} {last.PhotoUrl} ");
                         }
                     }
                     else
