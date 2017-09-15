@@ -324,10 +324,23 @@ namespace TripLine.Service
         {
             var creationDate = GetDateForPhoto(finfo);
             var photo = Photo.NewPhoto(_photoRepo.GetNewId(), finfo.FilePath, finfo.FileKey, creationDate);
+            GetLocationForPhoto(finfo, photo);
 
-            if (finfo.ExifInfo != null &&  finfo.ExifInfo.GPS_Latitude.HasValue && finfo.ExifInfo.GPS_Longitude.HasValue )
+            photo.DisplayName = (photo.Location != null) ? photo.Location.GetShortDisplay() : "Unknown Place";
+            photo.Excluded = photo.Location == null || photo.Location.Excluded || !photo.IsValid;
+            photo.FileInfoContent = finfo.Serialize(pretty: true);
+
+            if (photo.IsValid)
+                _lastBuildedPhoto = photo;
+
+            return photo;
+        }
+
+        private void GetLocationForPhoto(FileExtendedInfo finfo, Photo photo)
+        {
+            if (finfo.ExifInfo != null && finfo.ExifInfo.GPS_Latitude.HasValue && finfo.ExifInfo.GPS_Longitude.HasValue)
             {
-                photo.Position = new GeoPosition( finfo.ExifInfo.GPS_Latitude.Value, finfo.ExifInfo.GPS_Longitude.Value);
+                photo.Position = new GeoPosition(finfo.ExifInfo.GPS_Latitude.Value, finfo.ExifInfo.GPS_Longitude.Value);
 
                 photo.Location = _locationService.GetLocation(photo.Position);
 
@@ -339,13 +352,13 @@ namespace TripLine.Service
                     var place = _locationService.GetNearbyPlace(photo.Location);
 
                     photo.PlaceId = place?.Id ?? 0;
-                }               
+                }
             }
 
-            if (   photo.Location == null  && _lastBuildedPhoto?.Location != null
-                && ( _locationService.GetSearchPath(photo.PhotoUrl)  == _locationService.GetSearchPath(_lastBuildedPhoto.PhotoUrl)) 
-                && ( (photo.Creation.DayOfYear - _lastBuildedPhoto.Creation.DayOfYear) <= 3) 
-                )               
+            if (photo.Location == null && _lastBuildedPhoto?.Location != null
+                && (_locationService.GetSearchPath(photo.PhotoUrl) == _locationService.GetSearchPath(_lastBuildedPhoto.PhotoUrl))
+                && ((photo.Creation.DayOfYear - _lastBuildedPhoto.Creation.DayOfYear) <= 3)
+                )
             {   // No GPS info nut photo has same search path as previous... 
                 photo.Location = _lastBuildedPhoto.Location;
                 photo.Position = photo.Location.Position;
@@ -354,22 +367,13 @@ namespace TripLine.Service
                 photo.DebugInfo += "LocFromPhoto" + _lastBuildedPhoto.Id + ";";
             }
 
-            if (photo.Location == null   )
+            if (photo.Location == null)
             {
                 photo.DebugInfo += "FromPath" + ";";
                 photo.Location = _locationService.GetLocation(finfo.RelativePath);
 
                 if (photo.Location != null) photo.DebugInfo += "LocFromPath" + ";";
             }
-
-            photo.DisplayName = (photo.Location != null) ? photo.Location.GetShortDisplay() : "Unknown Place";
-            photo.Excluded = photo.Location == null || photo.Location.Excluded || ! photo.IsValid;
-            photo.FileInfoContent = finfo.Serialize(pretty:true);
-
-            if (photo.IsValid)
-                _lastBuildedPhoto = photo;
-
-            return photo;
         }
 
         private DateTime GetDateForPhoto (FileExtendedInfo finfo)
