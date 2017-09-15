@@ -70,7 +70,7 @@ namespace TripLine.Service.Tests
         [TestMethod()]
         public void TestLocationRepo_CheckRepo()
         {
-            var locationRepo = new LocationRepo( TripLineConfig.TestLocationRepoPath+"2", forceNew:true);
+            var locationRepo = new LocationRepo( TripLineConfig.LocationRepoPath+"2", forceNew:true);
 
             Assert.IsTrue(locationRepo.Content.Locations.Count == 0);
 

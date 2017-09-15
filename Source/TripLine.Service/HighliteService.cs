@@ -135,7 +135,9 @@ namespace TripLine.Service
 
                 var items = photos.Select(p => DoCreateHighliteItem(p.Id, p, 0, HighliteTarget.Place, string.Empty));
 
-                var topic = new HighliteTopic(place.PlaceName);
+                var itemsList = items.ToList();
+
+                var topic = new HighliteTopic(place.PlaceName, items.ToList());
                 topics.Add(topic);
             }
 
@@ -144,21 +146,14 @@ namespace TripLine.Service
 
 
         private IHighliteItem  CreatePhotoHighliteItem (Photo p) => DoCreateHighliteItem(p.Id, p, 0, HighliteTarget.Place, string.Empty);
-            
-            
-            
-
-
+           
         IEnumerable<Photo> PickPhotos(IEnumerable<Photo> photos)
         {
             var pciedPhotos = GetRandomPhotos(photos.ToList());
             return photos;
         }
 
-        // CreateHighliteItem(photo, count, HighliteTarget.Place,  )
-        
-
-
+       
         private List<HighliteTopic> GetLocationHighlites()
         {
             List<HighliteTopic> topics = new List<HighliteTopic>();
@@ -274,11 +269,8 @@ namespace TripLine.Service
 
         private HighliteTopic CreateHighliteTopicViewModelForTrip(string topicName, Trip trip)
         {
-
             var photos = _photoStore.GetPhotosByTrip(trip.Id);
-
             var photosByDate = photos.GroupBy(p => GetDayNumber(trip, p));
-
             var highliteItems = photosByDate.Select(g => DoCreateHighliteItem(
                 g.First().Id,
                 g.First(),
@@ -288,7 +280,6 @@ namespace TripLine.Service
 
             // on photo per day
            return new HighliteTopic(topicName, highliteItems);
-
         }
 
 
@@ -329,7 +320,8 @@ namespace TripLine.Service
                 DisplayName = displayName,
                 Target = target,
                 PhotoUrl = photo.PhotoUrl,
-                Thumbnail = photo.PhotoUrl
+                Thumbnail = photo.PhotoUrl,
+                Description = target.GetDescription()
             };
             return item;
         }
@@ -344,7 +336,8 @@ namespace TripLine.Service
                 DisplayName = displayName,
                 Target = target,
                 PhotoUrl = photo.PhotoUrl,
-                Thumbnail = photo.PhotoUrl
+                Thumbnail = photo.PhotoUrl,
+                Description = target.GetDescription()
             };
             return item;
         }
@@ -360,7 +353,8 @@ namespace TripLine.Service
                 DisplayName = trip.DisplayName,
                 Target = target,
                 PhotoUrl = photo.PhotoUrl,
-                Thumbnail = photo.PhotoUrl
+                Thumbnail = photo.PhotoUrl,
+                Description = target.GetDescription()
             };
             return item;
         }
@@ -375,7 +369,8 @@ namespace TripLine.Service
                 DisplayName = destination.DisplayName,
                 Target = target,
                 PhotoUrl = photo.PhotoUrl,
-                Thumbnail = photo.PhotoUrl
+                Thumbnail = photo.PhotoUrl,
+                Description = target.GetDescription()
             };
             return item;
         }
@@ -390,7 +385,8 @@ namespace TripLine.Service
                 DisplayName = title,
                 Target = target,
                 PhotoUrl = photo.PhotoUrl,
-                Thumbnail = photo.PhotoUrl
+                Thumbnail = photo.PhotoUrl,
+                Description = target.GetDescription()
             };
             return item;
         }

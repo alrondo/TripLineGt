@@ -28,8 +28,8 @@ namespace TripLine.ServiceTests
         {
             _cut = new PictureExifInformationReader();
             _googleClient = new GoogleClient();
-            _locationRepo = new LocationRepo(TripLineConfig.TestLocationRepoPath, forceNew: true);
-            _placeRepo = new PlaceRepo(TripLineConfig.TestPlaceRepoPath);
+            _locationRepo = new LocationRepo(TripLineConfig.LocationRepoPath, forceNew: true);
+            _placeRepo = new PlaceRepo(TripLineConfig.PlaceRepoPath);
 
             _locationService = new LocationService(_googleClient, _locationRepo, _placeRepo);
 

@@ -35,8 +35,8 @@ namespace TripLine.ServiceTests
             ServiceBootStrapper.Configure();
 
             _googleClient = new GoogleClient();
-            _locationRepo = new LocationRepo(TripLineConfig.TestLocationRepoPath);
-            _placeRepo = new PlaceRepo(TripLineConfig.TestPlaceRepoPath);
+            _locationRepo = new LocationRepo(TripLineConfig.LocationRepoPath);
+            _placeRepo = new PlaceRepo(TripLineConfig.PlaceRepoPath);
             
 
             _locationService = new LocationService(_googleClient, _locationRepo, _placeRepo);
@@ -97,6 +97,28 @@ namespace TripLine.ServiceTests
             }
         }
 
+
+        [TestMethod()]
+        public void HighliteTests_GetHighlites_Places_OK()
+        {
+            string baseDirectory = @"c:\TripLine\Highlites\";
+
+            Directory.CreateDirectory(baseDirectory);
+
+            var hlites = _highliteService.GetHighlites(new HighliteSelectOptions(target: HighliteTarget.Place));
+
+            foreach (var hlite in hlites)
+            {
+                string fpath = baseDirectory + "Place - " + hlite.DisplayName + ".txt";
+                using (var writer = new StreamWriter(File.Open(fpath, FileMode.Create, FileAccess.Write)))
+                {
+                    writer.WriteLine(Path.GetFileNameWithoutExtension(fpath));
+                    writer.WriteLine(hlite.Serialize(pretty: true));
+                }
+            }
+        }
+
+
         [TestMethod()]
         public void TripStoreTests_GetTrips_OK()
         {
@@ -135,6 +157,7 @@ namespace TripLine.ServiceTests
         }
 
 
+
         [TestMethod()]
         public void PhotoStore_GetPhotos_WithPlaces_OK()
         {
@@ -165,6 +188,7 @@ namespace TripLine.ServiceTests
                 }
             }
         }
+
 
 
         [TestMethod()]

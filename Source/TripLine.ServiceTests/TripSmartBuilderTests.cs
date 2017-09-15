@@ -36,8 +36,8 @@ namespace TripLine.ServiceTests
         public TripSmartBuilderTests()
         {
             _googleClient = new GoogleClient();
-            _locationRepo = new LocationRepo(TripLineConfig.TestLocationRepoPath);
-            _placeRepo = new PlaceRepo(TripLineConfig.TestPlaceRepoPath);
+            _locationRepo = new LocationRepo(TripLineConfig.LocationRepoPath);
+            _placeRepo = new PlaceRepo(TripLineConfig.PlaceRepoPath);
 
             _locationService = new LocationService(_googleClient, _locationRepo, _placeRepo);
 

@@ -50,9 +50,6 @@ namespace TripLine.Dtos
             return str;
         }
 
-      
-
-
         public void DebugWrite()
         {
             string str = JsonConvert.SerializeObject(this, Formatting.Indented);
@@ -72,8 +69,7 @@ namespace TripLine.Dtos
         public string Thumbnail { get; set; }
         public string PhotoUrl { get; set; }
         
-        public string Description { get; set; }
-      
+        public string Description { get; set; }   
     }
 
 
