@@ -3,17 +3,18 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         Title="Trip Line"  TitlebarHeight="40" 
         xmlns:controls="http://metro.mahapps.com/winfx/xaml/controls"
+                       Height="950"
         >
-   
-    
-    <Grid Margin="7"  Background="{StaticResource TLineViewBackgroundPanel}"  >
+
+
+    <Grid Margin="7"  Background="{StaticResource TLineViewBackgroundPanel}"   >
         <Grid.Resources>
             <BooleanToVisibilityConverter x:Key="boolToVis" />
         </Grid.Resources>
         <Grid.RowDefinitions>
             <RowDefinition Height="5"  />
             <RowDefinition Height="30"   />
-            <RowDefinition Height="6*"   MinHeight="600"    />
+            <RowDefinition Height="*"   MinHeight="700"    />
         </Grid.RowDefinitions>
 
         <Grid.ColumnDefinitions>
@@ -22,7 +23,7 @@
             <ColumnDefinition Width="2*"   MinWidth="120"  MaxWidth="180"  />
         </Grid.ColumnDefinitions>
 
-        <StackPanel  Grid.Row="0"  Grid.RowSpan="3" Grid.Column="0"  Margin="7,9,0,0" >
+        <StackPanel Name="panLeftShortcut" Grid.Row="0"  Grid.RowSpan="3" Grid.Column="0"  Margin="7,9,0,0" >
             <Button  Command="{Binding ShowOverviewCommand}"   Margin="5,5"  BorderThickness="0"   HorizontalContentAlignment="Left"  >
             <TextBlock Style="{StaticResource WizardHeaderTextSm}" Text="A little Overview"  HorizontalAlignment="Left" />
             </Button>
@@ -49,15 +50,18 @@
       
         </StackPanel>
 
-        <StackPanel  Grid.Row="1" Grid.Column="1"  Margin="0,0,0,0"  Height="30"  Orientation="Horizontal" >
+        <StackPanel Name="panViewTopMenu"  Grid.Row="1" Grid.Column="1"  Margin="0,0,0,0"  Height="30"  Orientation="Horizontal" >
         <Button   Name="BackBtn" Click="BackBtn_OnClick" MaxWidth="40"  >Back</Button>
         <Button Name="AddBtn"  MaxWidth="40" >Add</Button>
         </StackPanel>
 
+        <!--View Is here-->
+        <ContentControl x:Name="ContentControl" Grid.Row="2"  Grid.Column="1"     Margin="0,0,7,0"
+                         VerticalAlignment="Stretch" HorizontalAlignment="Stretch"
+                         VerticalContentAlignment="Stretch"  HorizontalContentAlignment="Stretch" 
+                           />
 
-        <ContentControl  Grid.Row="2"  Grid.Column="1"   x:Name="ContentControl"  Margin="0,0,7,0"   VerticalContentAlignment="Stretch"  HorizontalContentAlignment="Stretch"    />
-
-        <StackPanel  Grid.Row="0"  Grid.RowSpan="3" Grid.Column="2"   Margin="10" >
+        <StackPanel  Name="panRightLibrary"  Grid.Row="0"  Grid.RowSpan="3" Grid.Column="2"   Margin="10" >
             <TextBlock  Style="{StaticResource WizardHeaderTextSm}" >Your collection</TextBlock>
 
             <StackPanel  Orientation="Vertical" Margin="0,7,0,7" >
@@ -93,7 +97,6 @@
             
         </StackPanel>
 
-
     </Grid>
 
     <controls:MetroWindow.Flyouts>
@@ -115,7 +118,7 @@
                         <ColumnDefinition Width="auto"   />
                     </Grid.ColumnDefinitions>
 
-                    <ContentControl Grid.Row="0"  Background="AliceBlue" Foreground="Black" x:Name="MainFlyoutContentControl"   Width="600" Height="500"   />
+                    <ContentControl Grid.Row="0"  Background="AliceBlue" Foreground="Black" x:Name="MainFlyoutContentControl"   Width="600" Height="800"   />
                 </Grid>
 
             </controls:Flyout>

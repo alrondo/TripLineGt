@@ -13,75 +13,9 @@ using System.Collections.ObjectModel;
 using TripLine.Service;
 using TripLine.Dtos;
 using TripLine.DesktopApp.View;
-using System.Windows.Input;
-using System.Threading.Tasks;
 
 namespace TripLine.DesktopApp.ViewModels
 {
-    
-    public class HighliteItemViewModel : BaseViewModel, IHighliteItem
-    {
-        public string DefaultImg { get; set; } = "pack://application:,,,/Resources/hawai.jpg";
-
-        public string Thumbnail { get; set; } 
-        public string PhotoUrl { get; set; }
-
-        public string DisplayName { get; set; } = "abc";
-        public string Description { get; set; }
-
-        public int    Id      { get; set; }
-
-        public HighliteTarget Target { get; set; }
-
-        public event Action<HighliteItemViewModel> OnOpen;
-
-        public event Action<HighliteItemViewModel> OnRemoved;
-
-    
-        public ICommand OpenCommand
-        {
-            get
-            {
-                return new VMBladeCommand(async () => await ExecOpen(), () => true, "");  
-            }
-        }
-
-        public HighliteItemViewModel() : base("HighliteItem")
-        { }
-
-
-        private async Task ExecOpen()       
-        {
-            this?.OnOpen(this);
-            
-            OnPropertyChanged(nameof(DisplayName));
-        }
-
-
-    }
-
-
-    public class HighliteTopicViewModel : BaseViewModel, IHighliteTopic
-    {
-        public string DisplayName { get; set; }
-
-        // Little trick to disable listbox selection...   We bind Listbox selectitems to NoSelection.  
-        // The real selections are handled by the checkboxes inside the list items.
-        public HighliteItemViewModel NoSelection
-        {
-            get { return null; }   // no selection
-            set { OnPropertyChanged(); }
-        }
-
-        public List<HighliteItemViewModel> Items { get; set; }
-
-        public HighliteTopicViewModel() : base("HighliteTopic")
-        { }
-    }
-
-    
-
-    //[NotifyProperty(ApplyToStateMachine = false)]
     public class HighliteViewModel : BaseViewModel , IDisposable
     {
         private ILog _log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);

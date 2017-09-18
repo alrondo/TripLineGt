@@ -364,7 +364,7 @@ new GeoPosition(45.4568847222222,73.4437638888889),
 
                 foreach (var location in locations)
                 {
-                    var place = _locationService.GetNearbyPlace(location);
+                    var place = _locationService.GetNearbyPlace(location.Position, location.Id);
 
                     if (place == null)
                     {

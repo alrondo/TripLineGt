@@ -54,6 +54,13 @@ namespace TripLine.Service
             return newFilesToProcess;
         }
 
+
+
+        public IEnumerable<Photo> GetTravelPhotos()
+        {
+            return _photoRepo.Content.Photos.Where(p => p.IsTravel);
+        }
+
         public List<Photo> GetPhotos()
         {
             return _photoRepo.Content.Photos;
@@ -349,7 +356,7 @@ namespace TripLine.Service
                     photo.DebugInfo += "LocFromPos" + ";";
                     photo.PositionFromGps = true;
 
-                    var place = _locationService.GetNearbyPlace(photo.Location);
+                    var place = _locationService.GetNearbyPlace(photo.Position, photo.Location.Id);
 
                     photo.PlaceId = place?.Id ?? 0;
                 }

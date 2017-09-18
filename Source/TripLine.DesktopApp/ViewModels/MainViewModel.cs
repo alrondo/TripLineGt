@@ -133,11 +133,7 @@ namespace TripLine.DesktopApp.ViewModels
                 return new VMBladeCommand(() => GoLocationsView(), () => true, "");
             }
         }
-
         
-
-       
-
         public MainViewModel(ContentControl contentControl) : base("Home")
         {
             Initialize();
@@ -153,17 +149,22 @@ namespace TripLine.DesktopApp.ViewModels
             _locationService = Navigator.Configuration.IoC.Resolve(typeof(LocationService)) as LocationService;
 
             NumTrips = _tripStore.GetTrips().Count;
-
             NumLocations = _locationService.GetLocations().Count();
-
-            NumPlaces = 99;  // _locationService.GetPlaces().Count();
-
-
+            NumPlaces = _tripStore.GetPlacesCount();
         }
 
+        private bool _debugStartup = false;
 
         public async Task GoStartupView()
         {
+            if (_debugStartup)
+            {
+                ViewTitle = "Lets debug this";
+
+                HighliteSelectOptions = null;
+                await _navigator.NavigateTo(typeof(DebugView));
+            }
+            else
             if (_tripCreationService.PeakForNewTripPhotos())
                 await GoWizard();
             else
@@ -171,9 +172,7 @@ namespace TripLine.DesktopApp.ViewModels
                 HighliteSelectOptions = null;
                 await GoHome();
             }
-                
         }
-
 
         public async Task GoTripsView()
         {

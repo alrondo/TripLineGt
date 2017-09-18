@@ -5,6 +5,7 @@ using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Newtonsoft.Json;
 using TripLine.Dtos;
 
 namespace Tripline.WebConsumer
@@ -313,6 +314,10 @@ namespace Tripline.WebConsumer
                ?? results.FirstOrDefault();
 
         public bool IsOk => status.EqualLt("ok");
+
+        public IEnumerable<GPlacesResult> GetOtherResults(GPlacesResult selectResult) => results?.Where(r => r != selectResult);
+         
+        public string Serialize() => JsonConvert.SerializeObject(this, Newtonsoft.Json.Formatting.Indented);
     }
 
 
@@ -400,7 +405,6 @@ namespace Tripline.WebConsumer
             string url = nearbyplaces + $"&{GeoCodeParams.location}={latlngValue}&{GeoCodeParams.radius}={radius}";
 
             var res = base.ExecuteGetRequest<PlacesRequestResult>(url);
-
             return res;
         }
     }

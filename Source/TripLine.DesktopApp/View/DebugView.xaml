@@ -1,0 +1,41 @@
+﻿<view:BaseView x:Class="TripLine.DesktopApp.View.DebugView"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+      xmlns:cvt="clr-namespace:TripLine.DesktopApp.Converters"
+      xmlns:view="clr-namespace:TripLine.DesktopApp.View"
+      xmlns:vmodel="clr-namespace:TripLine.DesktopApp.ViewModels"
+      mc:Ignorable="d" 
+      d:DesignHeight="800" d:DesignWidth="600"   >
+
+    <Grid Margin="7,0,7,0"  Background="{StaticResource TLineViewBackgroundPanel}" >
+        <Grid.Resources>
+            <cvt:VisibilityConverter x:Key="VisibilityConverter"/>
+            <cvt:InvisibilityConverter x:Key="InvisibilityConverter"/>
+            <cvt:PathToImageSourceConverter x:Key="ImageConverter"/>
+        </Grid.Resources>
+
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="auto"  />
+            <RowDefinition Height="*"   />
+        </Grid.RowDefinitions>
+
+        <StackPanel Grid.Row="0"  Grid.ColumnSpan="2" Orientation="Vertical"  Background="{StaticResource TLineViewBackgroundPanel}"  Margin="0,7,0,7" >
+            <TextBlock Text="Debug View"  Style="{StaticResource WizardBannerText}"  Margin="0,0,0,0" />
+        </StackPanel>
+
+        <DockPanel  Grid.Row="1" Grid.ColumnSpan="2"  Background="Green"  >
+            <!-- Background="{StaticResource TLineViewBackground}" -->
+        </DockPanel>
+
+    </Grid>
+</view:BaseView>
+       
+
+
+

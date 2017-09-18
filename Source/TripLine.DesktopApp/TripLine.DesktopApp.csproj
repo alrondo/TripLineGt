@@ -89,12 +89,18 @@
     <Compile Include="Models\CandidateModel.cs" />
     <Compile Include="Models\PhotoSessionModel.cs" />
     <Compile Include="ViewModels\DebugInfoViewModel.cs" />
+    <Compile Include="ViewModels\DebugViewModel.cs" />
+    <Compile Include="ViewModels\HighliteItemViewModel.cs" />
+    <Compile Include="ViewModels\HighliteTopicViewModel.cs" />
     <Compile Include="ViewModels\MainViewModel.cs" />
     <Compile Include="ViewModels\TripWizardViewModel.cs" />
     <Compile Include="ViewModels\AlbumViewModel.cs" />
     <Compile Include="ViewModels\VMBladeCommand.cs" />
     <Compile Include="View\AlbumView.xaml.cs">
       <DependentUpon>AlbumView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\DebugView.xaml.cs">
+      <DependentUpon>DebugView.xaml</DependentUpon>
     </Compile>
     <Compile Include="View\HighliteView.xaml.cs">
       <DependentUpon>HighliteView.xaml</DependentUpon>
@@ -122,6 +128,10 @@
       <SubType>Code</SubType>
     </Compile>
     <Page Include="View\AlbumView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="View\DebugView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
