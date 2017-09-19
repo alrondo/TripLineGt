@@ -19,17 +19,9 @@ namespace TripLine.DesktopApp.ContentUserControl
         private ILog _log = LogManager.GetLogger("Main");
         //private readonly IWindowCommands _windowCommands;
 
-
         public readonly MainViewModel _mainViewModel;
         
         public Flyout MainFlyout { get; private set; }
-
-
-        /*
-                private MetroWindow MainWindow => (MetroWindow) Application.Current.MainWindow;
-        */
-
-        // private Flyout HardwareOverviewFlyout => MainWindow.Flyouts.Items[0] as Flyout;
 
 
         public Main(IWindowCommands commands, Flyout flyout, ContentControl flyoutContenetControl)
@@ -37,8 +29,6 @@ namespace TripLine.DesktopApp.ContentUserControl
             InitializeComponent();
 
             _mainViewModel = MainViewModel.Instance;
-
-            //_windowCommands = commands;
 
             MainFlyout = flyout;
             
@@ -59,8 +49,6 @@ namespace TripLine.DesktopApp.ContentUserControl
                 else
                     // change startup view
                     await _mainViewModel.GoStartupView();
-
-                    //await _nav.NavigateTo(typeof(HighliteView));
             }
             catch (Exception e)
             {

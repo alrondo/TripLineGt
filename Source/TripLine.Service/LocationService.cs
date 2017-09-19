@@ -108,42 +108,57 @@ namespace TripLine.Service
         }
 
 
-        public VisitedPlace GetNearbyPlace(Location location)
+        public VisitedPlace GetNearbyPlace(GeoPosition position, int locationId)
         {
-            VisitedPlace place = null;
-            var response = _googleClient.GetNearbyPlaces(location.Position.Latitude, location.Position.Longitude);
+            var response = _googleClient.GetNearbyPlaces(position.Latitude, position.Longitude);
 
-            if (response.IsOk)
+            GPlacesResult selectedResult = null;
+
+            if (response.IsOk && response.results.Any())
             {
-                var result = response.results?.FirstOrDefault(r => r.types.Any(t => t == "point_of_interest"));
+                selectedResult = response.results.FirstOrDefault(r => r.types.Any(t => t == "point_of_interest"));
 
-                if (result == null)
-                    return null;
-
-                place = _placeRepo.VisitedPlaces.FirstOrDefault(p => p.LocationId == location.Id && p.PlaceName == result.name);
-
-                if ( place == null)
-                {
-                    place = new VisitedPlace()
-                    {
-                        Id = _placeRepo.GetNewId(),
-                        LocationId = location.Id,
-                        PlaceName = result.name,
-                        Types = result.types
-                    };
-                    _placeRepo.VisitedPlaces.Add(place);
-                    _placeRepo.Save();
-                    Debug.WriteLine($"Found new place {place.PlaceName} at {location.Position.GetDisplay()} :: {place.Types} ");
-                }
-
-                return place;
-            }
-            else
-            {
-                Debug.WriteLine($"Could not find location by name for {location.Position.GetDisplay()} ");
+                if (selectedResult == null)
+                    selectedResult = response.results.FirstOrDefault();
             }
 
-            return null;
+
+            if (selectedResult == null)
+            {
+                Debug.WriteLine($"Could not find location by name for {position.GetDisplay()} ");
+                return null;
+            }
+
+            var place = new VisitedPlace()
+            {
+                Where = position.LatLong,
+                LocationId = locationId,
+                PlaceName = selectedResult.name.RemoveDiacritics(),
+                Types = selectedResult.types
+            };
+
+            var existing = _placeRepo.VisitedPlaces.FirstOrDefault(p => p.LocationId == place.LocationId &&
+                                                          p.PlaceName == place.PlaceName);
+
+            if (existing != null)
+                return existing;
+      
+            // Handle New place
+            place.Id = _placeRepo.GetNewId();
+            _placeRepo.VisitedPlaces.Add(place);
+            _placeRepo.Save();
+
+            string baseDirectory = @"c:\TripLine\Places\Request\";
+
+            Directory.CreateDirectory(baseDirectory);
+            string fpath = baseDirectory + $"{place.Id}_{place.PlaceName}" + ".txt";
+            using (var writer = new StreamWriter(File.Open(fpath, FileMode.Create, FileAccess.Write)))
+            {
+                writer.WriteLine(response.Serialize());
+            }
+            Debug.WriteLine($"Found new place {place.PlaceName} at {position.GetDisplay()} :: {place.Types} ");
+
+            return place;  
         }
 
         private List<Location> _newLocations = new List<Location>();

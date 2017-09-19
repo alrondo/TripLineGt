@@ -179,9 +179,8 @@ namespace TripLine.Service
             _tripRepo.Save();
         }
 
-
-
-
+        public int GetPlacesCount() => _photoStore.GetTravelPhotos().Where(p => p.PlaceId != 0).GroupBy(p => p.PlaceId).Count();
+       
         public List<Trip> GetTrips(int maxCount=int.MaxValue) => _tripRepo.Content.Trips.Take(maxCount).ToList();
 
         public Trip GetTrip(int id) => _tripRepo.Content.Trips.FirstOrDefault(t => t.Id == id);

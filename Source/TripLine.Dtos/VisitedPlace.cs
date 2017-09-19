@@ -16,8 +16,13 @@ namespace TripLine.Dtos
         public string PlaceName { get; set; }
         public string Summary { get; set; }
         public int LocationId { get; set; }
+
+        public string Where { get; set; }
+
         public string[] Types { get; set; }
         public string Icon { get; set; }
+
+        public string NearbyPlaces { get; set; }
     }
 
 

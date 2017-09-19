@@ -7,7 +7,7 @@
       xmlns:view="clr-namespace:TripLine.DesktopApp.View"
       xmlns:vmodel="clr-namespace:TripLine.DesktopApp.ViewModels"
       mc:Ignorable="d" 
-      d:DesignHeight="500" d:DesignWidth="600"   >
+      d:DesignHeight="800" d:DesignWidth="600"   >
 
     <Grid Margin="7,0,7,0"  Background="{StaticResource TLineViewBackgroundPanel}" >
         <Grid.Resources>
@@ -36,7 +36,6 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="auto"  />
             <RowDefinition Height="*"   />
-            <!--<RowDefinition Height="10"  />-->
         </Grid.RowDefinitions>
 
         <StackPanel Grid.Row="0"  Grid.ColumnSpan="2" Orientation="Vertical"  Background="{StaticResource TLineViewBackgroundPanel}"  Margin="0,7,0,7" >
@@ -64,7 +63,6 @@
                                 <ListBox.ItemsPanel>
                                     <ItemsPanelTemplate>
                                         <WrapPanel Orientation="Horizontal"  Margin="4,0,0,4" Background="{StaticResource TLineViewBackground}"  />
-                                        <!--<StackPanel Orientation="Horizontal"    />-->
                                     </ItemsPanelTemplate>
                                 </ListBox.ItemsPanel>
                             </ListBox>
@@ -72,64 +70,9 @@
                                       
                         </StackPanel>
                             
-                            
-                        <!--<ListBox.ItemTemplate>-->
-                   
-                    <!--</ListBox.ItemTemplate>
-                    </ListBox>
-                        </StackPanel>-->
-
                     </DataTemplate>
                 </ListBox.ItemTemplate>
             </ListBox>
-        </DockPanel>
-
-        <DockPanel  Grid.Row="1" Grid.ColumnSpan="2" Visibility="Collapsed">
-            <!--<ListBox  SelectionMode="Extended" Background="LightGoldenrodYellow">-->
-            <!--<ListBox.ItemTemplate>            <DataTemplate>-->
-            <StackPanel  Orientation="Vertical">
-                <StackPanel  Orientation="Vertical" >
-                    <TextBlock   >Just for you</TextBlock>
-
-                    <StackPanel  Orientation="Horizontal" >
-                        <DockPanel  Height="78" Width="100"  >
-                            <!--<Image  Source="pack://application:,,,/Resources/hawai.jpg" />-->
-                            <Image  Source="pack://application:,,,/Resources/hawai.jpg" />
-                        </DockPanel>
-                        <!--idem-->
-                        <DockPanel  Height="78" Width="100"  >
-                            <Image  Source="pack://application:,,,/Resources/hawai.jpg" />
-                        </DockPanel>
-                        <DockPanel  Height="78" Width="100"  >
-                            <Image  Source="pack://application:,,,/Resources/hawai.jpg" />
-                        </DockPanel>
-                    </StackPanel>
-                </StackPanel>
-
-                <!--idem-->
-                <StackPanel  Orientation="Vertical" >
-                    <TextBlock  Background="Wheat" >Just for you</TextBlock>
-
-                    <StackPanel  Orientation="Horizontal" >
-                        <DockPanel  Height="78" Width="100"  >
-                            <Image  Source="pack://application:,,,/Resources/hawai.jpg" />
-                        </DockPanel>
-                        <DockPanel  Height="78" Width="100"  >
-                            <Image  Source="pack://application:,,,/Resources/hawai.jpg" />
-                        </DockPanel>
-                        <DockPanel  Height="78" Width="100"  >
-                            <Image  Source="pack://application:,,,/Resources/hawai.jpg" />
-                        </DockPanel>
-                    </StackPanel>
-                </StackPanel>
-
-            </StackPanel>
-
-
-            <!--</DataTemplate>  </ListBox.ItemTemplate>-->
-            <!--</ListBox>-->
-
-
         </DockPanel>
 
     </Grid>
