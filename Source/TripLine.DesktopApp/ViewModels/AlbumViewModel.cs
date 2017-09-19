@@ -12,7 +12,6 @@ using TripLine.Toolbox.Extensions;
 using TripLine.WPF.MVVM;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
-using System.Threading.Tasks;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Xml;
@@ -22,49 +21,6 @@ using System.Windows;
 
 namespace TripLine.DesktopApp.ViewModels
 {
-    public class AlbumItemViewModel :  BaseViewModel
-    {
-        public string DefaultImg { get; set; } = "pack://application:,,,/Resources/hawai.jpg";
-
-        public string Thumbnail => PhotoUrl;
-        public string PhotoUrl { get; set; }
-
-        public string DisplayName { get; set; } = "abc";
-        public string Description { get; set; }
-
-
-        public int PhotoId { get; set; }
-
-        public int    Id      { get; set; }
-
-        public HighliteTarget Target { get; set; }
-
-        public event Action<AlbumItemViewModel> OnOpen;
-        public event Action<AlbumItemViewModel> OnRemove;
-
-        public AlbumItemViewModel() : base("AlbumItem")
-        { }
-
-        public ICommand OpenCommand
-        {
-            get
-            {
-                return new VMBladeCommand(async () => await ExecOpen(), () => true, ""); // CanExecuteOk(), "");
-            }
-        }
-
-
-        private async Task ExecOpen()
-        {
-            this?.OnOpen(this);
-
-            OnPropertyChanged(nameof(DisplayName));
-        }
-
-
-    }
-
-
     public class AlbumSectionViewModel : BaseViewModel
     {
         public string DisplayName { get; set; }

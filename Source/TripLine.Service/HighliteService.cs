@@ -182,20 +182,27 @@ namespace TripLine.Service
 
             var topic1 = CreateHighliteTopicViewModel("Visited locations", tripByLocationName);
 
+
             var tripByLocationCountry = _tripStore.GetTripByCountry();
 
             var topic2 = CreateHighliteTopicViewModel("Visited country", tripByLocationCountry);
 
-            var topic3 = CreateHighliteTopicViewModel("Recent trips", _tripStore.GetTrips(15));
+            var trips = _tripStore.GetTrips();
 
-       //     var topic5 = DoCreateHighliteTopicViewModel("Random locations", GetRandomPhotos(photos.ToList()),  HighliteTarget.Location,  TitleSource.LocationName);
+            var latestTrips = trips.OrderByDescending(t => t.FromDate).Take(3);
+
+            var oldestTrips = trips.OrderBy(t => t.FromDate).Take(3);
+            
+            var topic3 = CreateHighliteTopicViewModel("Latest trips", latestTrips);
+            
+            var topic4 = CreateHighliteTopicViewModel("Latest trips", oldestTrips);
 
             var topics = new List<HighliteTopic>()
             {
                 topic1,
                 topic2,
                 topic3,
-                //topic5
+                topic4
             };
 
             return topics;
@@ -236,28 +243,23 @@ namespace TripLine.Service
         }
 
 
-        private HighliteTopic CreateHighliteTopicViewModel(string topicName, List<TripByLocationGroup> tripByLocationGroup, int count=5)
+        private HighliteTopic CreateHighliteTopicViewModel(string topicName, IEnumerable<TripByLocationGroup> tripByLocationGroup, int count=5)
         {
             var tripItems = tripByLocationGroup.Select(g => g.Items.First());
-            var items = tripItems.Select(x => CreateHighliteItem(x.TripId,x.DisplayName,x.CoverPhoto,x.NumPictures, HighliteTarget.Trip));
+
+            var items = tripItems.Select(x => CreateHighliteItem(x));
             
             return new HighliteTopic(topicName, items.ToList());
         }
 
         
-        private HighliteTopic CreateHighliteTopicViewModel(string topicName, List<Trip> trips)
+        private HighliteTopic CreateHighliteTopicViewModel(string topicName, IEnumerable<Trip> trips)
         {
-            var items = trips.Select(x => CreateHighliteItem(x, _photoStore.GetPhotos().First(), 5, HighliteTarget.Trip));
+            var items = trips.Select(x => CreateHighliteItem(x, _photoStore.GetPhotos().First(), 5));
 
             return new HighliteTopic(topicName, items.ToList());
         }
-
-        private HighliteTopic CreateHighliteTopicViewModel(string topicName, List<Destination> trips)
-        {
-            var items = trips.Select(x => CreateHighliteItem(x,_photoStore.GetPhotos().First(), 5,HighliteTarget.Destination));
-            return new HighliteTopic(topicName, items.ToList());
-        }
-
+        
 
         int GetDayNumber( Trip trip,  Photo photo)
         {
@@ -344,45 +346,21 @@ namespace TripLine.Service
         }
 
 
-        private IHighliteItem CreateHighliteItem(Trip  trip, Photo photo, int count, HighliteTarget target)
+        private IHighliteItem CreateHighliteItem(TripItem titem)
+            => DoCreateHighliteItem(titem.TripId, titem.CoverPhoto, titem.NumPictures, HighliteTarget.Trip, titem.DisplayName);
+
+        private IHighliteItem CreateHighliteItem(Trip trip, Photo photo, int count)
+            => DoCreateHighliteItem(trip.Id, photo, count, HighliteTarget.Trip, trip.DisplayName);
+
+
+
+        private IHighliteItem DoCreateHighliteItem(int targetId, Photo photo, int count, HighliteTarget target, string title)
         {
             Debug.Assert(photo.Location != null);
 
             var item = new HighliteItem()
             {
-                TargetId = trip.Id,
-                DisplayName = trip.DisplayName,
-                Target = target,
-                PhotoUrl = photo.PhotoUrl,
-                Thumbnail = photo.PhotoUrl,
-                Description = target.GetDescription()
-            };
-            return item;
-        }
-
-        private IHighliteItem CreateHighliteItem(Destination destination, Photo photo, int count, HighliteTarget target)
-        {
-            Debug.Assert(photo.Location != null);
-
-            var item = new HighliteItem()
-            {
-                TargetId = destination.Id,
-                DisplayName = destination.DisplayName,
-                Target = target,
-                PhotoUrl = photo.PhotoUrl,
-                Thumbnail = photo.PhotoUrl,
-                Description = target.GetDescription()
-            };
-            return item;
-        }
-
-        private IHighliteItem DoCreateHighliteItem(int id, Photo photo, int count, HighliteTarget target, string title)
-        {
-            Debug.Assert(photo.Location != null);
-
-            var item = new HighliteItem()
-            {
-                TargetId = id,
+                TargetId = targetId,
                 DisplayName = title,
                 Target = target,
                 PhotoUrl = photo.PhotoUrl,
@@ -391,6 +369,9 @@ namespace TripLine.Service
             };
             return item;
         }
+        
+       
+
 
         private string GetItemTitle(TitleSource titleSource, Photo photo)
         {
