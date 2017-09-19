@@ -3,16 +3,9 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-
-
-using TripLine.Toolbox.Extensions;
-
-
-using TripLine.WPF.MVVM;
 using System.Collections.ObjectModel;
 using TripLine.Service;
 using TripLine.Dtos;
-using TripLine.DesktopApp.View;
 
 namespace TripLine.DesktopApp.ViewModels
 {
@@ -33,9 +26,6 @@ namespace TripLine.DesktopApp.ViewModels
             set { OnPropertyChanged(); }
         }
 
-
-
-
         private readonly MainViewModel _mainViewModel;
 
         public HighliteViewModel (PhotoStore photoStore, HighliteService highliteService) : base("Highlite")
@@ -50,8 +40,6 @@ namespace TripLine.DesktopApp.ViewModels
         {
            
         }
-
-       
         
         public ObservableCollection<HighliteTopicViewModel> _topics = new ObservableCollection<HighliteTopicViewModel>();
 
@@ -122,30 +110,13 @@ namespace TripLine.DesktopApp.ViewModels
         {
             HighliteTopicViewModel vmodel = AutoMapper.Mapper.Map<HighliteTopicViewModel>(topic);
             vmodel.Items = topic.Items.Take(5).Select(i => CreateHighliteItemViewModel(i)).ToList();
-
-
             return vmodel;
          }
 
         private HighliteItemViewModel CreateHighliteItemViewModel(IHighliteItem item)
         {
             HighliteItemViewModel vmodel = AutoMapper.Mapper.Map<HighliteItemViewModel>(item);
-
             return vmodel;
         }
-
-        //private async void OnSelected(HighliteItem hitem)
-        //{
-        //}
-
-
-        //private void OnRemoved(HighliteItem hitem)
-        //{
-        //}
-
-
-
-
-
     }
 }

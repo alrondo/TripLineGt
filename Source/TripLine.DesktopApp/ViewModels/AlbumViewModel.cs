@@ -120,14 +120,12 @@ namespace TripLine.DesktopApp.ViewModels
     public class AlbumViewModel : BaseViewModel , IDisposable
     {
         private ILog _log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
-
-
         private readonly TripStore _tripStore;
         private readonly PhotoStore _photoStore;
-        private readonly HighliteService _highliteService;
-        private readonly LocationService _locationService;
-        private readonly MainViewModel _mainViewModel;
-
+        private readonly HighliteService    _highliteService;
+        private readonly LocationService    _locationService;
+        private readonly MainViewModel      _mainViewModel;
+        private readonly DebugInfoViewModel _debugInfoVModel;
 
         public string DisplayName { get; set; } = "Your selected album";
 
@@ -140,7 +138,6 @@ namespace TripLine.DesktopApp.ViewModels
         }
 
 
-        DebugInfoViewModel _debugInfoVModel;
         public string Title => "Photo";
         public AlbumViewModel (TripStore tripStore, PhotoStore photoStore, HighliteService highliteService,
     							LocationService locationService, DebugInfoViewModel debugInfo) : base("Highlite")
@@ -151,7 +148,6 @@ namespace TripLine.DesktopApp.ViewModels
             _locationService = locationService;
             _debugInfoVModel = debugInfo;
             _mainViewModel = MainViewModel.Instance;
-
             _mainViewModel.OnRemove += _mainViewModel_OnRemove;
             Load();
         }
@@ -189,10 +185,7 @@ namespace TripLine.DesktopApp.ViewModels
         private void ExecInfo()
         {
             ShowInfo = ! ShowInfo;
-
             this.OnInfo?.Invoke(this);
-
-            //OnPropertyChanged(nameof(DisplayName));
         }
 
         public ObservableCollection<AlbumSectionViewModel> _sections = new ObservableCollection<AlbumSectionViewModel>();
@@ -244,12 +237,9 @@ namespace TripLine.DesktopApp.ViewModels
             var hitemVM =_mainViewModel.CurrentHighliteItemViewModel;
             _sections = LoadFromHighliteTarget(hitemVM.Target, hitemVM.TargetId);
 
-            //if (!_sections.Any())
-            //    return;
-
             SelectedSection = Sections.First();
 
-            var photo = _photoStore.GetPhoto(SelectedSection.Items.First().Id);
+            var photo = _photoStore.GetPhoto(SelectedSection.Items.First().PhotoId);
             DebugInfo.Load(photo);
             OnPropertyChanged(nameof(DisplayName));
             OnPropertyChanged(nameof(SelectedSection));
@@ -271,7 +261,6 @@ namespace TripLine.DesktopApp.ViewModels
                     throw new NotImplementedException();
             }
         }
-
 
         public ObservableCollection<AlbumSectionViewModel> LoadFromTrip(int id)
         {
@@ -304,7 +293,6 @@ namespace TripLine.DesktopApp.ViewModels
             foreach (var dest in trip.Destinations)
                 list.Add(CreateSection(dest));
 
-
             return list;
         }
 
@@ -314,6 +302,7 @@ namespace TripLine.DesktopApp.ViewModels
             list.Add(CreateSection(location));
             return list;
         }
+
         private AlbumSectionViewModel CreateSection(Destination destination)
         {
             AlbumSectionViewModel vmodel = AutoMapper.Mapper.Map<AlbumSectionViewModel>(destination);
@@ -351,16 +340,14 @@ namespace TripLine.DesktopApp.ViewModels
             vmodel.OnRemove += OnItemRemoved;
         }
         
-        private async void OnItemOpen(AlbumItemViewModel obj)
+        private async void OnItemOpen(AlbumItemViewModel albumItem)
         {
-            SelectedSection.SelectedItem = obj;
+            SelectedSection.SelectedItem = albumItem;
 
-            //if (obj.Target == HighliteTarget.Photos)
-            //{
-            var photo = _photoStore.GetPhoto(obj.Id);
+            var photo = _photoStore.GetPhoto(albumItem.PhotoId);
 
-            Debug.WriteLine($"> Photo {obj.DisplayName}");
-            Debug.WriteLine($">       {obj.PhotoUrl}");
+            Debug.WriteLine($"> Photo {albumItem.DisplayName}");
+            Debug.WriteLine($">       {albumItem.PhotoUrl}");
 
             photo.Dump("Open item ");
 
