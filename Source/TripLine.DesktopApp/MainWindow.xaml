@@ -13,7 +13,7 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="5"  />
             <RowDefinition Height="30"   />
-            <RowDefinition Height="6*"   MinHeight="600"    />
+            <RowDefinition Height="900"   MinHeight="600"    />
         </Grid.RowDefinitions>
 
         <Grid.ColumnDefinitions>
@@ -50,12 +50,15 @@
         </StackPanel>
 
         <StackPanel  Grid.Row="1" Grid.Column="1"  Margin="0,0,0,0"  Height="30"  Orientation="Horizontal" >
-        <Button   Name="BackBtn" Click="BackBtn_OnClick" MaxWidth="40"  >Back</Button>
-        <Button Name="AddBtn"  MaxWidth="40" >Add</Button>
+        <Button   Name="BackBtn" Click="BackBtn_OnClick" MinWidth="40"  >Back</Button>
+        <Button Name="AddBtn"  MinWidth="40" >Add</Button>
+        <Button Name="RemoveBtn" Click="RemoveBtn_OnClick"  MinWidth="40" >Remove</Button>
+
         </StackPanel>
 
 
-        <ContentControl  Grid.Row="2"  Grid.Column="1"   x:Name="ContentControl"  Margin="0,0,7,0"   VerticalContentAlignment="Stretch"  HorizontalContentAlignment="Stretch"    />
+        <ContentControl  Grid.Row="2"  Grid.Column="1"   x:Name="ContentControl"  Margin="0,0,7,0"   
+                         VerticalContentAlignment="Stretch"  HorizontalContentAlignment="Stretch"    />
 
         <StackPanel  Grid.Row="0"  Grid.RowSpan="3" Grid.Column="2"   Margin="10" >
             <TextBlock  Style="{StaticResource WizardHeaderTextSm}" >Your collection</TextBlock>

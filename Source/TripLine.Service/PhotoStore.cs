@@ -81,7 +81,7 @@ namespace TripLine.Service
             .OrderBy(f => f.Creation).ToList()
             .ToList();
 
-        public int NumNewPhotosFiles => NewImportPhotos.Count();
+        public int NumNewPhotosFiles => NewImportPhotos?.Count() ?? 0;
         
         public int NumNotImportedPhoto => _photoRepo.Content.Photos
             .Count(p => p.Unclassified && !p.IsTravel && p.IsValid);
@@ -102,7 +102,7 @@ namespace TripLine.Service
         public int TotalRepoPhotos => _photoRepo.Content.Photos.Count;
 
 
-        public IEnumerable<Photo> NewImportPhotos => _photoRepo.Content.Photos.Where(p => p.Unclassified).ToList();
+        public IEnumerable<Photo> NewImportPhotos => _photoRepo.Content.Photos.Where(p => p.Unclassified);
 
         public List<Photo> GetSessionPhoto(int sessionId)
             => _photoRepo.Content.Photos.Where(p => p.SessionId == sessionId).ToList();

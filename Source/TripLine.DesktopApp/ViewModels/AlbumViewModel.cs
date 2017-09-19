@@ -18,6 +18,7 @@ using System.Windows.Input;
 using System.Xml;
 using TripLine.Service;
 using TripLine.Dtos;
+using System.Windows;
 
 namespace TripLine.DesktopApp.ViewModels
 {
@@ -39,9 +40,7 @@ namespace TripLine.DesktopApp.ViewModels
         public HighliteTarget Target { get; set; }
 
         public event Action<AlbumItemViewModel> OnOpen;
-
-        public event Action<AlbumItemViewModel> OnRemoved;
-
+        public event Action<AlbumItemViewModel> OnRemove;
 
         public AlbumItemViewModel() : base("AlbumItem")
         { }
@@ -152,12 +151,27 @@ namespace TripLine.DesktopApp.ViewModels
             _locationService = locationService;
             _debugInfoVModel = debugInfo;
             _mainViewModel = MainViewModel.Instance;
+
+            _mainViewModel.OnRemove += _mainViewModel_OnRemove;
             Load();
+        }
+
+        private async void _mainViewModel_OnRemove()
+        {
+            var hitemVM = _mainViewModel.CurrentHighliteItemViewModel;
+
+            if (hitemVM != null && hitemVM.Target == HighliteTarget.Trip)
+            {
+                _tripStore.Remove(hitemVM.TargetId);
+
+                await _mainViewModel.GoBack();
+            }
+
         }
 
         public void Dispose()
         {
-           
+            _mainViewModel.OnRemove -= _mainViewModel_OnRemove;
         }
 
 
@@ -228,8 +242,11 @@ namespace TripLine.DesktopApp.ViewModels
             List<string> choseLocationNames = new List<string>();
 
             var hitemVM =_mainViewModel.CurrentHighliteItemViewModel;
-            _sections = LoadFromHighliteTarget(hitemVM.Target, hitemVM.Id);
-         
+            _sections = LoadFromHighliteTarget(hitemVM.Target, hitemVM.TargetId);
+
+            //if (!_sections.Any())
+            //    return;
+
             SelectedSection = Sections.First();
 
             var photo = _photoStore.GetPhoto(SelectedSection.Items.First().Id);
@@ -258,11 +275,20 @@ namespace TripLine.DesktopApp.ViewModels
 
         public ObservableCollection<AlbumSectionViewModel> LoadFromTrip(int id)
         {
-            var trip = _tripStore.GetTrip(id);
+            try
+            {
+                var trip = _tripStore.GetTrip(id);
 
-            _tripStore.DumpTrip(id,  "LoadFromTrip");
+                _tripStore.DumpTrip(id, "LoadFromTrip");
 
-            return  new ObservableCollection<AlbumSectionViewModel>(CreateSections(trip));
+                return new ObservableCollection<AlbumSectionViewModel>(CreateSections(trip));
+
+            }
+            catch
+            {
+                MessageBox.Show("Oups! My mistake!", $"Not able fo find a trip with id {id}", MessageBoxButton.OK);
+                return new ObservableCollection<AlbumSectionViewModel>();
+            }
         }
 
         public ObservableCollection<AlbumSectionViewModel> LoadFromLocation(int id)
@@ -322,7 +348,7 @@ namespace TripLine.DesktopApp.ViewModels
         private void  SetupCommands(AlbumItemViewModel vmodel)
         {
             vmodel.OnOpen += OnItemOpen;
-            vmodel.OnRemoved += OnItemRemoved;
+            vmodel.OnRemove += OnItemRemoved;
         }
         
         private async void OnItemOpen(AlbumItemViewModel obj)

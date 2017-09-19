@@ -59,6 +59,13 @@ namespace TripLine.Service
 
     public class TripStore
     {
+        public void Remove(int tripId)
+        {
+            var trip = GetTrip(tripId);
+
+            _tripRepo.Content.Trips.Remove(trip);
+            _tripRepo.Save();
+        }
     
         public List<TripByLocationGroup> GetTripByCity()
         {
@@ -177,7 +184,7 @@ namespace TripLine.Service
 
         public List<Trip> GetTrips(int maxCount=int.MaxValue) => _tripRepo.Content.Trips.Take(maxCount).ToList();
 
-        public Trip GetTrip(int id) => _tripRepo.Content.Trips.First(t => t.Id == id);
+        public Trip GetTrip(int id) => _tripRepo.Content.Trips.FirstOrDefault(t => t.Id == id);
 
         public Destination GetDestination(int destinationId) => GetDestinations().FirstOrDefault (d => d.Id == destinationId);
 

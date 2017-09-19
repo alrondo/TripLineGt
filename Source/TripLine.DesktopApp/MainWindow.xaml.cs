@@ -48,8 +48,6 @@ namespace TripLine.DesktopApp
             var flyoutCCntl = this.MainFlyoutContentControl;
 
             var main = new Main(this, flyout, flyoutCCntl);
-            
-            // main.Load();
             ContentControl.Content = main;
         }
 
@@ -131,17 +129,16 @@ namespace TripLine.DesktopApp
             {
                 openedFlyout.IsOpen = false;
             }
-
-            //var dialog = await DialogManager.GetCurrentDialogAsync<BaseMetroDialog>(_mainWindow);
-            //if (dialog != null)
-            //{
-            //    await dialog.RequestCloseAsync();
-            //}
         }
 
         private async void BackBtn_OnClick(object sender, RoutedEventArgs e)
         {
             await _mainViewModel.GoBack();
+        }
+
+        private void RemoveBtn_OnClick(object sender, RoutedEventArgs e)
+        {
+            _mainViewModel.RemoveCommand();
         }
     }
 }

@@ -29,7 +29,7 @@ namespace TripLine.DesktopApp.ViewModels
         public string DisplayName { get; set; } = "abc";
         public string Description { get; set; }
 
-        public int    Id      { get; set; }
+        public int    TargetId      { get; set; }
 
         public HighliteTarget Target { get; set; }
 
@@ -167,8 +167,7 @@ namespace TripLine.DesktopApp.ViewModels
         {
             _mainViewModel.CurrentHighliteItemViewModel = obj;
 
-            await _mainViewModel.Navigator.NavigateTo(typeof(AlbumViewModel));
-
+            await _mainViewModel.NavigateTo(typeof(AlbumViewModel));
         }
 
         private async void OnItemRemoved(HighliteItemViewModel obj)

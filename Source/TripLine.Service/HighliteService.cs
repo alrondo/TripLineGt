@@ -106,7 +106,7 @@ namespace TripLine.Service
         {
             List<HighliteTopic> topics = new List<HighliteTopic>();
 
-            var trips = _tripStore.GetTrips(15);
+            var trips = _tripStore.GetTrips();
 
             foreach (var trip in trips)
             {
@@ -188,14 +188,14 @@ namespace TripLine.Service
 
             var topic3 = CreateHighliteTopicViewModel("Recent trips", _tripStore.GetTrips(15));
 
-            var topic5 = DoCreateHighliteTopicViewModel("Random locations", GetRandomPhotos(photos.ToList()),  HighliteTarget.Location,  TitleSource.LocationName);
+       //     var topic5 = DoCreateHighliteTopicViewModel("Random locations", GetRandomPhotos(photos.ToList()),  HighliteTarget.Location,  TitleSource.LocationName);
 
             var topics = new List<HighliteTopic>()
             {
                 topic1,
                 topic2,
                 topic3,
-                topic5
+                //topic5
             };
 
             return topics;
@@ -272,7 +272,7 @@ namespace TripLine.Service
             var photos = _photoStore.GetPhotosByTrip(trip.Id);
             var photosByDate = photos.GroupBy(p => GetDayNumber(trip, p));
             var highliteItems = photosByDate.Select(g => DoCreateHighliteItem(
-                g.First().Id,
+                trip.Id,
                 g.First(),
                 g.Count(),
                 HighliteTarget.Trip,
@@ -301,6 +301,7 @@ namespace TripLine.Service
         // doer
         private HighliteTopic DoCreateHighliteTopicViewModel(string topicName, List<Photo> photos,   HighliteTarget target, TitleSource itemTitleSource)
         {
+            throw new NotImplementedException("");
             var items = photos.Select(p => CreateHighliteItem(p, _photoStore.GetPhotosAtLocation(p.Location.Id)?.Count ?? 0,
                                                             target, itemTitleSource));
 
@@ -316,7 +317,7 @@ namespace TripLine.Service
 
             var item = new HighliteItem()
             {
-                Id = (target == HighliteTarget.Location) ? photo.Location.Id : photo.Id,
+                TargetId = (target == HighliteTarget.Location) ? photo.Location.Id : photo.Id,
                 DisplayName = displayName,
                 Target = target,
                 PhotoUrl = photo.PhotoUrl,
@@ -332,7 +333,7 @@ namespace TripLine.Service
 
             var item = new HighliteItem()
             {
-                Id = tripId,
+                TargetId = tripId,
                 DisplayName = displayName,
                 Target = target,
                 PhotoUrl = photo.PhotoUrl,
@@ -349,7 +350,7 @@ namespace TripLine.Service
 
             var item = new HighliteItem()
             {
-                Id = trip.Id,
+                TargetId = trip.Id,
                 DisplayName = trip.DisplayName,
                 Target = target,
                 PhotoUrl = photo.PhotoUrl,
@@ -365,7 +366,7 @@ namespace TripLine.Service
 
             var item = new HighliteItem()
             {
-                Id = destination.Id,
+                TargetId = destination.Id,
                 DisplayName = destination.DisplayName,
                 Target = target,
                 PhotoUrl = photo.PhotoUrl,
@@ -381,7 +382,7 @@ namespace TripLine.Service
 
             var item = new HighliteItem()
             {
-                Id = id,
+                TargetId = id,
                 DisplayName = title,
                 Target = target,
                 PhotoUrl = photo.PhotoUrl,

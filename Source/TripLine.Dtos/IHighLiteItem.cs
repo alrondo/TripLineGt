@@ -6,7 +6,7 @@ namespace TripLine.Dtos
     {
         HighliteTarget Target { get; set; }
 
-        int Id { get; set; }
+        int TargetId { get; set; }
 
         string DisplayName { get; set; }
 

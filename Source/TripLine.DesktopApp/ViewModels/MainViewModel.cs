@@ -17,6 +17,8 @@ namespace TripLine.DesktopApp.ViewModels
         private static Navigator _navigator;
 
         static ContentControl _contentControl;
+        
+        public event Action OnRemove;
 
         public Navigator Navigator
         {
@@ -24,7 +26,19 @@ namespace TripLine.DesktopApp.ViewModels
 
             set { _navigator = value; }
         }
-        
+
+        public async Task<bool> NavigateTo(Type type, object param = null)
+        {
+            try
+            {
+                return await Navigator.NavigateTo(type, param);
+            }
+            catch
+            {
+                await GoHome();
+                return true;
+            }
+        }
 
         public HighliteSelectOptions HighliteSelectOptions { get; set; }
         
@@ -222,6 +236,11 @@ namespace TripLine.DesktopApp.ViewModels
             await _navigator.GoBack();
         }
 
+        public void RemoveCommand()
+        {
+            this?.OnRemove();
+        }
+
         private static void Initialize()
         {
             if (_navigator != null)
@@ -234,6 +253,8 @@ namespace TripLine.DesktopApp.ViewModels
 
         }
 
+
+        
 
     }
 }
