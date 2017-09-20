@@ -110,7 +110,7 @@ namespace TripLine.Service
 
             foreach (var trip in trips)
             {
-                var topic = CreateHighliteTopicViewModelForTrip($"Trip to {trip.DisplayName}",  trip);
+                var topic = CreateHighliteTopicViewModelForTrip($"Trip to {trip.GetDisplayName(withDate:true)}",  trip);
 
                 topics.Add(topic);
             }

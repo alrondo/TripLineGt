@@ -19,6 +19,15 @@ namespace TripLine.Dtos
 
         public DateTime Date => GetMostRelevantDate(FromDate, ToDate);
 
+        public string GetDisplayName (bool withDate=false)
+        {
+            var name = DisplayName;
+
+            if (withDate)
+                name += $"({FromDate.Year})";
+
+             return name;
+        }
 
         private DateTime GetMostRelevantDate(DateTime from, DateTime to)
         {

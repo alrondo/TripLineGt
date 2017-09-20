@@ -85,8 +85,7 @@ namespace TripLine.Service
 
         public List<Photo> NewTravelPhotos => _photoRepo.Content.Photos
             .Where(p => p.IsTravelCandidate)
-            .OrderBy(f => f.Creation).ToList()
-            .ToList();
+            .OrderBy(f => f.Creation).ToList();
 
         public int NumNewPhotosFiles => NewImportPhotos?.Count() ?? 0;
         

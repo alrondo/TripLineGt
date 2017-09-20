@@ -176,6 +176,8 @@ namespace TripLine.Service
             Trip trip= CreateTrip(tripCandidate);
             _tripRepo.Content.Trips.Add(trip);
 
+
+
             _tripRepo.Save();
         }
 

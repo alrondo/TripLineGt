@@ -122,7 +122,7 @@ namespace TripLine.ServiceTests
         [TestMethod()]
         public void TripStoreTests_GetTrips_OK()
         {
-            string baseDirectory = @"c:\TripLine\Trips\";
+            string baseDirectory = @"c:\TripLine\TripsPhotos\";
 
             Directory.CreateDirectory(baseDirectory);
 
@@ -130,7 +130,7 @@ namespace TripLine.ServiceTests
 
             foreach (var trip in trips)
             {
-                string fpath = baseDirectory + $"{trip.Id} - " + trip.DisplayName + ".txt";
+                string fpath = baseDirectory + $"{trip.Id} - " + trip.GetDisplayName(withDate:true) + ".txt";
                 using (var writer = new StreamWriter(File.Open(fpath, FileMode.Create, FileAccess.Write)))
                 {
                     writer.WriteLine(trip.Serialize(pretty: true));
@@ -138,21 +138,27 @@ namespace TripLine.ServiceTests
                     var photos = _photoStore.GetPhotosByTrip(trip.Id);
 
                     writer.WriteLine($"Total of {photos.Count} photos for this trip.");
-                    
-                    foreach (var photoGroup in photos.GroupBy(p => Path.GetDirectoryName(p.PhotoUrl)))
-                    {
-                        writer.WriteLine($"{photoGroup.Key}  has {photoGroup.Count()} photos.");
 
-                        if (photoGroup.Count() >= 1)
-                            writer.WriteLine(photoGroup.First().Serialize(true));
-                        if (photoGroup.Count() >= 2)
-                        {
-                            writer.WriteLine("...");
-                            writer.WriteLine(photoGroup.Last().Serialize(true));
-                        }
+                    foreach (var photo in photos)
+                    {
+                        if (photo == photos.First())
+                            OutputPhoto(fpath, photo, 1);
+                        else
+                        if (photo == photos.LastOrDefault())
+                            OutputPhoto(fpath, photo, photos.Count());
 
                     }
                 }
+            }
+        }
+        void OutputPhoto(string fpath, Photo photo, int idx)
+        {
+            fpath = fpath.Replace(".txt", "");
+            fpath += $"_P{idx}-{photo.Id}" + ".txt";
+
+            using (var writer = new StreamWriter(File.Open(fpath, FileMode.Create, FileAccess.Write)))
+            {
+                writer.WriteLine(photo.Serialize(true));
             }
         }
 

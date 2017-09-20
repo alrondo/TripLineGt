@@ -54,9 +54,9 @@ namespace TripLine.Dtos
 
         public bool Excluded { get; set; } = false;
 
-        public bool IsTravel => ! Unclassified  && ! Excluded;
+        public bool IsTravel => ! Unclassified  && ! Excluded  && PositionFromGps;
 
-        public bool IsTravelCandidate => Unclassified && !Excluded;
+        public bool IsTravelCandidate => Unclassified && !Excluded && PositionFromGps;
 
         public bool HasTag(PhotoTag tag)
         {
