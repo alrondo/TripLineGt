@@ -6,6 +6,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Diagnostics;
+using System.Reflection;
+using log4net;
 using TripLine.Dtos;
 using TripLine.Toolbox.Extensions;
 
@@ -18,6 +20,9 @@ namespace TripLine.Service
         private readonly LocationService _locationService;
 
         private readonly PhotoRepo _photoRepo;
+
+        private static ILog _log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
+
 
 
         private IEnumerable<PhotoSession> GetUntaggedPhotosSessions()
@@ -148,7 +153,8 @@ namespace TripLine.Service
                 _photoRepo.Content.LastFileDetectionTime = lastFileDetectedTime;
             _photoRepo.Save();
         }
-
+        
+        
 
 
         public List<PhotoSession>   CreateNewPhotoSessions(bool peakForNewPhotos = true)
@@ -353,7 +359,7 @@ namespace TripLine.Service
                 if (photo.Location != null)
                 {
                     photo.DebugInfo += "LocFromPos" + ";";
-                    photo.PositionFromGps = true;
+                    photo.PositionFromGps = CheckForValidGeoPosition(photo);
 
                     var place = _locationService.GetNearbyPlace(photo.Position, photo.Location.Id);
 
@@ -380,6 +386,28 @@ namespace TripLine.Service
 
                 if (photo.Location != null) photo.DebugInfo += "LocFromPath" + ";";
             }
+
+
+        }
+
+        //
+        // Valid GeoPosition  means that the gps position of the new photo differ from the last or they were taken very close in time
+        // This is to avoid photo having gps pos but the phone GPS was off...  ex: battery saving mode?
+        // 
+        private  bool CheckForValidGeoPosition(Photo newPhoto)
+        {
+            var lastAddedPhoto = _photoRepo.Content.Photos.LastOrDefault();
+
+            if (lastAddedPhoto == null)
+                return true;
+
+            if ((newPhoto.Creation - lastAddedPhoto.Creation).TotalHours < 2)
+                // Not much time between this and the previous photo.  Assume it's ok
+                return true;   
+            
+            // Expect our user to move/walk/run or ... Otherwise the GPS location of that photo is suspicious
+            return (newPhoto.Position.LatLong != lastAddedPhoto.Position.LatLong);
+
         }
 
         private DateTime GetDateForPhoto (FileExtendedInfo finfo)

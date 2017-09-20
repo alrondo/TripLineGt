@@ -109,13 +109,22 @@ namespace TripLine.ServiceTests
 
             foreach (var hlite in hlites)
             {
-                string fpath = baseDirectory + "Place - " + hlite.DisplayName + ".txt";
+                string fpath = baseDirectory + "Place - " + ValidFilename(hlite.DisplayName) + ".txt";
                 using (var writer = new StreamWriter(File.Open(fpath, FileMode.Create, FileAccess.Write)))
                 {
                     writer.WriteLine(Path.GetFileNameWithoutExtension(fpath));
                     writer.WriteLine(hlite.Serialize(pretty: true));
                 }
             }
+        }
+
+        string ValidFilename(string fileName)
+        {
+            foreach (char c in System.IO.Path.GetInvalidFileNameChars())
+            {
+                fileName = fileName.Replace(c, '_');
+            }
+            return fileName;
         }
 
 
@@ -179,7 +188,7 @@ namespace TripLine.ServiceTests
             {
                 var place = _locationService.GetPlace(group.Key);
 
-                string fpath = baseDirectory + group.Key + $" {place.PlaceName}" + ".txt";
+                string fpath = baseDirectory + group.Key + $" {ValidFilename(place.PlaceName)}" + ".txt";
                 using (var writer = new StreamWriter(File.Open(fpath, FileMode.Create, FileAccess.Write)))
                 {
                     writer.WriteLine($"{place.PlaceName}  has {group.Count()} photos.");

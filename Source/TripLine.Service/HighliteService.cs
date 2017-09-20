@@ -130,8 +130,14 @@ namespace TripLine.Service
             foreach (var group in photosByPlaces)
             {
                 var place = _locationService.GetPlace(group.Key);
+
+                if (place == null)
+                    continue;
                 
                 var photos = PickPhotos(group);
+
+                if (!photos.Any())
+                    continue;
 
                 var items = photos.Select(p => DoCreateHighliteItem(p.Id, p, 0, HighliteTarget.Place, string.Empty));
 
@@ -146,12 +152,12 @@ namespace TripLine.Service
 
 
         private IHighliteItem  CreatePhotoHighliteItem (Photo p) => DoCreateHighliteItem(p.Id, p, 0, HighliteTarget.Place, string.Empty);
-           
-        IEnumerable<Photo> PickPhotos(IEnumerable<Photo> photos)
-        {
-            var pciedPhotos = GetRandomPhotos(photos.ToList());
-            return photos;
-        }
+
+        IEnumerable<Photo> PickPhotos(IEnumerable<Photo> photos) => photos;
+        //{
+        //    var pciedPhotos = GetRandomPhotos(photos.ToList());
+        //    return photos;
+        //}
 
        
         private List<HighliteTopic> GetLocationHighlites()

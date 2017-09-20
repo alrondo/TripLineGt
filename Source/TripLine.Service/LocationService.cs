@@ -11,12 +11,13 @@ using Tripline.WebConsumer;
 using TripLine.Dtos;
 
 using System.Diagnostics;
+using log4net.Core;
 using static System.FormattableString;
 using TripLine.Toolbox.Extensions;
 
 namespace TripLine.Service
 {
-    
+   
 
     public class LocationService
     {
