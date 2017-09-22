@@ -251,7 +251,7 @@ namespace TripLine.Service
             if (exitingLocation != null)
                 return exitingLocation;
             
-            location.Excluded = IsExcludedLocation(location);
+            location.Excluded = IsExcludedLocation(location) || IsInHomeArea(location);
 
             Debug.WriteLine($"New location for {address} {location.Id} {location.DisplayName} ");
 
@@ -276,21 +276,19 @@ namespace TripLine.Service
 
             return dname.RemoveDiacritics();
         }
-
-
-        public bool IsWithinDistance(Location location1, IEnumerable<Location> locations, long distanceMi)
-        {
-            return (locations.Any(l => GetDistanceMi(location1, l) < distanceMi));
-        }
+        
 
         public bool IsWithinDistance(Location location1, Location location2, long distanceMi)
         {
             return (GetDistanceMi(location1, location2) < distanceMi);
         }
 
-        public bool IsWithinDistanceOfExclusion(Location location, int distanceMi=ExclusionDistanceMi)
+        private const int _homeAreaKm = 40;
+
+        public bool IsInHomeArea(Location location)
         {
-            return (ExcludedLocation.Any(excludeLoc => IsWithinDistance(location, excludeLoc, distanceMi)));
+            return IsWithinDistance(location, GetHome(), _homeAreaKm);
+            //return (ExcludedLocation.Any(excludeLoc => IsWithinDistance(location, excludeLoc, distanceMi)));
         }
 
 

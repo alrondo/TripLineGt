@@ -48,5 +48,10 @@ namespace TripLine.DesktopApp.View
         }
 
         public HighliteViewModel ModelView { get; set; }
+
+        private void UIElement_OnPreviewMouseWheel(object sender, MouseWheelEventArgs e)
+        {
+            MainScrollViewer.ScrollToVerticalOffset(MainScrollViewer.VerticalOffset - e.Delta / 3);
+        }
     }
 }

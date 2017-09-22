@@ -42,38 +42,43 @@
             <TextBlock Text="{Binding Path=Title }"  Style="{StaticResource WizardBannerText}"  Margin="0,0,0,0" />
         </StackPanel>
 
-        <DockPanel  Grid.Row="1" Grid.ColumnSpan="2"  Background="{StaticResource TLineViewBackground}">
-            <ListBox  ItemsSource="{Binding Path=Topics}" SelectionMode="Single" 
+     
+            <DockPanel  Grid.Row="1" Grid.ColumnSpan="2"  Background="{StaticResource TLineViewBackground}">
+            <ScrollViewer x:Name="MainScrollViewer" >
+                <ListBox  ItemsSource="{Binding Path=Topics}" SelectionMode="Single" 
                       Background="{StaticResource TLineViewBackground}"    
                       SelectedValue="{Binding NoSelection}"  IsSynchronizedWithCurrentItem="True" 
                       VirtualizingStackPanel.IsVirtualizing="False"  ScrollViewer.VerticalScrollBarVisibility="Auto"
-                      ScrollViewer.HorizontalScrollBarVisibility="Disabled" >
-                <ListBox.ItemTemplate >
-                    <DataTemplate>
-                        <StackPanel  Orientation="Vertical" Margin="0,0,0,0" Background="{StaticResource TLineViewBackground}"  >
+                      ScrollViewer.HorizontalScrollBarVisibility="Disabled" 
+                      PreviewMouseWheel="UIElement_OnPreviewMouseWheel">
+                    <ListBox.ItemTemplate >
+                        <DataTemplate>
+                            <StackPanel  Orientation="Vertical" Margin="0,0,0,0" Background="{StaticResource TLineViewBackground}"  >
 
-                            <TextBlock  Text="{Binding Path=DisplayName, Mode=TwoWay }" Style="{StaticResource WizardText}"
+                                <TextBlock  Text="{Binding Path=DisplayName, Mode=TwoWay }" Style="{StaticResource WizardText}"
                                         Margin="4,2,0,5"                                 />
-                            <ListBox  ItemsSource="{Binding Path=Items}" SelectionMode="Extended"  
+                                <ListBox  ItemsSource="{Binding Path=Items}" SelectionMode="Extended"  
                                       Background="{StaticResource TLineViewBackgroundPanel}" 
                                       ItemTemplate="{StaticResource hliteItemTemplate}"
                                       SelectedValue="{Binding NoSelection}"  IsSynchronizedWithCurrentItem="True" 
-                                      VirtualizingStackPanel.IsVirtualizing="False"  ScrollViewer.HorizontalScrollBarVisibility="Visible" ScrollViewer.VerticalScrollBarVisibility="Disabled"
+                                      VirtualizingStackPanel.IsVirtualizing="False"  ScrollViewer.HorizontalScrollBarVisibility="Visible" 
+                                      ScrollViewer.VerticalScrollBarVisibility="Disabled"
                                       >
-                                <ListBox.ItemsPanel>
-                                    <ItemsPanelTemplate>
-                                        <WrapPanel Orientation="Horizontal"  Margin="4,0,0,4" Background="{StaticResource TLineViewBackground}"  />
-                                    </ItemsPanelTemplate>
-                                </ListBox.ItemsPanel>
-                            </ListBox>
-                                      
-                                      
-                        </StackPanel>
-                            
-                    </DataTemplate>
-                </ListBox.ItemTemplate>
-            </ListBox>
-        </DockPanel>
+                                    <ListBox.ItemsPanel>
+                                        <ItemsPanelTemplate>
+                                            <WrapPanel Orientation="Horizontal"  Margin="4,0,0,4" Background="{StaticResource TLineViewBackground}"  />
+                                        </ItemsPanelTemplate>
+                                    </ListBox.ItemsPanel>
+                                </ListBox>
+
+
+                            </StackPanel>
+
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+                </ListBox>
+            </ScrollViewer>
+                </DockPanel>
 
     </Grid>
 </view:BaseView>
