@@ -153,13 +153,14 @@ namespace TripLine.Service
 
         private IHighliteItem  CreatePhotoHighliteItem (Photo p) => DoCreateHighliteItem(p.Id, p, 0, HighliteTarget.Place, string.Empty);
 
-        IEnumerable<Photo> PickPhotos(IEnumerable<Photo> photos) => photos;
-        //{
-        //    var pciedPhotos = GetRandomPhotos(photos.ToList());
-        //    return photos;
-        //}
+        IEnumerable<Photo> PickPhotos(IEnumerable<Photo> photos) => GetRandomPhotos(photos.ToList());
 
-       
+        Photo PickPhoto(IEnumerable<Photo> photos)
+        {
+            var photo = GetRandomPhotos(photos.ToList(), 1).FirstOrDefault();
+            return photo ?? photos.First();
+        }
+
         private List<HighliteTopic> GetLocationHighlites()
         {
             List<HighliteTopic> topics = new List<HighliteTopic>();
@@ -215,7 +216,56 @@ namespace TripLine.Service
         }
 
 
-        private static List<Photo> GetRandomPhotos(List<Photo> photos, int numPhotoWanted=5)
+        private Dictionary<int, int> _allPickedPhotos = new Dictionary<int, int>();
+
+        private int GetPickedCount(Photo photo)
+        {
+            if (!_allPickedPhotos.ContainsKey(photo.Id))
+                return 0;
+
+            return _allPickedPhotos[photo.Id];
+        }
+
+        private void AddPickedCount(Photo photo)
+        {
+            int count = GetPickedCount(photo);
+
+            _allPickedPhotos[photo.Id] = ++count;
+        }
+
+        
+        private List<Photo> GetRandomPhotos(List<Photo> photos, int numPhotoWanted = 5)
+        {
+            var num2Pick = Math.Min(photos.Count, numPhotoWanted);
+
+            List<Photo> picks = new List<Photo>();
+            List<Photo> backupPics = new List<Photo>();
+
+            var random = new Random( (int) ( DateTime.Now.Ticks) );
+
+            for (var i=0; i< photos.Count; i++)
+            {
+                var selPhoto = photos[random.Next(0, photos.Count-1)];
+
+                if (GetPickedCount(selPhoto) >= 1)
+                {
+                    if (GetPickedCount(selPhoto) == 1)
+                        backupPics.Add(selPhoto);
+
+                    continue;
+                }
+
+                AddPickedCount(selPhoto);
+                picks.Add(selPhoto);
+
+                if (picks.Count() >= num2Pick)
+                    break;
+            }
+
+            return picks;
+        }
+        
+        private static List<Photo> zzGetRandomPhotos(List<Photo> photos, int numPhotoWanted=5)
         {
             List<Photo> randomPhotos = new List<Photo>();
 
@@ -277,11 +327,12 @@ namespace TripLine.Service
 
         private HighliteTopic CreateHighliteTopicViewModelForTrip(string topicName, Trip trip)
         {
-            var photos = _photoStore.GetPhotosByTrip(trip.Id);
+            var photos =    _photoStore.GetPhotosByTrip(trip.Id);
             var photosByDate = photos.GroupBy(p => GetDayNumber(trip, p));
+
             var highliteItems = photosByDate.Select(g => DoCreateHighliteItem(
                 trip.Id,
-                g.First(),
+                PickPhoto(g),
                 g.Count(),
                 HighliteTarget.Trip,
                 $"Day {g.Key} {g.First().Location.City ?? @"N/A"} ")).ToList();
@@ -297,8 +348,8 @@ namespace TripLine.Service
             var photosByDate = photos.GroupBy(p => p.Creation.ToShortDateString());
 
             var highliteItems = photosByDate.Select(g => DoCreateHighliteItem(
-                g.First().Id,
-                g.First(),
+                location.Id,
+                PickPhoto(g),
                 g.Count(),
                 HighliteTarget.Photos,
                 $"{g.Key}")).ToList();
@@ -306,22 +357,11 @@ namespace TripLine.Service
             return new HighliteTopic(topicName, highliteItems);
         }
 
-        // doer
-        private HighliteTopic DoCreateHighliteTopicViewModel(string topicName, List<Photo> photos,   HighliteTarget target, TitleSource itemTitleSource)
-        {
-            throw new NotImplementedException("");
-            var items = photos.Select(p => CreateHighliteItem(p, _photoStore.GetPhotosAtLocation(p.Location.Id)?.Count ?? 0,
-                                                            target, itemTitleSource));
-
-            return new HighliteTopic(topicName, items.ToList() );
-        }
-
         private IHighliteItem CreateHighliteItem(Photo photo, int count, HighliteTarget target, TitleSource titleSource)
         {
             Debug.Assert(photo.Location != null);
 
             var displayName = target == HighliteTarget.Location ? photo.Location.DisplayName + $" {count} photos" : photo.DisplayName;
-
 
             var item = new HighliteItem()
             {

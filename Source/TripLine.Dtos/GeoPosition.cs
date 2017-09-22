@@ -13,28 +13,32 @@ namespace TripLine.Dtos
 
         public string LatLong => $"{Latitude},{Longitude}";
 
+        private const float _epsilon = (float)0.0001;
 
-        public bool IsAlike(GeoPosition position, uint units = 3)
+        public bool IsAlike(GeoPosition position)
         {
-            return (IsAlike(position.Latitude, position.Longitude, units));
+            return (IsAlike(position.Latitude, position.Longitude));
         }
 
 
-        public bool IsAlike(float latitude, float longitude, uint units=3)
+        public bool IsAlike(float latitude, float longitude)
         {
-            return (      HasMinimalDifference(Longitude, longitude, units)
-                       && HasMinimalDifference(Latitude, latitude, units));
+            float epsilon =  (float)0.0001;
+
+            return (      HasMinimalDifference(Longitude, longitude, _epsilon)
+                       && HasMinimalDifference(Latitude, latitude, _epsilon));
         }
 
-        public static bool HasMinimalDifference(float value1, float value2, uint units)
+        public static bool HasMinimalDifference(float value1, float value2, float epsilon)
         {
-            Debug.Assert(units >1);
+            Debug.Assert(epsilon <= 0.1);
 
             if ((value1 > 0 && value2 < 0) || (value1 < 0 && value2 > 0))
                 return false;   // not same sign
 
-            return (Math.Abs(value1 - value2) < Math.Pow(1.0, -units));
+            bool near = (Math.Abs(value1 - value2) <  epsilon);
 
+            return near;
         }
 
 

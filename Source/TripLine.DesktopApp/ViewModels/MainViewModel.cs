@@ -31,6 +31,7 @@ namespace TripLine.DesktopApp.ViewModels
         {
             try
             {
+                UpdateCounters();
                 return await Navigator.NavigateTo(type, param);
             }
             catch
@@ -162,9 +163,7 @@ namespace TripLine.DesktopApp.ViewModels
             _tripStore =  Navigator.Configuration.IoC.Resolve(typeof(TripStore)) as TripStore;
             _locationService = Navigator.Configuration.IoC.Resolve(typeof(LocationService)) as LocationService;
 
-            NumTrips = _tripStore.GetTrips().Count;
-            NumLocations = _locationService.GetLocations().Count();
-            NumPlaces = _tripStore.GetPlacesCount();
+            UpdateCounters();
         }
 
         private bool _debugStartup = false;
@@ -193,24 +192,21 @@ namespace TripLine.DesktopApp.ViewModels
             ViewTitle = "Your Trips";
 
             HighliteSelectOptions = new HighliteSelectOptions(HighliteTarget.Trip);
-            await _navigator.NavigateTo(typeof(HighliteView));
+            await NavigateTo(typeof(HighliteView));
         }
 
         public async Task GoPlacesView()
         {
             ViewTitle = "Your Trips";
-
             HighliteSelectOptions = new HighliteSelectOptions(HighliteTarget.Place);
-            await _navigator.NavigateTo(typeof(HighliteView));
+            await NavigateTo(typeof(HighliteView));
         }
-
-
+        
         public async Task GoLocationsView()
         {
             ViewTitle = "Your Trips";
-
             HighliteSelectOptions = new HighliteSelectOptions(HighliteTarget.Location);
-            await _navigator.NavigateTo(typeof(HighliteView));
+            await NavigateTo(typeof(HighliteView));
         }
 
         public string ViewTitle = "";
@@ -218,16 +214,14 @@ namespace TripLine.DesktopApp.ViewModels
         public async Task GoHome()
         {
             ViewTitle = "A Little Overview";
-
             HighliteSelectOptions = null;
-            await _navigator.NavigateTo(typeof(HighliteView));
+            await NavigateTo(typeof(HighliteView));
         }
 
         public async Task GoWizard()
         {
             ViewTitle = "Trip Creation Wizard";
-
-            await _navigator.NavigateTo(typeof(TripWizardView));
+            await NavigateTo(typeof(TripWizardView));
         }
 
         public async Task GoBack()
@@ -246,14 +240,14 @@ namespace TripLine.DesktopApp.ViewModels
                 return;
 
             _navigator = TripLine.WPF.MVVM.Navigator.Load();
-
-            //_navigator.Configuration.IoC.Register(_windowCommands);
             _navigator.Configuration.OnNavigation += (view, model) => _contentControl.Content = view;
+         }
 
+        private void UpdateCounters()
+        {
+            NumTrips = _tripStore.GetTrips().Count;
+            NumLocations = _locationService.GetLocations().Count();
+            NumPlaces = _tripStore.GetPlacesCount();
         }
-
-
-        
-
     }
 }

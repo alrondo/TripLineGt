@@ -66,10 +66,7 @@ namespace TripLine.Service
 
             _locationRepo.Save();
         }
-
-
-
-
+        
 
         public Location GetHome() => _locationRepo.GetHomeLocation();
 

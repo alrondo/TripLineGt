@@ -52,7 +52,8 @@ namespace TripLine.Service
 
         public Location GetLocation(float latitude, float longitude)
         {
-            var location = Locations.FirstOrDefault(l => l.SearchedPosition != null && l.SearchedPosition.IsAlike(latitude, longitude, 5));
+            var location = Locations.FirstOrDefault(l => l.SearchedPosition != null 
+                                        && l.SearchedPosition.IsAlike(latitude, longitude));
             if (location != null)
                 return location;
 

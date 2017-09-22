@@ -37,16 +37,11 @@ namespace TripLine.ServiceTests
             _googleClient = new GoogleClient();
             _locationRepo = new LocationRepo(TripLineConfig.LocationRepoPath);
             _placeRepo = new PlaceRepo(TripLineConfig.PlaceRepoPath);
-            
-
             _locationService = new LocationService(_googleClient, _locationRepo, _placeRepo);
-
             _pictureExifReader = new PictureExifInformationReader();
             _localFileFolder = new LocalFileFolders(_pictureExifReader);
             _photoStore = new PhotoStore(new PhotoRepo(forceNew:false), _localFileFolder, _locationService);
-
             _tripSmartBuilder = new TripSmartBuilder(_locationService, _photoStore, new DestinationBuilder(_locationService));
-
             _tripStore = new TripStore(_photoStore, _locationService, _tripSmartBuilder, new TripsRepo(forceNew:false));
             _highliteService = new HighliteService(_photoStore, _tripStore, _locationService);
 
@@ -57,10 +52,12 @@ namespace TripLine.ServiceTests
                 tripCreationService.AddAll();
         }
 
+        string _testsOut = @"c:\TripLine\TestsOut";
+
         [TestMethod()]
         public void HighliteTests_GetHighlites_OK()
         {
-            string baseDirectory = @"c:\TripLine\Highlites\";
+            string baseDirectory = $@"{_testsOut}\Hlite Overview\";
             
             Directory.CreateDirectory(baseDirectory);
         
@@ -68,7 +65,7 @@ namespace TripLine.ServiceTests
                 
             foreach (var hlite in hlites)
             {
-                string fpath = baseDirectory + "Overview - " + hlite.DisplayName + ".txt";
+                string fpath = baseDirectory + ValidFilename(hlite.DisplayName) + ".txt";
                 using ( var writer = new StreamWriter(File.Open(fpath, FileMode.Create, FileAccess.Write)))
                 {
                     writer.WriteLine(Path.GetFileNameWithoutExtension(fpath));
@@ -80,7 +77,7 @@ namespace TripLine.ServiceTests
         [TestMethod()]
         public void HighliteTests_GetHighlites_Trips_OK()
         {
-            string baseDirectory = @"c:\TripLine\Highlites\";
+            string baseDirectory = $@"{_testsOut}\Hlite Trips\";
 
             Directory.CreateDirectory(baseDirectory);
 
@@ -88,7 +85,7 @@ namespace TripLine.ServiceTests
 
             foreach (var hlite in hlites)
             {
-                string fpath = baseDirectory + "Trip - " + hlite.DisplayName + ".txt";
+                string fpath = baseDirectory + ValidFilename(hlite.DisplayName) + ".txt";
                 using (var writer = new StreamWriter(File.Open(fpath, FileMode.Create, FileAccess.Write)))
                 {
                     writer.WriteLine(Path.GetFileNameWithoutExtension(fpath));
@@ -101,7 +98,7 @@ namespace TripLine.ServiceTests
         [TestMethod()]
         public void HighliteTests_GetHighlites_Places_OK()
         {
-            string baseDirectory = @"c:\TripLine\Highlites\";
+            string baseDirectory = $@"{_testsOut}\Hlite Places\";
 
             Directory.CreateDirectory(baseDirectory);
 
@@ -109,7 +106,7 @@ namespace TripLine.ServiceTests
 
             foreach (var hlite in hlites)
             {
-                string fpath = baseDirectory + "Place - " + ValidFilename(hlite.DisplayName) + ".txt";
+                string fpath = baseDirectory + ValidFilename(hlite.DisplayName) + ".txt";
                 using (var writer = new StreamWriter(File.Open(fpath, FileMode.Create, FileAccess.Write)))
                 {
                     writer.WriteLine(Path.GetFileNameWithoutExtension(fpath));
@@ -131,7 +128,7 @@ namespace TripLine.ServiceTests
         [TestMethod()]
         public void TripStoreTests_GetTrips_OK()
         {
-            string baseDirectory = @"c:\TripLine\TripsPhotos\";
+            string baseDirectory = $@"{_testsOut}\Trips\";
 
             Directory.CreateDirectory(baseDirectory);
 
@@ -139,7 +136,9 @@ namespace TripLine.ServiceTests
 
             foreach (var trip in trips)
             {
-                string fpath = baseDirectory + $"{trip.Id} - " + trip.GetDisplayName(withDate:true) + ".txt";
+                string fpath = baseDirectory + $"{trip.Id}-" 
+                    + ValidFilename(trip.GetDisplayName(withDate:true)) + ".txt";
+
                 using (var writer = new StreamWriter(File.Open(fpath, FileMode.Create, FileAccess.Write)))
                 {
                     writer.WriteLine(trip.Serialize(pretty: true));
@@ -160,6 +159,7 @@ namespace TripLine.ServiceTests
                 }
             }
         }
+
         void OutputPhoto(string fpath, Photo photo, int idx)
         {
             fpath = fpath.Replace(".txt", "");
@@ -176,11 +176,11 @@ namespace TripLine.ServiceTests
         [TestMethod()]
         public void PhotoStore_GetPhotos_WithPlaces_OK()
         {
-            string baseDirectory = @"c:\TripLine\OutPhotos\";
+            string baseDirectory = $@"{_testsOut}\PhotosWithPlaces\";
 
             Directory.CreateDirectory(baseDirectory);
 
-            var photosByPlaces = _photoStore.GetPhotos().Where(p => p.PlaceId != 0).GroupBy(p => p.PlaceId);
+            var photosByPlaces = _photoStore.GetTravelPhotos().Where(p => p.PlaceId != 0).GroupBy(p => p.PlaceId);
 
             Debug.Assert(photosByPlaces.Count() >= 1);
 
@@ -209,11 +209,11 @@ namespace TripLine.ServiceTests
         [TestMethod()]
         public void PhotoStore_GetPhotos_WithGpsPosition_OutputByLocationAndDate()
         {
-            string baseDirectory = @"c:\TripLine\OutPhotos\";
+            string baseDirectory = $@"{_testsOut}\PhotosByDate\";
 
             Directory.CreateDirectory(baseDirectory);
 
-            var photos = _photoStore.GetPhotos().Where(p => p.PositionFromGps);
+            var photos = _photoStore.GetTravelPhotos();
 
             var photosByLocation = photos.GroupBy(p => p.Location.DisplayName);
 
@@ -223,7 +223,8 @@ namespace TripLine.ServiceTests
 
                 foreach (var dateGroup in photosByDate)
                 {
-                    string fpath = $"{baseDirectory}{locationGroup.Key} on {dateGroup.Key} ({dateGroup.Count()})" + ".txt";
+                    var name = ValidFilename($"{locationGroup.Key} on {dateGroup.Key} ({dateGroup.Count()})");
+                    string fpath = $"{baseDirectory}{name}" + ".txt";
                     using (var writer = new StreamWriter(File.Open(fpath, FileMode.Create, FileAccess.Write)))
                     {
                         if (dateGroup.Any())
