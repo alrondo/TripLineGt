@@ -14,9 +14,7 @@ using TripLine.Service;
 
 namespace Tripline.DesktopApp
 {
-
-   
-
+    
 
     public class Bootstrapper : MvvmBootstrap
     {
@@ -25,9 +23,6 @@ namespace Tripline.DesktopApp
             base.Config.IoC.Register<MainViewModel>(mainViewModel).AsSingleton();
 
         }
-
-
-
 
         public override void Configure(MvvmConfiguration config)
         {
@@ -52,7 +47,6 @@ namespace Tripline.DesktopApp
             config.CreateMap<PhotoSessionModel, PhotoSession>();
             config.CreateMap<HighliteTopicViewModel, HighliteTopic>();
             config.CreateMap<HighliteTopic, HighliteTopicViewModel>();
-
             config.CreateMap<HighliteItemViewModel, IHighliteItem>();
             config.CreateMap<IHighliteItem, HighliteItemViewModel>();
            
@@ -62,9 +56,17 @@ namespace Tripline.DesktopApp
             config.CreateMap<HighliteTopic, AlbumSectionViewModel>();
             config.CreateMap<Destination, AlbumSectionViewModel>();
             config.CreateMap<Location, AlbumSectionViewModel>();
-
             config.CreateMap<IHighliteItem, AlbumItemViewModel>();
             config.CreateMap<Photo, AlbumItemViewModel>();
+
+
+            // from album service to VModel
+            config.CreateMap<AlbumItem, AlbumItemViewModel>();
+            config.CreateMap<AlbumItemViewModel, AlbumItem>();
+            config.CreateMap<AlbumSection, AlbumSectionViewModel>();
+            config.CreateMap<AlbumSectionViewModel, AlbumSection>();
+            config.CreateMap<Album, AlbumViewModel>();
+            config.CreateMap<AlbumViewModel, Album>();
 
         }
     }

@@ -34,6 +34,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="Album.cs" />
+    <Compile Include="AlbumItem.cs" />
+    <Compile Include="AlbumSection.cs" />
     <Compile Include="Destination.cs" />
     <Compile Include="DtoDefs.cs" />
     <Compile Include="GeoPosition.cs" />

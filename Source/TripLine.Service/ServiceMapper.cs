@@ -29,6 +29,13 @@ namespace TripLine.Service
             config.CreateMap<TripCandidate, Trip>();
             config.CreateMap<DestinationCandidate, Destination>();
 
+            config.CreateMap<HighliteTopic, AlbumSection>();
+            config.CreateMap<Destination, AlbumSection>();
+            config.CreateMap<Location, AlbumSection>();
+
+            config.CreateMap<IHighliteItem, AlbumItem>();
+            config.CreateMap<Photo, AlbumItem>();
+
         }
 
         public static TDestination Map<TDestination>(object source)

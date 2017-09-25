@@ -12,40 +12,6 @@ using TripLine.Toolbox.Extensions;
 
 namespace TripLine.Service
 {
-    public class HighliteSelectOptions
-    {
-
-        public bool Random { get; set; } = true;
-
-        public int?  MaxNumberOfTarget { get; set; }
-
-        public HighliteTarget? Target { get; set; } = null;
-
-        //order by & and other stuff
-
-
-        public HighliteSelectOptions(HighliteTarget target)
-        {
-            Target = target;
-        }
-
-        public HighliteSelectOptions()
-        {
-            Target = null;
-        }
-
-    }
-
-
-    public enum TitleSource
-    {
-        Default,
-        TripName,
-        LocationName,
-        PhotoName,
-        FileName
-    }
-
     public class HighliteService 
     {
         private ILog _log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
@@ -65,8 +31,6 @@ namespace TripLine.Service
 
         private HighliteSelectOptions _selectOptions = null;
 
-
-        //private IEnumerable<int> _outputtedPhotoIds= new List<int>();
         
         public List<HighliteTopic> GetHighlites(HighliteSelectOptions selectOptions=null)
         {

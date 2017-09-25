@@ -73,15 +73,16 @@ namespace TripLine.DesktopApp.ViewModels
     }
 
 
+
     public class AlbumViewModel : BaseViewModel , IDisposable
     {
         private ILog _log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
         private readonly TripStore _tripStore;
         private readonly PhotoStore _photoStore;
-        private readonly HighliteService    _highliteService;
         private readonly LocationService    _locationService;
         private readonly MainViewModel      _mainViewModel;
         private readonly DebugInfoViewModel _debugInfoVModel;
+        private readonly HighliteService _highliteService;
 
         public string DisplayName { get; set; } = "Your selected album";
 
@@ -197,6 +198,7 @@ namespace TripLine.DesktopApp.ViewModels
 
             var photo = _photoStore.GetPhoto(SelectedSection.Items.First().PhotoId);
             DebugInfo.Load(photo);
+
             OnPropertyChanged(nameof(DisplayName));
             OnPropertyChanged(nameof(SelectedSection));
             OnPropertyChanged(nameof(DebugInfo));
@@ -224,7 +226,7 @@ namespace TripLine.DesktopApp.ViewModels
             {
                 var trip = _tripStore.GetTrip(id);
 
-                _tripStore.DumpTrip(id, "LoadFromTrip");
+                //_tripStore.DumpTrip(id, "LoadFromTrip");
 
                 return new ObservableCollection<AlbumSectionViewModel>(CreateSections(trip));
 
@@ -241,6 +243,11 @@ namespace TripLine.DesktopApp.ViewModels
             var location = _locationService.GetLocation(id);
             return new ObservableCollection<AlbumSectionViewModel>(CreateSections(location));
         }
+
+
+        
+
+
 
         private List<AlbumSectionViewModel> CreateSections(Trip trip)
         {
