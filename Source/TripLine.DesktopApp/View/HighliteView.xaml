@@ -7,9 +7,9 @@
       xmlns:view="clr-namespace:TripLine.DesktopApp.View"
       xmlns:vmodel="clr-namespace:TripLine.DesktopApp.ViewModels"
       mc:Ignorable="d" 
-      d:DesignHeight="800" d:DesignWidth="600"   >
+      d:DesignHeight="600" d:DesignWidth="500"   >
 
-    <Grid Margin="7,0,7,0"  Background="{StaticResource TLineViewBackgroundPanel}" >
+   <Grid Margin="7,0,7,0" Background="{StaticResource TLineViewBackgroundPanel}" VerticalAlignment="Stretch" >
         <Grid.Resources>
             <cvt:VisibilityConverter x:Key="VisibilityConverter"/>
             <cvt:InvisibilityConverter x:Key="InvisibilityConverter"/>
@@ -43,13 +43,12 @@
         </StackPanel>
 
      
-            <DockPanel  Grid.Row="1" Grid.ColumnSpan="2"  Background="{StaticResource TLineViewBackground}">
-            <ScrollViewer x:Name="MainScrollViewer" >
+        <DockPanel  Grid.Row="1" Grid.ColumnSpan="2"  Background="{StaticResource TLineViewBackground}"  VerticalAlignment="Stretch" >
+            <ScrollViewer x:Name="MainScrollViewer" HorizontalScrollBarVisibility="Disabled"   VerticalScrollBarVisibility="Auto" >
                 <ListBox  ItemsSource="{Binding Path=Topics}" SelectionMode="Single" 
                       Background="{StaticResource TLineViewBackground}"    
                       SelectedValue="{Binding NoSelection}"  IsSynchronizedWithCurrentItem="True" 
-                      VirtualizingStackPanel.IsVirtualizing="False"  ScrollViewer.VerticalScrollBarVisibility="Auto"
-                      ScrollViewer.HorizontalScrollBarVisibility="Disabled" 
+                      VirtualizingStackPanel.IsVirtualizing="False"  ScrollViewer.VerticalScrollBarVisibility="Disabled" ScrollViewer.HorizontalScrollBarVisibility="Disabled" 
                       PreviewMouseWheel="UIElement_OnPreviewMouseWheel">
                     <ListBox.ItemTemplate >
                         <DataTemplate>
@@ -61,24 +60,21 @@
                                       Background="{StaticResource TLineViewBackgroundPanel}" 
                                       ItemTemplate="{StaticResource hliteItemTemplate}"
                                       SelectedValue="{Binding NoSelection}"  IsSynchronizedWithCurrentItem="True" 
-                                      VirtualizingStackPanel.IsVirtualizing="False"  ScrollViewer.HorizontalScrollBarVisibility="Visible" 
-                                      ScrollViewer.VerticalScrollBarVisibility="Disabled"
-                                      >
+                                      VirtualizingStackPanel.IsVirtualizing="False"  
+                                      ScrollViewer.HorizontalScrollBarVisibility="Auto" ScrollViewer.VerticalScrollBarVisibility="Disabled" >
                                     <ListBox.ItemsPanel>
                                         <ItemsPanelTemplate>
                                             <WrapPanel Orientation="Horizontal"  Margin="4,0,0,4" Background="{StaticResource TLineViewBackground}"  />
                                         </ItemsPanelTemplate>
                                     </ListBox.ItemsPanel>
                                 </ListBox>
-
-
                             </StackPanel>
 
                         </DataTemplate>
                     </ListBox.ItemTemplate>
                 </ListBox>
             </ScrollViewer>
-                </DockPanel>
+      </DockPanel>
 
     </Grid>
 </view:BaseView>

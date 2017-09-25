@@ -3,9 +3,8 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         Title="Trip Line"  TitlebarHeight="40" 
         xmlns:controls="http://metro.mahapps.com/winfx/xaml/controls"
-                       Height="950"
+                       Height="950" MinHeight="600"
         >
-
 
     <Grid Margin="7"  Background="{StaticResource TLineViewBackgroundPanel}"   >
         <Grid.Resources>
@@ -14,7 +13,7 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="5"  />
             <RowDefinition Height="30"   />
-            <RowDefinition Height="900"   MinHeight="600"    />
+            <RowDefinition Height="*"       />
         </Grid.RowDefinitions>
 
         <Grid.ColumnDefinitions>
@@ -23,7 +22,7 @@
             <ColumnDefinition Width="2*"   MinWidth="120"  MaxWidth="180"  />
         </Grid.ColumnDefinitions>
 
-        <StackPanel Name="panLeftShortcut" Grid.Row="0"  Grid.RowSpan="3" Grid.Column="0"  Margin="7,9,0,0" >
+        <StackPanel Name="panLeftShortcut" Grid.Row="0"  Grid.RowSpan="3" Grid.Column="0"  Margin="12,9,0,0" >
             <Button  Command="{Binding ShowOverviewCommand}"   Margin="5,5"  BorderThickness="0"   HorizontalContentAlignment="Left"  >
             <TextBlock Style="{StaticResource WizardHeaderTextSm}" Text="A little Overview"  HorizontalAlignment="Left" />
             </Button>
@@ -57,10 +56,11 @@
         </StackPanel>
 
         <!--View Is here-->
-        <ContentControl x:Name="ContentControl" Grid.Row="2"  Grid.Column="1"     Margin="0,0,7,0"
-                         VerticalAlignment="Stretch" HorizontalAlignment="Stretch"
-                         VerticalContentAlignment="Stretch"  HorizontalContentAlignment="Stretch" 
-                           />
+        <ContentControl x:Name="ContentControl" Grid.Row="2"  Grid.Column="1"     Margin="0,0,7,0" 
+                        VerticalContentAlignment="Stretch"  HorizontalContentAlignment="Stretch"  Background="BlueViolet" />
+                         <!--VerticalAlignment="Stretch" HorizontalAlignment="Stretch"-->
+                         <!--"--> 
+                          
 
         <StackPanel  Name="panRightLibrary"  Grid.Row="0"  Grid.RowSpan="3" Grid.Column="2"   Margin="10" >
             <TextBlock  Style="{StaticResource WizardHeaderTextSm}" >Your collection</TextBlock>

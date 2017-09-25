@@ -89,6 +89,7 @@
     <Compile Include="Models\CandidateModel.cs" />
     <Compile Include="Models\PhotoSessionModel.cs" />
     <Compile Include="ViewModels\AlbumItemViewModel.cs" />
+    <Compile Include="ViewModels\AlbumSectionViewModel.cs" />
     <Compile Include="ViewModels\DebugInfoViewModel.cs" />
     <Compile Include="ViewModels\DebugViewModel.cs" />
     <Compile Include="ViewModels\HighliteItemViewModel.cs" />
