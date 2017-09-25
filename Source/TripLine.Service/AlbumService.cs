@@ -59,13 +59,12 @@ namespace TripLine.Service
 
         public Album GetLocationAlbum(int locationId)
         {
-            var album = new Album()
-            {
-                Sections = BuildFromLocation(locationId)
-            };
-            return album;
-        }
+            var location = _locationService.GetLocation(locationId);
+            var sections = BuildFromLocation(locationId);
 
+            return new Album(location.DisplayName, sections);
+        }
+        
 
         private List<AlbumSection> BuildAlbumSectionFromTrip(int tripId)
         {
@@ -131,7 +130,5 @@ namespace TripLine.Service
 
             return vmodel;
         }
-
-
     }
 }
