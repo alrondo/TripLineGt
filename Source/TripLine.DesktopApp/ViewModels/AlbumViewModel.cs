@@ -21,59 +21,6 @@ using System.Windows;
 
 namespace TripLine.DesktopApp.ViewModels
 {
-    public class AlbumSectionViewModel : BaseViewModel
-    {
-        public string DisplayName { get; set; }
-
-        // Little trick to disable listbox selection...   We bind Listbox selectitems to NoSelection.  
-        // The real selections are handled by the checkboxes inside the list items.
-        public AlbumItemViewModel NoSelection
-        {
-            get { return null; }   // no selection
-            set
-            {
-                OnPropertyChanged();
-                OnPropertyChanged(nameof(SelectedItem));
-            }
-        }
-
-
-        private List<AlbumItemViewModel> _items;
-        public List<AlbumItemViewModel> Items
-        {
-            get { return _items; }
-            set
-            {
-                if (value == _items)
-                    return;
-
-                _items = value;
-                OnPropertyChanged();
-
-                SelectedItem = _items?.First();
-            }
-        }
-        private AlbumItemViewModel _selectedItem;
-        public AlbumItemViewModel SelectedItem
-        {
-            get { return _selectedItem; }
-            set
-            {
-                if (value == _selectedItem)
-                    return;
-
-                _selectedItem = value;
-                OnPropertyChanged();
-            }
-        }
-        public AlbumSectionViewModel( ) : base("AlbumSection")
-        {
-            Items = Items;
-        }
-    }
-
-
-
     public class AlbumViewModel : BaseViewModel , IDisposable
     {
         private ILog _log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
@@ -83,6 +30,8 @@ namespace TripLine.DesktopApp.ViewModels
         private readonly MainViewModel      _mainViewModel;
         private readonly DebugInfoViewModel _debugInfoVModel;
         private readonly HighliteService _highliteService;
+        private readonly AlbumService _albumService;
+
 
         public string DisplayName { get; set; } = "Your selected album";
 
@@ -95,12 +44,29 @@ namespace TripLine.DesktopApp.ViewModels
         }
 
 
+        private Album _album;
+
+        public Album Album
+        {
+            get { return _album; }   // no selection
+            set
+            {
+                if (value == _album)
+                    return;
+
+                OnPropertyChanged(); 
+                
+            }
+        }
+
+
         public string Title => "Photo";
-        public AlbumViewModel (TripStore tripStore, PhotoStore photoStore, HighliteService highliteService,
+        public AlbumViewModel (TripStore tripStore, PhotoStore photoStore, HighliteService highliteService,  AlbumService albumService,
     							LocationService locationService, DebugInfoViewModel debugInfo) : base("Highlite")
         {
             _tripStore = tripStore;
             _photoStore = photoStore;
+            _albumService = albumService;
             _highliteService = highliteService;
             _locationService = locationService;
             _debugInfoVModel = debugInfo;
@@ -192,7 +158,8 @@ namespace TripLine.DesktopApp.ViewModels
             List<string> choseLocationNames = new List<string>();
 
             var hitemVM =_mainViewModel.CurrentHighliteItemViewModel;
-            _sections = LoadFromHighliteTarget(hitemVM.Target, hitemVM.TargetId);
+
+            LoadFromHighliteTarget(hitemVM.Target, hitemVM.TargetId);
 
             SelectedSection = Sections.First();
 
@@ -206,97 +173,30 @@ namespace TripLine.DesktopApp.ViewModels
             ShowInfo = false;
         }
 
-        public ObservableCollection<AlbumSectionViewModel> LoadFromHighliteTarget(HighliteTarget target, int id)
+        public void LoadFromHighliteTarget(HighliteTarget target, int id)
         {
+
             switch (target)
             {
                 case HighliteTarget.Trip:
-                    return LoadFromTrip(id);
+                    _album = _albumService.GetTripAlbum(id);
+                    break;
 
                 case HighliteTarget.Location:
-                    return LoadFromLocation(id);
+                    _album = _albumService.GetLocationAlbum(id);
+
+                    break;
+
                 default:
                     throw new NotImplementedException();
             }
+
+
+            Sections = new ObservableCollection<AlbumSectionViewModel>();
+            _album.Sections.ForEach(s => Sections.Add(CreateAlbumSections(s)));
         }
-
-        public ObservableCollection<AlbumSectionViewModel> LoadFromTrip(int id)
-        {
-            try
-            {
-                var trip = _tripStore.GetTrip(id);
-
-                //_tripStore.DumpTrip(id, "LoadFromTrip");
-
-                return new ObservableCollection<AlbumSectionViewModel>(CreateSections(trip));
-
-            }
-            catch
-            {
-                MessageBox.Show("Oups! My mistake!", $"Not able fo find a trip with id {id}", MessageBoxButton.OK);
-                return new ObservableCollection<AlbumSectionViewModel>();
-            }
-        }
-
-        public ObservableCollection<AlbumSectionViewModel> LoadFromLocation(int id)
-        {
-            var location = _locationService.GetLocation(id);
-            return new ObservableCollection<AlbumSectionViewModel>(CreateSections(location));
-        }
-
 
         
-
-
-
-        private List<AlbumSectionViewModel> CreateSections(Trip trip)
-        {
-            var list = new List<AlbumSectionViewModel>();
-
-            foreach (var dest in trip.Destinations)
-                list.Add(CreateSection(dest));
-
-            return list;
-        }
-
-        private List<AlbumSectionViewModel> CreateSections(Location location)
-        {
-            var list = new List<AlbumSectionViewModel>();
-            list.Add(CreateSection(location));
-            return list;
-        }
-
-        private AlbumSectionViewModel CreateSection(Destination destination)
-        {
-            AlbumSectionViewModel vmodel = AutoMapper.Mapper.Map<AlbumSectionViewModel>(destination);
-
-            var photos = _photoStore.GetPhotos().Where(p => p.DestId == destination.Id).ToList();
-
-            vmodel.Items = photos.Select(p => CreateAlbumItemViewModel(p)).ToList();
-
-            return vmodel;
-        }
-
-        private AlbumSectionViewModel CreateSection(Location location)
-        {
-            AlbumSectionViewModel vmodel = AutoMapper.Mapper.Map<AlbumSectionViewModel>(location);
-
-            var photos = _photoStore.GetPhotosAtLocation(location.Id).ToList();
-            vmodel.Items = photos.Select(p => CreateAlbumItemViewModel(p)).ToList();
-            return vmodel;
-        }
-        private AlbumItemViewModel CreateAlbumItemViewModel(Photo photo)
-        {
-            AlbumItemViewModel vmodel = AutoMapper.Mapper.Map<AlbumItemViewModel>(photo);
-
-            vmodel.PhotoId = photo.Id;
-
-            SetupCommands(vmodel);
-            return vmodel;
-        }
-
-
-
         private void  SetupCommands(AlbumItemViewModel vmodel)
         {
             vmodel.OnOpen += OnItemOpen;
@@ -321,6 +221,18 @@ namespace TripLine.DesktopApp.ViewModels
         private async void OnItemRemoved(AlbumItemViewModel obj)
         {
             throw new NotImplementedException();
+        }
+        
+
+        private AlbumSectionViewModel CreateAlbumSections(AlbumSection section)
+        {
+            AlbumSectionViewModel vmodel = AutoMapper.Mapper.Map<AlbumSectionViewModel>(section);
+
+            foreach (var item in vmodel.Items)
+            {
+                SetupCommands(item);
+            }
+            return vmodel;
         }
 
     }
