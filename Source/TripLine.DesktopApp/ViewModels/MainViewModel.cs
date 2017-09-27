@@ -131,13 +131,19 @@ namespace TripLine.DesktopApp.ViewModels
             }
         }
 
-
-
         public ICommand ShowTripsCommand
         {
             get
             {
                 return new VMBladeCommand(() => GoTripsView(), () => true, "");  
+            }
+        }
+
+        public ICommand ShowPlacesCommand
+        {
+            get
+            {
+                return new VMBladeCommand(() => GoPlacesView(), () => true, "");
             }
         }
 
@@ -197,7 +203,7 @@ namespace TripLine.DesktopApp.ViewModels
 
         public async Task GoPlacesView()
         {
-            ViewTitle = "Your Trips";
+            ViewTitle = "Your Places";
             HighliteSelectOptions = new HighliteSelectOptions(HighliteTarget.Place);
             await NavigateTo(typeof(HighliteView));
         }
