@@ -85,7 +85,7 @@
                     </DockPanel>
                 </Button>
 
-                <Button     >
+                <Button  Command="{Binding ShowPlacesCommand}"   >
                     <DockPanel     Width="100" >
                         <TextBlock Margin="0,5,4,0" Style="{StaticResource WizardHeaderTextXSm}" 
                                    HorizontalAlignment="Center"  DockPanel.Dock="Bottom"  Text="{Binding NumPlacesString}" />

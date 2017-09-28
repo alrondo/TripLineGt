@@ -12,6 +12,22 @@ using TripLine.Toolbox.Extensions;
 
 namespace TripLine.Service
 {
+
+    public class TripTopic
+    {
+        public string Name { get; set; }
+        public Trip Trip { get; set; }
+        public List<Photo> PhotoMatch { get; set; }
+    }
+
+    public class TripMatch
+    {
+        public string Name { get; set; }
+        public List<Trip> Trips { get; set; }
+    }
+
+
+
     public class HighliteService 
     {
         private ILog _log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
@@ -19,18 +35,18 @@ namespace TripLine.Service
         private readonly PhotoStore _photoStore;
         private readonly TripStore _tripStore;
         private readonly LocationService _locationService;
+        private readonly RandomPhotoProvider _randomPhotoProvider;
 
-
-        public HighliteService(PhotoStore photoStore, TripStore tripStore, LocationService locationService) 
+        public HighliteService(PhotoStore photoStore, TripStore tripStore, 
+            LocationService locationService) 
         {
             _tripStore = tripStore;
             _photoStore = photoStore;
             _locationService = locationService;
+            _randomPhotoProvider = new RandomPhotoProvider();
         }
-    
 
         private HighliteSelectOptions _selectOptions = null;
-
         
         public List<HighliteTopic> GetHighlites(HighliteSelectOptions selectOptions=null)
         {
@@ -56,7 +72,6 @@ namespace TripLine.Service
                 case HighliteTarget.Location:
                     topics = GetLocationHighlites();
                     break;
-
 
                 default:
                     throw new NotImplementedException();
@@ -210,11 +225,11 @@ namespace TripLine.Service
 
         private IHighliteItem  CreatePhotoHighliteItem (Photo p) => DoCreateHighliteItem(p.Id, p, 0, HighliteTarget.Place, string.Empty);
 
-        IEnumerable<Photo> PickPhotos(IEnumerable<Photo> photos) => GetRandomPhotos(photos.ToList());
+        IEnumerable<Photo> PickPhotos(IEnumerable<Photo> photos) => _randomPhotoProvider.GetRandomPhotos(photos.ToList());
 
         Photo PickPhoto(IEnumerable<Photo> photos)
         {
-            var photo = GetRandomPhotos(photos.ToList(), 1).FirstOrDefault();
+            var photo = _randomPhotoProvider.GetRandomPhotos(photos.ToList(), 1).FirstOrDefault();
             return photo ?? photos.First();
         }
 
@@ -235,56 +250,6 @@ namespace TripLine.Service
         }
 
 
-        
-
-        private Dictionary<int, int> _allPickedPhotos = new Dictionary<int, int>();
-
-        private int GetPickedCount(Photo photo)
-        {
-            if (!_allPickedPhotos.ContainsKey(photo.Id))
-                return 0;
-
-            return _allPickedPhotos[photo.Id];
-        }
-
-        private void AddPickedCount(Photo photo)
-        {
-            int count = GetPickedCount(photo);
-
-            _allPickedPhotos[photo.Id] = ++count;
-        }
-
-        
-        private List<Photo> GetRandomPhotos(List<Photo> photos, int numPhotoWanted = 5)
-        {
-            var num2Pick = Math.Min(photos.Count, numPhotoWanted);
-
-            List<Photo> picks = new List<Photo>();
-            List<Photo> backupPics = new List<Photo>();
-
-            var random = new Random( (int) ( DateTime.Now.Ticks) );
-
-            for (var i=0; i< photos.Count; i++)
-            {
-                var selPhoto = photos[random.Next(0, photos.Count-1)];
-
-                if (GetPickedCount(selPhoto) >= 1)
-                {
-                    if (GetPickedCount(selPhoto) == 1)
-                        backupPics.Add(selPhoto);
-
-                    continue;
-                }
-
-                AddPickedCount(selPhoto);
-                picks.Add(selPhoto);
-
-                if (picks.Count() >= num2Pick)
-                    break;
-            }
-
-            return picks;
-        }
         
         
 

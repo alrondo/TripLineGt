@@ -76,6 +76,7 @@
     <Compile Include="PictureExifInformationReader.cs" />
     <Compile Include="PlaceRepo.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="RandomPhotoProvider.cs" />
     <Compile Include="ServiceMapper.cs" />
     <Compile Include="System\FormattableString.cs" />
     <Compile Include="TripAlbum.cs" />
