@@ -12,4 +12,14 @@ namespace TripLine.Service
             Trip = trip;
         }       
     }
+
+    public class PlaceAlbum : Album
+    {
+        public VisitedPlace Place { get; private set; }
+
+        public PlaceAlbum(VisitedPlace place, List<AlbumSection> sections) : base(place.PlaceName, sections)
+        {
+            Place = place;
+        }
+    }
 }

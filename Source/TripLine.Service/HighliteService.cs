@@ -158,7 +158,7 @@ namespace TripLine.Service
                 }     
                                            
             }
-            var items = photos.Select(p => DoCreateHighliteItem(p.Id, p, 0, HighliteTarget.Place, string.Empty));
+            var items = photos.Select(p => DoCreateHighliteItem(selPlace.Id, p, 0, HighliteTarget.Place, string.Empty));
             var topic = new HighliteTopic(topicName, items.ToList());
 
             return topic;

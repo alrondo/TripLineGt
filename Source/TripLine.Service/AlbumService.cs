@@ -56,6 +56,16 @@ namespace TripLine.Service
             return new Album(tripAlbum.DisplayName, sections);
         }
 
+        public Album GetPlaceAlbum(int placeId)
+        {
+            var sections = BuildAlbumSectionFromPlace(placeId);
+
+            var place = _tripStore.GetPlace(placeId);
+
+            var paceAlbum = new PlaceAlbum(place, sections);
+
+            return new Album(paceAlbum.DisplayName, sections);
+        }
 
         public Album GetLocationAlbum(int locationId)
         {
@@ -80,6 +90,21 @@ namespace TripLine.Service
             }
         }
 
+        private List<AlbumSection> BuildAlbumSectionFromPlace(int placeId)
+        {
+            try
+            {
+                var place = _tripStore.GetPlace(placeId);
+                return new List<AlbumSection>(CreateSections(place));
+
+            }
+            catch
+            {
+                return new List<AlbumSection>();
+            }
+        }
+
+
         private List<AlbumSection> BuildFromLocation(int locationId)
         {
             var location = _locationService.GetLocation(locationId);
@@ -96,6 +121,16 @@ namespace TripLine.Service
             return list;
         }
 
+        private List<AlbumSection> CreateSections(VisitedPlace place)
+        {
+            var list = new List<AlbumSection>();
+
+            list.Add(CreateSection(place));
+
+            return list;
+        }
+
+
         private List<AlbumSection> CreateSections(Location location)
         {
             var list = new List<AlbumSection>();
@@ -111,6 +146,15 @@ namespace TripLine.Service
 
             vmodel.Items = photos.Select(p => CreateAlbumItem(p)).ToList();
 
+            return vmodel;
+        }
+
+        private AlbumSection CreateSection(VisitedPlace place)
+        {
+            AlbumSection vmodel = AutoMapper.Mapper.Map<AlbumSection>(place);
+
+            var photos = _photoStore.GetPhotos().Where(p => p.PlaceId == place.Id).ToList();
+            vmodel.Items = photos.Select(p => CreateAlbumItem(p)).ToList();
             return vmodel;
         }
 

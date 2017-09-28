@@ -187,6 +187,9 @@ namespace TripLine.Service
 
         public Trip GetTrip(int id) => _tripRepo.Content.Trips.FirstOrDefault(t => t.Id == id);
 
+        public VisitedPlace GetPlace(int id) => _locationService.GetPlace(id);
+
+
         public Destination GetDestination(int destinationId) => GetDestinations().FirstOrDefault (d => d.Id == destinationId);
 
         public IEnumerable<Destination> GetDestinations() => _tripRepo.Content.Trips.SelectMany(t => t.Destinations);

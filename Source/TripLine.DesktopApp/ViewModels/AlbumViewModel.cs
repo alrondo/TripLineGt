@@ -187,6 +187,10 @@ namespace TripLine.DesktopApp.ViewModels
 
                     break;
 
+                case HighliteTarget.Place:
+                    _album = _albumService.GetPlaceAlbum(id);
+                    break;
+
                 default:
                     throw new NotImplementedException();
             }

@@ -32,6 +32,7 @@ namespace TripLine.Service
             config.CreateMap<HighliteTopic, AlbumSection>();
             config.CreateMap<Destination, AlbumSection>();
             config.CreateMap<Location, AlbumSection>();
+            config.CreateMap<VisitedPlace, AlbumSection>();
 
             config.CreateMap<IHighliteItem, AlbumItem>();
             config.CreateMap<Photo, AlbumItem>();
