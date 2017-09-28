@@ -13,19 +13,6 @@ using TripLine.Toolbox.Extensions;
 namespace TripLine.Service
 {
 
-    public class TripTopic
-    {
-        public string Name { get; set; }
-        public Trip Trip { get; set; }
-        public List<Photo> PhotoMatch { get; set; }
-    }
-
-    public class TripMatch
-    {
-        public string Name { get; set; }
-        public List<Trip> Trips { get; set; }
-    }
-
 
 
     public class HighliteService 

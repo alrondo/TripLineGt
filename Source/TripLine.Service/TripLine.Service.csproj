@@ -82,6 +82,7 @@
     <Compile Include="TripAlbum.cs" />
     <Compile Include="TripCandidate.cs" />
     <Compile Include="TripCreationService.cs" />
+    <Compile Include="TripProvider.cs" />
     <Compile Include="TripSmartBuilder.cs" />
     <Compile Include="TripsRepo.cs" />
     <Compile Include="TripStore.cs" />
