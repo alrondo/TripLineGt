@@ -74,7 +74,9 @@
     <Compile Include="PhotoStore.cs" />
     <Compile Include="PictureExifInformation.cs" />
     <Compile Include="PictureExifInformationReader.cs" />
+    <Compile Include="PlaceItem.cs" />
     <Compile Include="PlaceRepo.cs" />
+    <Compile Include="PlacesGroup.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RandomPhotoProvider.cs" />
     <Compile Include="ServiceMapper.cs" />
@@ -82,7 +84,9 @@
     <Compile Include="TripAlbum.cs" />
     <Compile Include="TripCandidate.cs" />
     <Compile Include="TripCreationService.cs" />
+    <Compile Include="TripItem.cs" />
     <Compile Include="TripProvider.cs" />
+    <Compile Include="TripsGroup.cs" />
     <Compile Include="TripSmartBuilder.cs" />
     <Compile Include="TripsRepo.cs" />
     <Compile Include="TripStore.cs" />
