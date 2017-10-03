@@ -89,6 +89,13 @@ namespace TripLine.Service
         }
 
 
+        public List<VisitedPlace> GetPlaces()
+        {
+            var photosByPlaces = _photoStore.GetPhotos().Where(p => p.PlaceId != 0).GroupBy(p => p.PlaceId);
+            var places = photosByPlaces.Select(g => GetPlace(g.Key));
+            return places.ToList();
+        }
+
         public List<VisitedPlace> GetPlacesWithMostPhotos()
         {
             List<PlacesGroup> groupOfPlaces = new List<PlacesGroup>();

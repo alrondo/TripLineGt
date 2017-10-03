@@ -24,23 +24,11 @@ namespace TripLine.Service
         private static ILog _log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
 
 
-
-        private IEnumerable<PhotoSession> GetUntaggedPhotosSessions()
-        {
-            throw new NotImplementedException();
-        }
-
-
         public PhotoStore(PhotoRepo photoRepo, LocalFileFolders fileFolder, LocationService locationService)
         {
             _fileFolder = fileFolder;
             _locationService = locationService;
             _photoRepo = photoRepo;
-        }
-
-        public void PinPhotos(int sessionId, int tripId, int destinationId)
-        {
-            throw new NotImplementedException();
         }
 
 
@@ -74,6 +62,11 @@ namespace TripLine.Service
         public List<Photo> GetPhotosByTrip(int tripId)
         {
             return _photoRepo.Content.Photos.Where(p => p.TripId == tripId).ToList();
+        }
+
+        public List<Photo> GetPhotosByPlace(int placeId)
+        {
+            return _photoRepo.Content.Photos.Where(p => p.PlaceId == placeId).ToList();
         }
 
 
@@ -153,11 +146,8 @@ namespace TripLine.Service
                 _photoRepo.Content.LastFileDetectionTime = lastFileDetectedTime;
             _photoRepo.Save();
         }
-        
-        
-
-
-        public List<PhotoSession>   CreateNewPhotoSessions(bool peakForNewPhotos = true)
+      
+       public List<PhotoSession>   CreateNewPhotoSessions(bool peakForNewPhotos = true)
        {
             List<Photo> newPhotos = NewTravelPhotos.OrderBy(p => p.Creation).Where(p => p.Unclassified).ToList();
 
@@ -225,14 +215,7 @@ namespace TripLine.Service
                 photo.PlaceId = placeId.Value;
         }
 
-        private bool IsUnique(List<int> allids, int id)
-        {
-            if (allids.Contains(id))
-                return false;
-
-            allids.Add(id);
-            return true;
-        }
+ 
         
         private List<PhotoSession>  CreatePhotoSessions(List<Photo> photos)
         {
@@ -308,29 +291,6 @@ namespace TripLine.Service
 
         private Photo _lastBuildedPhoto =null;
 
-
-
-        public Location FindPhotoLocation(FileExtendedInfo finfo)
-        {
-            Location location = null;
-
-            if (finfo.ExifInfo == null)
-                return null;
-
-            if (finfo.ExifInfo.GPS_Latitude.HasValue && finfo.ExifInfo.GPS_Longitude.HasValue)
-            {
-                var position = new GeoPosition(finfo.ExifInfo.GPS_Latitude.Value, finfo.ExifInfo.GPS_Longitude.Value);
-
-                location =  _locationService.GetLocation(position);
-            }
-
-            if (location == null)
-            {
-                location = _locationService.GetLocation(finfo.RelativePath);
-            }
-
-            return location;
-        }
 
         public Photo CreatePhoto(FileExtendedInfo finfo)
         {

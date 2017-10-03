@@ -23,6 +23,8 @@ namespace TripLine.Dtos
         public string Icon { get; set; }
 
         public string NearbyPlaces { get; set; }
+
+        public int    NumPhotos { get; set; }
     }
 
 

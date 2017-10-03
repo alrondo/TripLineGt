@@ -47,15 +47,15 @@ namespace TripLine.Service
             switch (_selectOptions.Target.Value)
             {
                 case HighliteTarget.Trip:
-                    topics = GetTripHighlites();
+                    topics = CreateTopicsForAllTrips();
                     break;
 
                 case HighliteTarget.Place:
-                    topics = GetPlaceHighlites();
+                    topics = CreateTopicsForAllPlaces();
                     break;
 
                 case HighliteTarget.Location:
-                    topics = GetLocationHighlites();
+                    topics = CreateTopicsForAllLocations();
                     break;
 
                 default:
@@ -64,6 +64,7 @@ namespace TripLine.Service
 
             return topics;
         }
+
 
         private List<HighliteTopic> GetRandomHighlites()
         {
@@ -85,9 +86,7 @@ namespace TripLine.Service
 
             var topic4 = CreateTopicForTrips("Long time ago", oldestTrips);
 
-            var mostPhotographedPlaces = _tripStore.GetPlacesWithMostPhotos();
-
-            //var topic5 = CreateTopicForPlaces"Most photograph places", mostPhotographedPlaces);
+            var topic5 = CreateTopicWithMostPhtographedPlace();
 
             var topics = new List<HighliteTopic>()
             {
@@ -95,13 +94,13 @@ namespace TripLine.Service
                 topic2,
                 topic3,
                 topic4,
-                //topic5
+                topic5
             };
 
             return topics;
         }
 
-        private List<HighliteTopic> GetTripHighlites()
+        private List<HighliteTopic> CreateTopicsForAllTrips()
         {
             List<HighliteTopic> topics = new List<HighliteTopic>();
 
@@ -117,63 +116,44 @@ namespace TripLine.Service
             return topics;
         }
 
-
-        //private HighliteTopic GetMostPhotographPlaceHighlite( string topicName, string type=null)
-        //{
-        //    Func<VisitedPlace, bool> filter = type != null
-        //        ? (Func < VisitedPlace, bool> ) delegate (VisitedPlace p) { return p.Types.Contains(type); }
-        //        : null;
-            
-        //    List<HighliteTopic> topics = new List<HighliteTopic>();
-
-        //    var photosByPlaces = _photoStore.GetPhotos().Where(p => p.PlaceId != 0).GroupBy(p => p.PlaceId);
-
-        //    photosByPlaces = photosByPlaces.OrderByDescending(l => l.Count());
-
-            
-        //    return topic;
-        //}
-
-        private List<HighliteTopic> GetPlaceHighlites()
+        private List<HighliteTopic> CreateTopicsForAllPlaces()
         {
-            var photosByPlaces = _photoStore.GetPhotos().Where(p => p.PlaceId != 0).GroupBy(p => p.PlaceId);
-
-            Debug.Assert(photosByPlaces.Count() >= 1);         
-            return GetPlaceHighlites (photosByPlaces);
-        }
-
-        private List<HighliteTopic> GetPlaceHighlites(IEnumerable<IGrouping<int, Photo>> photoGroups, 
-            Func<VisitedPlace, bool> placeFilter=null)
-        {
-            if (placeFilter==null)
-                placeFilter = delegate (VisitedPlace p) { return true; };
             List<HighliteTopic> topics = new List<HighliteTopic>();
 
-            foreach (var group in photoGroups)
+            var places = _tripStore.GetPlaces();
+
+            foreach (var trip in places)
             {
-                var place = _locationService.GetPlace(group.Key);
+                var items = places.Select(pl => DoCreateHighliteItem(pl.Id, PickPlacePhoto(pl.Id), CountPlacePhoto(pl.Id),
+                    HighliteTarget.Place, string.Empty));
 
-                if (place == null)
-                    continue;
+                var topic = new HighliteTopic("Most photographed places", items.ToList());
 
-                if (!placeFilter(place))
-                    continue;
-
-                var photos = PickPhotos(group);
-
-                if (!photos.Any())
-                    continue;
-
-                var items = photos.Select(p => DoCreateHighliteItem(p.Id, p, 0, HighliteTarget.Place, string.Empty));
-
-                var topic = new HighliteTopic(place.PlaceName, items.ToList());
                 topics.Add(topic);
             }
 
             return topics;
         }
-     
-        private List<HighliteTopic> GetLocationHighlites()
+
+        private HighliteTopic CreateTopicWithMostPhtographedPlace()
+        {
+            var places = _tripStore.GetPlaces();
+
+            places = places.OrderByDescending(p => p.NumPhotos).ToList();
+
+            places = places.Take(5).ToList();
+
+            var items = places.Select(pl => DoCreateHighliteItem(pl.Id, PickPlacePhoto(pl.Id), CountPlacePhoto(pl.Id),
+                HighliteTarget.Place, string.Empty));
+
+            
+            var topic = new HighliteTopic("Most photographed places", items.ToList());
+
+            return topic;
+        }
+
+    
+        private List<HighliteTopic> CreateTopicsForAllLocations()
         {
             List<HighliteTopic> topics = new List<HighliteTopic>();
 
@@ -223,18 +203,6 @@ namespace TripLine.Service
            return new HighliteTopic(topicName, highliteItems);
         }
 
-
-
-        private HighliteTopic CreateTopicForPlacesGroup(string topicName, IEnumerable<PlacesGroup> groupOfPlaces, int count = 5)
-        {
-            var placeItems = groupOfPlaces.Select(g => g.Items.First());
-
-            var items = placeItems.Select(x => CreateHighliteItem(x));
-
-            return new HighliteTopic(topicName, items.ToList());
-        }
-
-
         private HighliteTopic CreateTopicForLocation(string topicName, Location location)
         {
             var photos = _photoStore.GetPhotosAtLocation(location.Id);
@@ -267,7 +235,6 @@ namespace TripLine.Service
 
             return CreateHighliteItem(trip, photo, photos.Count);
         }
-       
 
         private IHighliteItem DoCreateHighliteItem(int targetId, Photo photo, int count, HighliteTarget target, string title)
         {
@@ -286,15 +253,16 @@ namespace TripLine.Service
         }
 
 
-
-
-        IEnumerable<Photo> PickPhotos(IEnumerable<Photo> photos) => _randomPhotoProvider.GetRandomPhotos(photos.ToList());
-
         Photo PickPhoto(IEnumerable<Photo> photos)
         {
             var photo = _randomPhotoProvider.GetRandomPhotos(photos.ToList(), 1).FirstOrDefault();
             return photo ?? photos.First();
         }
+
+        Photo PickPlacePhoto(int placeId) => PickPhoto(_photoStore.GetPhotosByPlace(placeId));
+
+        int CountPlacePhoto(int placeId) => _photoStore.GetPhotosByPlace(placeId).Count;
+
 
         int GetDayNumber(Trip trip, Photo photo)
         {
