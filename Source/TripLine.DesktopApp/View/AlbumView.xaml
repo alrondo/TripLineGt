@@ -51,7 +51,7 @@
         <DockPanel Grid.Row="2"  Visibility="{Binding ShowPhoto, Converter={StaticResource VisibilityHideConverter}}"   Background="{StaticResource TLineViewBackground}">
             <TextBlock  Text="{Binding Path=SelectedSection.SelectedItem.DisplayName,  Mode=TwoWay}" Style="{StaticResource WizardTextLine}" DockPanel.Dock="Bottom" />
             <Image      Source="{Binding Path=SelectedSection.SelectedItem.PhotoUrl, Mode=TwoWay, Converter={StaticResource ImageConverter}}" 
-                        Stretch="UniformToFill" HorizontalAlignment="Stretch"  VerticalAlignment="Stretch"   />
+                        Stretch="Uniform" HorizontalAlignment="Stretch"  VerticalAlignment="Stretch"   />
         </DockPanel>
         <StackPanel  Grid.Row="2"  Orientation="Vertical"  VerticalAlignment="Top"   Visibility="{Binding ShowInfo, Converter={StaticResource VisibilityHideConverter}}"  >
             <Grid Background="{StaticResource TLineViewBackgroundPanel}" >
@@ -120,6 +120,7 @@
         
         <StackPanel Orientation="Horizontal"  Name="Detail" Grid.Row="4"   Background="{StaticResource TLineViewBackground}"  >
             <Button Background="{StaticResource TLineViewBackground}" Command="{Binding InfoCommand}"  Content="Info"></Button>
+            <Button Background="{StaticResource TLineViewBackground}" Command="{Binding DeletePhotoCommand}"  Content="Delete"></Button>
             <!--<TextBlock Text="100"  Style="{StaticResource WizardTextLine}"  Margin="0,0,0,0" />
             <TextBlock Text=",100"  Style="{StaticResource WizardTextLine}"  Margin="0,0,0,0" />-->
         </StackPanel>

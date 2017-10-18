@@ -66,38 +66,41 @@ namespace TripLine.Service
         }
 
 
+        private static List<HighliteTopic> _randomHighlites = null;
+
         private List<HighliteTopic> GetRandomHighlites()
         {
-            var tripByLocationName = _tripStore.GetTripByLocationName();
+            if (_randomHighlites==null)
+            {
+                _randomHighlites = LoadRandomHighlites();
+            }
+            return _randomHighlites;
+        }
 
-            var topic1 = CreateTopicForTripsGroup("Visited locations", tripByLocationName);
-
-            var tripByLocationCountry = _tripStore.GetTripByCountry();
-
-            var topic2 = CreateTopicForTripsGroup("Visited country", tripByLocationCountry);
-
+        private List<HighliteTopic> LoadRandomHighlites()
+        {
             var trips = _tripStore.GetTrips();
-
-            var latestTrips = trips.OrderByDescending(t => t.FromDate).Take(3);
-
-            var oldestTrips = trips.OrderBy(t => t.FromDate).Take(3);
-
-            var topic3 = CreateTopicForTrips("Latest trips", latestTrips);
-
-            var topic4 = CreateTopicForTrips("Long time ago", oldestTrips);
-
-            var topic5 = CreateTopicWithMostPhtographedPlace();
-
+            var latestTrips = trips.OrderByDescending(t => t.FromDate);
+            var oldestTrips = trips.OrderBy(t => t.FromDate);
+            var longTrips = trips.OrderByDescending(t => t.Duration).Where(t => t.Duration.TotalDays > 9);
+            var wendTrips = trips.Where(t =>    t.Duration.TotalDays <= 3
+                                            && (t.FromDate.DayOfWeek == DayOfWeek.Friday  
+                                             || t.FromDate.DayOfWeek == DayOfWeek.Saturday));
+            
             var topics = new List<HighliteTopic>()
             {
-                topic1,
-                topic2,
-                topic3,
-                topic4,
-                topic5
+                CreateTopicForTripsGroup("Visited locations", _tripStore.GetTripByLocationName()),
+                CreateTopicForTripsGroup("Visited country", _tripStore.GetTripByCountry()),
+                CreateTopicForTrips("Latest trips", latestTrips),
+                CreateTopicForTrips("Long time ago", oldestTrips),
+                CreateTopicForTrips("Weekends", wendTrips),
+                CreateTopicForTrips("Long journey", longTrips),
+
+                CreateTopicWithMostPhotographedPlace(),
+                CreateTopicWithMostPhotographedTrip()
             };
 
-            return topics;
+            return topics.OrderByDescending(t => t.Items.Count).Take(6).ToList();
         }
 
         private List<HighliteTopic> CreateTopicsForAllTrips()
@@ -122,12 +125,12 @@ namespace TripLine.Service
 
             var places = _tripStore.GetPlaces();
 
-            foreach (var trip in places)
+            foreach (var place in places)
             {
                 var items = places.Select(pl => DoCreateHighliteItem(pl.Id, PickPlacePhoto(pl.Id), CountPlacePhoto(pl.Id),
                     HighliteTarget.Place, string.Empty));
 
-                var topic = new HighliteTopic("Most photographed places", items.ToList());
+                var topic = new HighliteTopic($"{place.PlaceName}", items.ToList());
 
                 topics.Add(topic);
             }
@@ -135,24 +138,31 @@ namespace TripLine.Service
             return topics;
         }
 
-        private HighliteTopic CreateTopicWithMostPhtographedPlace()
+        private HighliteTopic CreateTopicWithMostPhotographedPlace()
         {
             var places = _tripStore.GetPlaces();
-
             places = places.OrderByDescending(p => p.NumPhotos).ToList();
-
             places = places.Take(5).ToList();
+            return CreateTopicForPlaces("Most photographed places", places);
+        }
 
+        private HighliteTopic CreateTopicWithMostPhotographedTrip()
+        {
+            var trips = _tripStore.GetTrips();
+            trips = trips.OrderByDescending(p => p.NumPhotos).ToList();
+            trips = trips.Take(5).ToList();
+            return CreateTopicForTrips("Most photographed trip", trips);
+        }
+
+        private HighliteTopic CreateTopicForPlaces( string title, IEnumerable<VisitedPlace> places)
+        {
             var items = places.Select(pl => DoCreateHighliteItem(pl.Id, PickPlacePhoto(pl.Id), CountPlacePhoto(pl.Id),
-                HighliteTarget.Place, string.Empty));
+              HighliteTarget.Place, pl.PlaceName));
 
-            
-            var topic = new HighliteTopic("Most photographed places", items.ToList());
-
+            var topic = new HighliteTopic(title, items.ToList());
             return topic;
         }
 
-    
         private List<HighliteTopic> CreateTopicsForAllLocations()
         {
             List<HighliteTopic> topics = new List<HighliteTopic>();
@@ -162,7 +172,6 @@ namespace TripLine.Service
             foreach (var location in locations)
             {
                 var topic = CreateTopicForLocation($"{location.DisplayName}", location);
-
                 topics.Add(topic);
             }
 
@@ -171,17 +180,22 @@ namespace TripLine.Service
 
         private HighliteTopic CreateTopicForTripsGroup(string topicName, IEnumerable<TripsGroup> tripByLocationGroup, int count=5)
         {
-            var tripItems = tripByLocationGroup.Select(g => g.Items.First());
+            List<IHighliteItem> hliteItems = new List<IHighliteItem>();
 
-            var items = tripItems.Select(x => CreateHighliteItem(x));
+            foreach (var group in tripByLocationGroup)
+            {
+                var titem = group.Items.First();
+                var hliteItem = CreateHighliteItem(titem, group.GroupName);
+                hliteItems.Add(hliteItem);
+            }
             
-            return new HighliteTopic(topicName, items.ToList());
+            return new HighliteTopic(topicName, hliteItems);
         }
 
         
-        private HighliteTopic CreateTopicForTrips(string topicName, IEnumerable<Trip> trips)
+        private HighliteTopic CreateTopicForTrips(string topicName, IEnumerable<Trip> trips, int tripCount=5)
         {
-            var items = trips.Select(x => CreateHighliteItem(x));
+            var items = trips.Take(tripCount).Select(x => CreateHighliteItem(x));
 
             return new HighliteTopic(topicName, items.ToList());
         }    
@@ -218,8 +232,9 @@ namespace TripLine.Service
             return new HighliteTopic(topicName, highliteItems);
         }
 
-        private IHighliteItem CreateHighliteItem(TripItem titem)
-            => DoCreateHighliteItem(titem.TripId, titem.CoverPhoto, titem.NumPictures, HighliteTarget.Trip, titem.DisplayName);
+        private IHighliteItem CreateHighliteItem(TripItem titem, string title=null)
+            => DoCreateHighliteItem(titem.TripId, titem.CoverPhoto, titem.NumPictures, 
+                                    HighliteTarget.Trip,  title ?? titem.DisplayName);
 
         private IHighliteItem CreateHighliteItem(PlaceItem titem)
             => DoCreateHighliteItem(titem.PlaceId, titem.CoverPhoto, titem.NumPictures, HighliteTarget.Trip, titem.DisplayName);
@@ -231,7 +246,7 @@ namespace TripLine.Service
         private IHighliteItem CreateHighliteItem(Trip trip)
         {
             var photos = _photoStore.GetPhotosByTrip(trip.Id);
-            var photo = PickPhoto(photos);
+            var photo  = PickPhoto(photos);
 
             return CreateHighliteItem(trip, photo, photos.Count);
         }

@@ -59,14 +59,16 @@ namespace TripLine.Service
         {
             List<TripsGroup> tripsByLocation = new List<TripsGroup>();
 
-            var res = _tripRepo.Content.Trips.Where(t => t.Location != null && !string.IsNullOrEmpty(t.Location.Country) ).GroupBy(t => t.Location.Country).ToList();
+            var res = _tripRepo.Content.Trips.Where(t => t.Location != null 
+                                                    && !string.IsNullOrEmpty(t.Location.Country) )
+                                                    .GroupBy(t => t.Location.Country).ToList();
 
             foreach (var grp in res)
             {
-                var locationName = grp.Key;
+                var groupName = grp.Key;
 
                 var tripItems = grp.Select(i => CreateTripItem(i)).ToList();
-                tripsByLocation.Add(new TripsGroup(locationName, tripItems));
+                tripsByLocation.Add(new TripsGroup(groupName, tripItems));
             }
             return tripsByLocation;
         }
@@ -80,10 +82,10 @@ namespace TripLine.Service
 
             foreach (var grp in res)
             {
-                int  year =  grp.Key;
+                var groupName = grp.Key.ToString();
 
                 var tripItems = grp.Select(i => CreateTripItem(i)).ToList();
-                tripsByDate.Add(new TripsGroup(year.ToString() , tripItems));
+                tripsByDate.Add(new TripsGroup(groupName , tripItems));
             }
             return tripsByDate;
         }
@@ -115,11 +117,9 @@ namespace TripLine.Service
 
             // get photos count...
             var photos = _photoStore.GetPhotosByTrip(trip.Id);
-
             titem.DisplayName = trip.DisplayName;
             titem.NumPictures = photos.Count;
             titem.CoverPhoto = photos.First();
-            
             return titem;
         }
 

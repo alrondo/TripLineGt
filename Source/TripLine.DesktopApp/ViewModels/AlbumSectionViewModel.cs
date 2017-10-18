@@ -43,10 +43,25 @@ namespace TripLine.DesktopApp.ViewModels
                 if (value == _selectedItem)
                     return;
 
+                if (value == null)
+                    value = _items?.First();
+
                 _selectedItem = value;
                 OnPropertyChanged();
             }
         }
+
+        public void DeleteSelectedItem()
+        {
+            if (SelectedItem == null)
+                return;
+
+            _items.Remove(SelectedItem);
+            SelectedItem = _items?.First();
+            OnPropertyChanged(nameof(Items));
+        }
+
+
         public AlbumSectionViewModel( ) : base("AlbumSection")
         {
             Items = Items;

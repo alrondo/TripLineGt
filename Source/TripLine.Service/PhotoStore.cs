@@ -80,6 +80,11 @@ namespace TripLine.Service
             return _photoRepo.Content.Photos.Where(p => p.Location != null &&   p.Location.Id == locationId).ToList();
         }
 
+        public void DeletePhoto(int photoId)
+        {
+            var ph = GetPhoto(photoId);
+            _photoRepo.Content.Photos.Remove(ph);
+        }
 
         public List<Photo> NewTravelPhotos => _photoRepo.Content.Photos
             .Where(p => p.IsTravelCandidate)

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -29,32 +30,31 @@ namespace TripLine.Service
         }
 
 
-        public List<Photo> GetRandomPhotos(List<Photo> photos, int numPhotoWanted = 5)
+
+        private Random _random = new Random((int)(DateTime.Now.Ticks));
+
+        public List<Photo> GetRandomPhotos(List<Photo> photos, int numPhotoWanted = 5, int maxRepickSame=2)
         {
-            var num2Pick = Math.Min(photos.Count, numPhotoWanted);
+            Debug.Assert(photos.Count > 0);
 
             List<Photo> picks = new List<Photo>();
-            List<Photo> backupPics = new List<Photo>();
 
-            var random = new Random((int)(DateTime.Now.Ticks));
-
-            for (var i = 0; i < photos.Count; i++)
+            for (var i = 0; i < photos.Count  && picks.Count() < numPhotoWanted; i++)
             {
-                var selPhoto = photos[random.Next(0, photos.Count - 1)];
+                photos = photos.OrderBy(p => GetPickedCount(p)).ToList();
 
-                if (GetPickedCount(selPhoto) >= 1)
-                {
-                    if (GetPickedCount(selPhoto) == 1)
-                        backupPics.Add(selPhoto);
+                var lowestPickCount = GetPickedCount(photos.First());
 
-                    continue;
-                }
+                if (lowestPickCount >= maxRepickSame)
+                    return picks;  
+
+                var choices = photos.Where(p => GetPickedCount(p) <= lowestPickCount).ToList();
+                var selPhoto = choices[_random.Next(0, choices.Count - 1)];
 
                 AddPickedCount(selPhoto);
                 picks.Add(selPhoto);
 
-                if (picks.Count() >= num2Pick)
-                    break;
+                Console.WriteLine($"Random photo {selPhoto.PhotoUrl}  - num time: {GetPickedCount(selPhoto)}");
             }
 
             return picks;

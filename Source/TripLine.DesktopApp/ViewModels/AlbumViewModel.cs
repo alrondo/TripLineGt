@@ -95,20 +95,26 @@ namespace TripLine.DesktopApp.ViewModels
 
 
         public event Action<AlbumViewModel> OnInfo;
-
-
-        public ICommand InfoCommand
-        {
-            get
-            {
-                return new VMBladeCommand( () => ExecInfo(), () => true, ""); // CanExecuteOk(), "");
-            }
-        }
-
-        private void ExecInfo()
+        
+        public ICommand InfoCommand => new VMBladeCommand(() => ToggleInfo(), () => true, "");
+       
+        public ICommand DeletePhotoCommand => new VMBladeCommand(() => DeletePhoto(), () => true, "");
+        
+        private void ToggleInfo()
         {
             ShowInfo = ! ShowInfo;
             this.OnInfo?.Invoke(this);
+        }
+
+        private void DeletePhoto()
+        {
+            var item = SelectedItem;
+            SelectedSection?.DeleteSelectedItem();
+            OnPropertyChanged(nameof(SelectedItem));
+            _photoStore.DeletePhoto(item.PhotoId);
+            OnPropertyChanged(nameof(SelectedSection));
+            OnPropertyChanged(nameof(Sections));
+
         }
 
         public ObservableCollection<AlbumSectionViewModel> _sections = new ObservableCollection<AlbumSectionViewModel>();
@@ -131,8 +137,9 @@ namespace TripLine.DesktopApp.ViewModels
 
         public AlbumSectionViewModel SelectedSection { get; set; }
 
+        public AlbumItemViewModel SelectedItem => SelectedSection.SelectedItem;
 
-        public DebugInfoViewModel DebugInfo  => _debugInfoVModel;
+        public DebugInfoViewModel   DebugInfo  => _debugInfoVModel;
 
 
         private bool _showInfo = false;
