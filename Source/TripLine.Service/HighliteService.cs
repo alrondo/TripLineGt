@@ -89,7 +89,7 @@ namespace TripLine.Service
             
             var topics = new List<HighliteTopic>()
             {
-                CreateTopicForTripsGroup("Visited locations", _tripStore.GetTripByLocationName()),
+                //CreateTopicForTripsGroup("Visited locations", _tripStore.GetTripByLocationName()),
                 CreateTopicForTripsGroup("Visited country", _tripStore.GetTripByCountry()),
                 CreateTopicForTrips("Latest trips", latestTrips),
                 CreateTopicForTrips("Long time ago", oldestTrips),
@@ -271,7 +271,16 @@ namespace TripLine.Service
         Photo PickPhoto(IEnumerable<Photo> photos)
         {
             var photo = _randomPhotoProvider.GetRandomPhotos(photos.ToList(), 1).FirstOrDefault();
-            return photo ?? photos.First();
+            return ValidateUrl(photo ?? photos.First());
+        }
+
+        Photo ValidateUrl (Photo photo)
+        {
+            if (!File.Exists(photo.PhotoUrl))
+            {
+                photo.PhotoUrl = "pack://application:,,,/Resources/hawai.jpg";
+            }
+            return photo;
         }
 
         Photo PickPlacePhoto(int placeId) => PickPhoto(_photoStore.GetPhotosByPlace(placeId));

@@ -223,6 +223,8 @@ namespace TripLine.DesktopApp.ViewModels
             Debug.WriteLine($"> Photo {albumItem.DisplayName}");
             Debug.WriteLine($">       {albumItem.PhotoUrl}");
 
+            DebugInfo.Load(photo);
+
             photo.Dump("Open item ");
 
         }
